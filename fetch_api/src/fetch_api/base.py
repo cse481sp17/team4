@@ -1,5 +1,6 @@
 #! /usr/bin/env python
 
+# TODO: import ????????_msgs
 import rospy
 
 
@@ -14,6 +15,7 @@ class Base(object):
     """
 
     def __init__(self):
+        # TODO: Create publisher
         pass
 
     def move(self, linear_speed, angular_speed):
@@ -28,9 +30,13 @@ class Base(object):
             angular_speed: The rotation speed, in radians/second. A positive
                 value means the robot should rotate clockwise.
         """
+        # TODO: Create Twist msg
+        # TODO: Fill out msg
+        # TODO: Publish msg
         rospy.logerr('Not implemented.')
 
     def stop(self):
         """Stops the mobile base from moving.
         """
+        # TODO: Publish 0 velocity
         rospy.logerr('Not implemented.')
