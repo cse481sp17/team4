@@ -30,6 +30,7 @@ class Torso(object):
             height: The height, in meters, to set the torso to. Values range
                 from Torso.MIN_HEIGHT (0.0) to Torso.MAX_HEIGHT(0.4).
         """
+        # TODO: Check that the height is between MIN_HEIGHT and MAX_HEIGHT.
         # TODO: Create a trajectory point
         # TODO: Set position of trajectory point
         # TODO: Set time of trajectory point
