@@ -19,7 +19,7 @@ def main():
 
     gripper = fetch_api.Gripper()
     effort = gripper.MAX_EFFORT
-    if command == 'open' and len(argv) > 2:
+    if command == 'close' and len(argv) > 2:
         effort = float(argv[2])
 
     if command == 'open':
