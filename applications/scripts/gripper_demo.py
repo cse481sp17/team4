@@ -9,8 +9,16 @@ def print_usage():
     print '       rosrun applications gripper_demo.py close 40'
 
 
+def wait_for_time():
+    """Wait for simulated time to begin.
+    """
+    while rospy.Time().now().to_sec() == 0:
+        pass
+
+
 def main():
     rospy.init_node('gripper_demo')
+    wait_for_time()
     argv = rospy.myargv()
     if len(argv) < 2:
         print_usage()
