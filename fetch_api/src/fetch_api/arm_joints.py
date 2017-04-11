@@ -52,7 +52,8 @@ class ArmJoints(object):
         j.set_wrist_roll(vals[6])
         return j
 
-    def names(self):
+    @staticmethod
+    def names():
         return [
             'shoulder_pan_joint', 'shoulder_lift_joint', 'upperarm_roll_joint',
             'elbow_flex_joint', 'forearm_roll_joint', 'wrist_flex_joint',
