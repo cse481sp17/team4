@@ -17,9 +17,9 @@ class Torso(object):
     MAX_HEIGHT = 0.4
 
     def __init__(self):
-	self.client = actionlib.SimpleActionClient('torso_controller/follow_joint_trajectory', ACTION_NAME)
-	self.client.wait_for_server()
-        pass
+	    self.client = actionlib.SimpleActionClient('torso_controller/follow_joint_trajectory', ACTION_NAME)
+	    self.client.wait_for_server()
+    pass
 
     def set_height(self, height):
         """Sets the torso height.
@@ -43,12 +43,15 @@ class Torso(object):
 	
         
 	trajectoryPoint.time_from_start = rospy.Duration.from_sec(TIME_FROM_START)
+
+	jointTrajectory = trajectory_msgs.msg.JointTrajectory()
+	jointTrajectory.joint_names.append(JOINT_NAME)
+	jointTrajectory.points.append(trajectoryPoint)
         
 	goal = control_msgs.msg.FollowJointTrajectoryGoal()
         
-	goal.joint_names.append(JOINT_NAME)
         
-	goal.trajectory = trajectoryPoint
+	goal.trajectory = jointTrajectory
         
 	self.client.send_goal(goal)
         
