@@ -43,15 +43,12 @@ class Torso(object):
 	
         
 	trajectoryPoint.time_from_start = rospy.Duration.from_sec(TIME_FROM_START)
-
-	jointTrajectory = trajectory_msgs.msg.JointTrajectory()
-	jointTrajectory.joint_names.append(JOINT_NAME)
-	jointTrajectory.points.append(trajectoryPoint)
         
 	goal = control_msgs.msg.FollowJointTrajectoryGoal()
         
+	goal.joint_names.append(JOINT_NAME)
         
-	goal.trajectory = jointTrajectory
+	goal.trajectory = trajectoryPoint
         
 	self.client.send_goal(goal)
         

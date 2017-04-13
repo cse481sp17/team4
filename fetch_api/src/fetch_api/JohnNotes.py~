@@ -1,0 +1,292 @@
+In Gripper.py
+
+# TODO: import ?????????
+import actionlib
+# TODO: import ???????_msgs.msg
+import control_msgs.msg
+
+import rospy
+
+# TODO: ACTION_NAME = ???
+#ACTION_NAME = GripperCommand
+
+    def __init__(self):
+        # TODO: Create actionlib client
+        self.client = actionlib.SimpleActionClient('GripperCommand', control_msgs.msg.GripperCommandAction)
+        # TODO: Wait for server
+        self.client.wait_for_server()
+        pass
+
+    def open(self):
+        """Opens the gripper.
+        """
+        # TODO: Create goal
+        goal = control_msgs.msg.GripperCommandGoal()
+        goal.command.position = OPENED_POS
+        goal.command.max_effort = MAX_EFFORT
+        # TODO: Send goal
+        self.client.send_goal(goal)
+        # TODO: Wait for result
+        self.client.wait_for_result()
+        #rospy.logerr('Not implemented.')
+
+    def close(self, max_effort=MAX_EFFORT):
+        """Closes the gripper.
+
+        Args:
+            max_effort: The maximum effort, in Newtons, to use. Note that this
+                should not be less than 35N, or else the gripper may not close.
+        """
+        # TODO: Create goal
+        goal = control_msgs.msg.GripperCommandGoal()
+        goal.command.position = CLOSED_POS
+        goal.command.max_effort = MAX_EFFORT
+        # TODO: Send goal
+        self.client.send_goal(goal)
+        # TODO: Wait for result
+        self.client.wait_for_result()
+        #rospy.logerr('Not implemented.')
+
+In gripper_demo
+
+    if command == 'open':
+        gripper.open()
+        #rospy.logerr('Not implemented.')
+    elif command == 'close':
+        gripper.close()
+        #rospy.logerr('Not implemented.')
+
+In Torso.py
+
+# TODO: import ?????????
+import actionlib
+# TODO: import ???????_msgs.msg
+import control_msgs.msg
+# TODO: import ??????????_msgs.msg
+import trajectory_msgs.msg
+import rospy
+
+# TODO: ACTION_NAME = ???
+ACTION_NAME = FollowJointTrajectory
+# TODO: JOINT_NAME = ???
+JOINT_NAME = torso_lift_joint
+TIME_FROM_START = 5  # How many seconds it should take to set the torso height.
+
+class Torso(object):
+    """Torso controls the robot's torso height.
+    """
+    MIN_HEIGHT = 0.0
+    MAX_HEIGHT = 0.4
+
+    def __init__(self):
+        # TODO: Create actionlib client
+        # TODO: Wait for server
+        self.client = actionlib.SimpleActionClient('FollowJointTrajectory', control_msgs.msg.FollowJointTrajectoryAction)
+        self.client.wait_for_server()
+        pass
+
+    def set_height(self, height):
+        """Sets the torso height.
+
+        This will always take ~5 seconds to execute.
+
+        Args:
+            height: The height, in meters, to set the torso to. Values range
+                from Torso.MIN_HEIGHT (0.0) to Torso.MAX_HEIGHT(0.4).
+        """
+        # TODO: Check that the height is between MIN_HEIGHT and MAX_HEIGHT.
+        if height >= MIN_HEIGHT and height <= MAX_HEIGHT:
+            orint "It's good"
+        # TODO: Create a trajectory point
+        trajPoint = trajectory_msgs.msg.JointTrajectoryPoint()
+        # TODO: Set position of trajectory point
+        trajPoint.positions.append(height)
+        # TODO: Set time of trajectory point
+        trajPoint.duration = TIME_FROM_START
+
+        # TODO: Create goal
+        goal = control_msgs.msg.FollowJointTrajectoryGoal()
+        # TODO: Add joint name to list
+        goal.joint_names.append(JOINT_NAME)
+        # TODO: Add the trajectory point created above to trajectory
+        goal.trajectory = trajPoint
+
+        # TODO: Send goal
+        # TODO: Wait for result
+        self.client.send_goal(goal)
+        # TODO: Wait for result
+        self.client.wait_for_result()
+        #rospy.logerr('Not implemented.')
+
+torso_demo.py
+
+import rospy
+
+# addition
+import fetch_api
+
+
+def print_usage():
+    print 'Moves the torso to a certain height between [0.0, 0.4]'
+    print 'Usage: rosrun applications torso_demo.py 0.4'
+
+
+def wait_for_time():
+    """Wait for simulated time to begin.
+    """
+    while rospy.Time().now().to_sec() == 0:
+        pass
+
+
+def main():
+    rospy.init_node('torso_demo')
+    wait_for_time()
+    argv = rospy.myargv()
+    if len(argv) < 2:
+        print_usage()
+        return
+    height = float(argv[1])
+    # my additions
+    torso = fetch_api.Torso()
+    torso.set_height(height)
+
+
+if __name__ == '__main__':
+    main()
+
+
+Head Demo
+
+# With additions
+import rospy
+
+import fetch_api
+
+def print_usage():
+    print 'Usage:'
+    print '    rosrun applications head_demo.py look_at FRAME_ID X Y Z'
+    print '    rosrun applications head_demo.py pan_tilt PAN_ANG TILT_ANG'
+    print 'Examples:'
+    print '    rosrun applications head_demo.py look_at base_link 1 0 0.3'
+    print '    rosrun applications head_demo.py pan_tilt 0 0.707'
+
+
+def wait_for_time():
+    """Wait for simulated time to begin.
+    """
+    while rospy.Time().now().to_sec() == 0:
+        pass
+
+
+def main():
+    rospy.init_node('head_demo')
+    wait_for_time()
+    argv = rospy.myargv()
+    if len(argv) < 2:
+        print_usage()
+        return
+    command = argv[1]
+
+    #My code
+    head = fetch_api.Head()
+
+    if command == 'look_at':
+        if len(argv) < 6:
+            print_usage()
+            return
+        frame_id, x, y, z = argv[2], float(argv[3]), float(argv[4]), float(
+            argv[5])
+        rospy.logerr('Not implemented.')
+        # Insert some call here   head.look_at()
+    elif command == 'pan_tilt':
+        if len(argv) < 4:
+            print_usage()
+            return
+        pan, tilt = float(argv[2]), float(argv[3])
+        rospy.logerr('Not implemented.')
+        # Insert some call here
+    else:
+        print_usage()
+
+
+if __name__ == '__main__':
+    main()
+
+
+Head api
+
+#!/usr/bin/env python
+
+# TODO: import ?????????
+import actionlib
+# TODO: import ???????_msgs.msg
+import control_msgs.msg
+# TODO: import ??????????_msgs.msg
+import geometry_msgs_msgs.msg
+import math
+import rospy
+
+LOOK_AT_ACTION_NAME = 'PointHead'  # TODO: Get the name of the look-at action
+PAN_TILT_ACTION_NAME = 'FollowJointTrajectory'  # TODO: Get the name of the pan/tilt action
+PAN_JOINT = 'head_pan_joint'  # TODO: Get the name of the head pan joint
+TILT_JOINT = 'head_tilt_joint'  # TODO: Get the name of the head tilt joint
+PAN_TILT_TIME = 2.5  # How many seconds it should take to move the head.
+
+
+class Head(object):
+    """Head controls the Fetch's head.
+
+    It provides two interfaces:
+        head.look_at(frame_id, x, y, z)
+        head.pan_tilt(pan, tilt) # In radians
+
+    For example:
+        head = fetch_api.Head()
+        head.look_at('base_link', 1, 0, 0.3)
+        head.pan_tilt(0, math.pi/4)
+    """
+    MIN_PAN = None  # TODO: Minimum pan angle, in radians.
+    MAX_PAN = None  # TODO: Maximum pan angle, in radians.
+    MIN_TILT = None  # TODO: Minimum tilt angle, in radians.
+    MAX_TILT = None  # TODO: Maximum tilt angle, in radians.
+
+    def __init__(self):
+        # TODO: Create actionlib clients
+        # TODO: Wait for both servers
+        pass
+
+    def look_at(self, frame_id, x, y, z):
+        """Moves the head to look at a point in space.
+
+        Args:
+            frame_id: The name of the frame in which x, y, and z are specified.
+            x: The x value of the point to look at.
+            y: The y value of the point to look at.
+            z: The z value of the point to look at.
+        """
+        # TODO: Create goal
+        # TODO: Fill out the goal (we recommend setting min_duration to 1 second)
+        # TODO: Send the goal
+        # TODO: Wait for result
+        rospy.logerr('Not implemented.')
+
+    def pan_tilt(self, pan, tilt):
+        """Moves the head by setting pan/tilt angles.
+
+              Args:
+            pan: The pan angle, in radians. A positive value is clockwise.
+            tilt: The tilt angle, in radians. A positive value is downwards.
+        """
+        # TODO: Check that the pan/tilt angles are within joint limits
+        # TODO: Create a trajectory point
+        # TODO: Set positions of the two joints in the trajectory point
+        # TODO: Set time of the trajectory point
+
+        # TODO: Create goal
+        # TODO: Add joint names to the list
+        # TODO: Add trajectory point created above to trajectory
+
+        # TODO: Send the goal
+        # TODO: Wait for result
+
+        rospy.logerr('Not implemented.')

@@ -2,7 +2,6 @@
 
 import actionlib
 import control_msgs.msg
-from control_msgs.msg import GripperCommandAction, GripperCommandGoal
 
 import rospy
 
@@ -17,8 +16,8 @@ class Gripper(object):
     MAX_EFFORT = 100  # Max grasp force, in Newtons
 
     def __init__(self):
-	#rospy.init_node('gripper_client')
-        self.client = actionlib.SimpleActionClient('gripper_controller/gripper_action', GripperCommandAction)
+	rospy.init_noe('gripper_client')
+        self.client = actionlib.SimpleActionServer('gripper', GripperCommandAction)
         self.client.wait_for_server()
         pass
 
@@ -27,12 +26,12 @@ class Gripper(object):
         """
 	# create goal
         goal = control_msgs.msg.GripperCommandGoal()
-	goal.command.position = OPENED_POS
-	goal.command.max_effort = self.MAX_EFFORT
+	goal.command.position = OPEN_POS
+	goal.command.max_effort = MAX_EFFORT
 	
 	# send goal and wait for result
 	self.client.send_goal(goal)
-        self.client.wait_for_result(rospy.Duration.from_sec(5.0))
+        client.wait_for_result(rospy.Duration.from_sec(5.0))
 
     def close(self, max_effort=MAX_EFFORT):
         """Closes the gripper.
@@ -42,10 +41,10 @@ class Gripper(object):
                 should not be less than 35N, or else the gripper may not close.
         """
 	# unnecessary, but might be helpful
-	if (max_effort > self.MAX_EFFORT):
-		max_effort = self.MAX_EFFORT
-	if (max_effort < self.MIN_EFFORT):
-		max_effort = self.MIN_EFFORT
+	if (max_effort > MAX_EFFORT):
+		max_effort = MAX_EFFORT
+	if (max_effort < MIN_EFFORT):
+		max_effort = MIN_EFFORT
 	
 	# create goal
         goal = control_msgs.msg.GripperCommandGoal()
@@ -54,5 +53,5 @@ class Gripper(object):
 	
 	# send goal and wait for result:
 	self.client.send_goal(goal)
-        self.client.wait_for_result(rospy.Duration.from_sec(5.0))
+        client.wait_for_result(rospy.Duration.from_sec(5.0))
 

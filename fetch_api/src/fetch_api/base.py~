@@ -49,7 +49,7 @@ class Base(object):
         """Stops the mobile base from moving.
         """
         # TODO: Publish 0 velocity
-        twistMsg = Twist()
-	self.pub.publish(twistMsg)
-	#move(0, 0) ?
+        #twistMsg = Twist()
+	#self.pub.publish(twistMsg)
+	move(0, 0)
 	# rospy.logerr('Not implemented.')
