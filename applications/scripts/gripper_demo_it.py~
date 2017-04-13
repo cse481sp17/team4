@@ -32,7 +32,7 @@ def main():
     if command == 'open':
 	gripper.open()
     elif command == 'close':
-        gripper.close(effort)
+        gripper.close()
     else:
         print_usage()
 

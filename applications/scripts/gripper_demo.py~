@@ -18,21 +18,31 @@ def wait_for_time():
 
 def main():
     rospy.init_node('gripper_demo')
+    print "Here1"
     wait_for_time()
+    print "Here2"
     argv = rospy.myargv()
     if len(argv) < 2:
         print_usage()
         return
     command = argv[1]
 
+    print "Here3"
     gripper = fetch_api.Gripper()
-    effort = gripper.MAX_EFFORT
+    #effort = gripper.MAX_EFFORT
+    effort = 40
     if command == 'close' and len(argv) > 2:
         effort = float(argv[2])
+
+    print "Here3.5"
     if command == 'open':
-	gripper.open()
+        print "Here4"
+        gripper.open()
+        #rospy.logerr('Not implemented.')
     elif command == 'close':
-        gripper.close(effort)
+        gripper.close()
+        print "Here"
+        #rospy.logerr('Not implemented.')
     else:
         print_usage()
 
