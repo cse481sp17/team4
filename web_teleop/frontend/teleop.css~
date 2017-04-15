@@ -36,3 +36,11 @@
 #desiredTorsoHeight {
   font-weight: bold;
 }
+
+/* Head */
+#desiredHeadTiltPosition {
+  font-weight: bold;
+}
+#desiredHeadPanPosition {
+  font-weight: bold;
+}

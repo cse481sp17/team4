@@ -4,8 +4,7 @@ Torso = function(ros) {
   var desiredTorsoHeight = document.querySelector('#desiredTorsoHeight');
   var torsoSlider = document.querySelector('#torsoSlider');
   var torsoButton = document.querySelector('#torsoButton');
-  document.write("hello there");
-  console.error("asdfsadf");
+
   var that = this;
 
   var setTorsoClient = new ROSLIB.Service({

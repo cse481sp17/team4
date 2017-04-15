@@ -44,3 +44,8 @@
 #desiredHeadPanPosition {
   font-weight: bold;
 }
+
+/* Gripper */
+#desiredGripperForce {
+  font-weight: bold;
+}
