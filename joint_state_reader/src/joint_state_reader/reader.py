@@ -34,7 +34,7 @@ class JointStateReader(object):
         Returns: the joint value, or None if we do not have a value yet.                               
         """                                                                                            
         if name in self.jointValues:
-            return jointValues[name]
+            return self.jointValues[name]
         else:
             return None
                                                                                                        

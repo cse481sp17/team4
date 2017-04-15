@@ -1,0 +1,50 @@
+#!/usr/bin/env python
+
+import fetch_api
+import rospy
+from web_teleop.srv import SetTorso, SetTorsoResponse, SetHead, SetHeadResponse
+
+
+def wait_for_time():
+    """Wait for simulated time to begin.
+    """
+    while rospy.Time().now().to_sec() == 0:
+        pass
+
+
+class ActuatorServer(object):
+    def __init__(self):
+        self._torso = fetch_api.Torso()
+	self._head = fetch_api.Head()
+
+    def handle_set_torso(self, request):
+        # TODO: move the torso to the requested height
+        # print "actuators.py, printing request: ", request
+        f = open('torsofile.txt', 'w')
+	f.write("actuators.py, printing set torso request: " + request.height)
+	f.close()
+	self._torso.set_height(request.height)
+        return SetTorsoResponse()
+
+    def handle_set_head(self, request):
+	#TODO move head tilt and pan
+	self._head.pan_tilt(request.pan, request.tilt)
+	f = open('headfile.txt', 'w')
+	f.write("actuators.py, printing set head request (tilt, pan): (" + tilt + ", " + pan + ")")
+	f.close()
+	return SetHeadResponse() # this might not work
+
+
+
+def main():
+    rospy.init_node('web_teleop_actuators')
+    wait_for_time()
+    server = ActuatorServer()
+    torso_service = rospy.Service('web_teleop/set_torso', SetTorso,
+                                  server.handle_set_torso)
+    head_service = rospy.Service('web_teleop/set_head', SetHead, server.handle_set_head)
+    rospy.spin()
+
+
+if __name__ == '__main__':
+    main()

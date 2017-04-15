@@ -1,0 +1,15 @@
+terminal 1:
+roscore
+
+terminal 2:
+roslaunch fetch_gazebo playground.launch
+
+terminal 3:
+roslaunch rosbridge_server rosbridge_websocket.launch
+
+terminal 4:
+roslaunch web_teleop backend.launch
+
+terminal 5:
+from inside web_teleop/frontend, launch:
+python -m SimpleHTTPServer 8080 .
