@@ -1,5 +1,3 @@
-document.write("whats up");
-
 Torso = function(ros) {
   // HTML elements
   var torsoHeight = document.querySelector('#torsoHeight');

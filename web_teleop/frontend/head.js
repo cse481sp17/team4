@@ -20,6 +20,40 @@ Head = function(ros) {
     name: '/web_teleop/set_head',
     serviceType: 'web_teleop/SetHead'
   });
+
+  // Listen to torso height from the joint_state_republisher.
+  var listener = new ROSLIB.Topic({
+    ros: ros,
+    name: 'joint_state_republisher/head_pan_joint',
+    messageType: 'std_msgs/Float64'
+  });
+
+  listener.subscribe(function(message) {
+    // Whenever we get a message with a new torso height, update
+    // the torso height display on the webpage.
+    var pan = message.data;
+
+    // Note the noise in the data. You can smooth it out using this line of code.
+    pan = Math.round(pan*1000) / 1000
+    headPanPosition.textContent = pan;
+  });
+
+  // Listen to torso height from the joint_state_republisher.
+  var listener2 = new ROSLIB.Topic({
+    ros: ros,
+    name: 'joint_state_republisher/head_tilt_joint',
+    messageType: 'std_msgs/Float64'
+  });
+
+  listener2.subscribe(function(message) {
+    // Whenever we get a message with a new torso height, update
+    // the torso height display on the webpage.
+    var tilt = message.data;
+
+    // Note the noise in the data. You can smooth it out using this line of code.
+    tilt = Math.round(tilt*1000) / 1000
+    headTiltPosition.textContent = tilt;
+  });
   
   // Initialize head tilt slider.
   var desiredTilt = 0.0;
@@ -46,11 +80,10 @@ Head = function(ros) {
 
   // Method to set the head pan and tilt.
   this.setHead = function(tilt, pan) {
-    var tilt = Math.min(Math.max(-Math.pi/2, tilt), Math.pi/4);
-    var pan = Math.min(Math.max(-Math.pi/2, pan), Math.pi/2);
+    //var tilt = Math.min(Math.max(-Math.pi/2, tilt), Math.pi/4);
     var request = new ROSLIB.ServiceRequest({
-	  tilt: tilt,
-	  pan: pan
+	  tilt: parseFloat(tilt),
+	  pan: parseFloat(pan)
     });
     setHeadClient.callService(request);
   };
@@ -59,6 +92,7 @@ Head = function(ros) {
   headPanButton.addEventListener('click', function() {
 	// never gets here, problem somewher einbetween
 	//that.setHead(1, 1);
+	//desiredHeadTiltPosition.textContent = desiredPan;
 	that.setHead(desiredTilt, desiredPan);
   });
 
