@@ -4,12 +4,12 @@ roscore
 terminal 2:
 roslaunch fetch_gazebo playground.launch
 
-terminal 3:
+terminal 3: (not needed if launching backend)
 roslaunch rosbridge_server rosbridge_websocket.launch
 
 terminal 4:
 roslaunch web_teleop backend.launch
 
 terminal 5:
-from inside web_teleop/frontend, launch:
-python -m SimpleHTTPServer 8080 .
+cd ~/catkin_ws/src/cse481c/web_teleop/frontend
+python -m  SimpleHTTPServer 8080 .
