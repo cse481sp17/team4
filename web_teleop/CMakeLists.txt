@@ -61,6 +61,7 @@ add_service_files(
   SetTorso.srv
   SetHead.srv
   SetGripper.srv
+  SetArm.srv
   # Service1.srv
   # Service2.srv
 )

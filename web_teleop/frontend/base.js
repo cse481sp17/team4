@@ -10,8 +10,8 @@ Base = function(ros) {
   var that = this;
 
   // Public variables (outsiders can set this using base.linearSpeed = 0.1)
-  this.linearSpeed = 0.25;
-  this.angularSpeed = 0.25;
+  this.linearSpeed = 0.40;
+  this.angularSpeed = 0.40;
 
   // Set up the publisher.
   var cmdVel = new ROSLIB.Topic({

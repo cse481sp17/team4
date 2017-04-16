@@ -8,6 +8,8 @@
     <script src="base.js"></script>
     <script src="torso.js"></script>
     <script src="head.js"></script>
+    <script src="gripper.js"></script>
+	<script src="arm.js"></script>
     <script src="app.js"></script>
   </head>
   <body onload="init()">
@@ -51,6 +53,14 @@
       <input id="headPanSlider" type="range" min="-1.570796" max="1.570796" step="0.1"></input>
       <span id="desiredHeadPanPosition"></span>
       <input id="headPanButton" type="button" value="Set"></input>
+    </div>
+    <div id="gripper">
+      <h2>Gripper control</h2>
+      <label for="gripperSlider">Set Gripper force:</label>
+      <input id="gripperSlider" type="range" min="35.0" max="100.0" step="5.0"></input>
+      <span id="desiredGripperForce"></span>
+      <input id="gripperOpenButton" type="button" value="Open"></input>
+      <input id="gripperCloseButton" type="button" value="Close"></input>
     </div>
   </body>
 </html>

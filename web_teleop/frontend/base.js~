@@ -58,13 +58,13 @@ Base = function(ros) {
 
   this.turnRight = function() {
     that._timer = setInterval(function() {
-      move(0, that.angularSpeed)
+      move(0, -that.angularSpeed)
     }, 50);
   }
 
   this.turnLeft = function() {
     that._timer = setInterval(function() {
-      move(0, -that.angularSpeed)
+      move(0, that.angularSpeed)
     }, 50);
   }
 

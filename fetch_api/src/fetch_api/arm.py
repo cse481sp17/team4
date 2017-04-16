@@ -1,8 +1,5 @@
-# TODO: import ?????????
 import actionlib
-# TODO: import ???????_msgs.msg
 import control_msgs.msg
-# TODO: import ??????????_msgs.msg
 import trajectory_msgs.msg
 import rospy
 
@@ -20,10 +17,9 @@ class Arm(object):
     """
 
     def __init__(self):
-        # TODO: Create actionlib client
-        # TODO: Wait for server
-	    self.client = actionlib.SimpleActionClient('arm_controller/follow_joint_trajectory', control_msgs.msg.FollowJointTrajectoryAction)
-	    self.client.wait_for_server()
+        # create actionlib client and wait for server
+        self.client = actionlib.SimpleActionClient('arm_controller/follow_joint_trajectory', control_msgs.msg.FollowJointTrajectoryAction)
+        self.client.wait_for_server()
     pass
 
     def move_to_joints(self, arm_joints):
@@ -35,28 +31,28 @@ class Arm(object):
         """
         joint_names = arm_joints.names()
         joint_values = arm_joints.values()
-
-        # TODO: Create a trajectory point
-        # TODO: Set position of trajectory point
-        # TODO: Set time of trajectory point
+        
+        # create a TrajectoryPoint
         trajectoryPoint = trajectory_msgs.msg.JointTrajectoryPoint()
         trajectoryPoint.positions = joint_values
         trajectoryPoint.time_from_start = rospy.Duration.from_sec(5.0)
-
-
-        # TODO: Create goal
-        # TODO: Add joint name to list
-        # TODO: Add the trajectory point created above to trajectory
+        
+        # create a JointTrajectory
         jointTrajectory = trajectory_msgs.msg.JointTrajectory()
         jointTrajectory.joint_names = joint_names
         jointTrajectory.points.append(trajectoryPoint)
-        
+             
+        # create and send goal        
         goal = control_msgs.msg.FollowJointTrajectoryGoal()
         goal.trajectory = jointTrajectory
         self.client.send_goal(goal)
         self.client.wait_for_result(rospy.Duration.from_sec(5.0))
+    
+    def move_to_relaxed_position(self):
+        relaxed = ArmJoints.from_list([1.32, 1.40, -0.20, 1.72, 0.0, 1.66, 0.0])
+        self.move_to_joints(relaxed)
 
+    def move_to_extended_position(self):
+        extended = ArmJoints.from_list([1.5, -0.6, 3.0, 1.0, 3.0, 1.0, 3.0])
+        self.move_to_joints(extended)
 
-        # TODO: Send goal
-        # TODO: Wait for result
-        #rospy.logerr('Not implemented.')

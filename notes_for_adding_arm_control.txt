@@ -1,0 +1,8 @@
+To make arm, need to...
+
+Create and write arm.js file -- defines behavior of arm in response to buttons (listeners) (check!)
+Modify html file to correspond to buttons and actions in arm.js
+Create SetArm.srv file -- defines the message type (request) that must be sent (check!)
+In CMakeLists.txt, add SetArm.srv as a service (check!)
+Add line to app.js file (check!)
+Add methods in web_teleop/nodes/actuators_node.py (check!)

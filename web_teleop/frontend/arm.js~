@@ -1,0 +1,37 @@
+Arm = function(ros) {
+	var armExtendButton = document.querySelector('#armExtendButton');
+	var armRelaxButton = document.querySelector('#armRelaxButton');
+
+	var that = this;
+
+	var setArmClient = new ROSLIB.Service({
+		ros: ros,
+		name: '/web_teleop/set_arm',
+		serviceType: 'web_teleop/SetArm'
+	});
+
+	this.setArm = function(command) {
+		var arm_joints = 
+		if (command == 0) {
+		
+		
+		var request = new ROSLIB.ServiceRequest({
+		});
+		setArmClient.callService(request);
+	}
+
+	armExtendButton.addEventListener('click', function() {that.setArm(1);});
+	armRelaxButton.addEventListener('click', function() {that.setArm(0);});
+}
+
+
+
+  // Method to set the height.
+  this.setGrip = function(command, force) {
+    var force = Math.min(Math.max(35.0, force), 100.0);
+    var request = new ROSLIB.ServiceRequest({
+      command: parseInt(command),
+      force: parseFloat(force)
+    });
+    setGripperClient.callService(request);
+  };

@@ -9,6 +9,7 @@
     <script src="torso.js"></script>
     <script src="head.js"></script>
     <script src="gripper.js"></script>
+	<script src="arm.js"></script>
     <script src="app.js"></script>
   </head>
   <body onload="init()">
@@ -60,6 +61,11 @@
       <span id="desiredGripperForce"></span>
       <input id="gripperOpenButton" type="button" value="Open"></input>
       <input id="gripperCloseButton" type="button" value="Close"></input>
+    </div>
+    <div id="arm">
+      <h2>Arm control</h2>
+      <input id="armExtendButton" type="button" value="Extend arm"></input>
+      <input id="armRelaxButton" type="button" value="Relax arm"></input>
     </div>
   </body>
 </html>

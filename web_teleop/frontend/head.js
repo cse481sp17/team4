@@ -80,7 +80,7 @@ Head = function(ros) {
 
   // Method to set the head pan and tilt.
   this.setHead = function(tilt, pan) {
-	var pan = Math.min(Math.max(-Math.PI/2, tilt), Math.PI/2);
+	var pan = Math.min(Math.max(-Math.PI/2, pan), Math.PI/2);
     var tilt = Math.min(Math.max(-Math.PI/2, tilt), Math.PI/4);
     var request = new ROSLIB.ServiceRequest({
 	  tilt: parseFloat(tilt),
