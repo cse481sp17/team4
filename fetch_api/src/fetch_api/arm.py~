@@ -53,6 +53,6 @@ class Arm(object):
         self.move_to_joints(relaxed)
 
     def move_to_extended_position(self):
-        extended = ArmJoints.from_list([1.5, -0.6, 3.0, 1.0, 3.0, 1.0, 3.0])
+        extended = ArmJoints.from_list([-0.496, 0.311, -1.31, -0.63, -2.95, 0.181, -2.14])
         self.move_to_joints(extended)
 

@@ -20,6 +20,9 @@
       <input id="websocketUrl" type="text"></input>
       <input id="websocketButton" type="button" value="Reconnect"></input>
     </div>
+    <div id="camera">
+  		<img src="//localhost:8000/stream?topic=/head_camera/rgb/image_raw"></img>
+	</div>
     <div id="base">
       <h2>Base control</h2>
       <table class="base-arrows">
@@ -61,6 +64,11 @@
       <span id="desiredGripperForce"></span>
       <input id="gripperOpenButton" type="button" value="Open"></input>
       <input id="gripperCloseButton" type="button" value="Close"></input>
+    </div>
+    <div id="arm">
+      <h2>Arm control</h2>
+      <input id="armExtendButton" type="button" value="Extend arm"></input>
+      <input id="armRelaxButton" type="button" value="Relax arm"></input>
     </div>
   </body>
 </html>
