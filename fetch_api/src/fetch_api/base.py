@@ -2,6 +2,7 @@
 
 from geometry_msgs.msg import Twist
 import rospy
+from nav_msgs.msg import Odometry
 
 
 class Base(object):
@@ -15,8 +16,13 @@ class Base(object):
     """
 
     def __init__(self):
-        # TODO: Create publisher
         self.pub = rospy.Publisher('cmd_vel', Twist, queue_size=10)
+        self.currentOdom = None
+        self._odom_sub = rospy.Subscriber('odom', nav_msgs.msg.Odometry, callback=self._odom_callback)
+
+    def _odom_callback(self, msg):
+        self.currentOdom = msg
+
 	
 
     def move(self, linear_speed, angular_speed):
@@ -31,25 +37,57 @@ class Base(object):
             angular_speed: The rotation speed, in radians/second. A positive
                 value means the robot should rotate clockwise.
         """
-        # TODO: Create Twist msg
         twistMsg = None
-	twistMsg = Twist()
-	twistMsg.linear.x = linear_speed
-	twistMsg.linear.y = linear_speed
-	twistMsg.linear.z = linear_speed
-	twistMsg.angular.x = angular_speed
-	twistMsg.angular.y = angular_speed
-	twistMsg.angular.z = angular_speed
-	# TODO: Fill out msg
-        # TODO: Publish msg
-	self.pub.publish(twistMsg)
-        # rospy.logerr('Not implemented.')
+	    twistMsg = Twist()
+        twistMsg.linear.x = linear_speed
+        twistMsg.linear.y = linear_speed
+        twistMsg.linear.z = linear_speed
+        twistMsg.angular.x = angular_speed
+        twistMsg.angular.y = angular_speed
+        twistMsg.angular.z = angular_speed
+	    self.pub.publish(twistMsg)
 
     def stop(self):
         """Stops the mobile base from moving.
         """
-        # TODO: Publish 0 velocity
         twistMsg = Twist()
-	self.pub.publish(twistMsg)
-	#move(0, 0) ?
-	# rospy.logerr('Not implemented.')
+	    self.pub.publish(twistMsg)
+
+
+    def go_forward(self, distance, speed=0.1):
+        """Moves the robot a certain distance.
+
+        It's recommended that the robot move slowly. If the robot moves too
+        quickly, it may overshoot the target. Note also that this method does
+        not know if the robot's path is perturbed (e.g., by teleop). It stops
+        once the distance traveled is equal to the given distance or more.
+
+        Args:
+            distance: The distance, in meters, to move. A positive value
+                means forward, negative means backward.
+            speed: The speed to travel, in meters/second.
+        """
+        # TODO: rospy.sleep until the base has received at least one message on /odom
+        while (self.currentOdom == None):
+            rospy.sleep(rospy.Duration.from_sec(0.005))
+        
+
+        # TODO: record start position, use Python's copy.deepcopy
+        start = copy.deepcopy(self.currentOdom)
+        rate = rospy.Rate(10)
+
+        position = self.currentOdom.pose.pose.position
+
+        # TODO: CONDITION should check if the robot has traveled the desired distance
+        # TODO: Be sure to handle the case where the distance is negative!
+        while (distanceBetweenPoints(position, start) < distance):
+            # TODO: you will probably need to do some math in this loop to check the CONDITION
+            direction = -1 if distance < 0 else 1
+            self.move(direction * speed, 0)
+            rate.sleep()
+
+
+
+def distanceBetweenPoints(point1, point2):
+    distance = (point1.x - point2.x)**2 + (point1.y - point2.y)**2
+    return sqrt(distance)

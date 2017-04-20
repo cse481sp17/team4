@@ -8,7 +8,8 @@ from geometry_msgs.msg import Quaternion, Pose, Point, Vector3
 from std_msgs.msg import Header, ColorRGBA
 from nav_msgs.msg import Odometry
 
-
+from interactive_markers.interactive_marker_server import *
+from visualization_msgs.msg import *
 
 import sys, select, termios, tty
 
@@ -51,7 +52,13 @@ def getKey():
 
 speed = .5
 turn = 1
+
+# List of Points visited for Marker Line
 all_points = [Point(0.0, 0.0, 0.0)]
+
+# A variable for the interactive marker move
+# While the variable is true, keyboard controls are disabled
+moving = False
 
 
 def vels(speed, turn):
@@ -93,14 +100,59 @@ def show_path_in_rviz(data):
     marker_publisher.publish(marker)
 
 
+def handle_viz_input(input):
+    if (input.event_type == InteractiveMarkerFeedback.BUTTON_CLICK):
+        rospy.loginfo(input.marker_name + ' was clicked.')
+    else:
+        rospy.loginfo('Cannot handle this InteractiveMarker event')
+        
+def handle_move(input):
+    if (input.event_type == InteractiveMarkerFeedback.BUTTON_CLICK):
+        rospy.loginfo(input.marker_name + ' was clicked.')
+    else:
+        rospy.loginfo('Cannot handle this InteractiveMarker event')
+        
+
 
 if __name__ == "__main__":
     settings = termios.tcgetattr(sys.stdin)
 
     rospy.init_node('fetch_teleop_key')
     base = fetch_api.Base()
+    
+    # Subscriber for path recording and marking
     rospy.Subscriber('/odom', Odometry, show_path_in_rviz)
     
+    # Interactive Marker test Code
+    server = InteractiveMarkerServer("simple_marker")
+    int_marker = InteractiveMarker()
+    int_marker.header.frame_id = "base_link"
+    int_marker.name = "my_marker"
+    int_marker.description = "Simple Click Control"
+    int_marker.pose.position.x = 1
+    int_marker.pose.orientation.w = 1
+	
+    box_marker = Marker()
+    box_marker.type = Marker.CUBE
+    box_marker.pose.orientation.w = 1
+    box_marker.scale.x = 0.45
+    box_marker.scale.y = 0.45
+    box_marker.scale.z = 0.45
+    box_marker.color.r = 0.0
+    box_marker.color.g = 0.5
+    box_marker.color.b = 0.5
+    box_marker.color.a = 1.0
+	
+    button_control = InteractiveMarkerControl()
+    button_control.interaction_mode = InteractiveMarkerControl.BUTTON
+    button_control.always_visible = True
+    button_control.markers.append(box_marker)
+    int_marker.controls.append( button_control )
+	
+    server.insert(int_marker, handle_viz_input)
+    server.applyChanges()
+
+    # teleop code
     x = 0
     th = 0
     status = 0
