@@ -8,8 +8,14 @@ from geometry_msgs.msg import Quaternion, Pose, Point, Vector3
 from std_msgs.msg import Header, ColorRGBA
 from nav_msgs.msg import Odometry
 
+# Imports for the Markers
 from interactive_markers.interactive_marker_server import *
 from visualization_msgs.msg import *
+
+# Imports for calculating rotations
+import tf.transformations as tft
+import numpy as np
+import math
 
 import sys, select, termios, tty
 
@@ -111,7 +117,14 @@ def handle_move(input):
         rospy.loginfo(input.marker_name + ' was clicked.')
     else:
         rospy.loginfo('Cannot handle this InteractiveMarker event')
-        
+
+def quaternion_to_yaw(q):
+    m = tft.quaternion_matrix([q.x, q.y, q.z, q.w])
+    x = m[0, 0]
+    y = m[1, 0]
+    theta_rads = math.atan2(y, x)
+    theta_degs = theta_rads * 180 / math.pi
+    return theta_degs
 
 
 if __name__ == "__main__":
