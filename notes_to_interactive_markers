@@ -1,0 +1,28 @@
+To run with the interactive markers:
+
+Step 1: roscore
+
+Step 2: open gazebo
+
+Step 3: open rviz
+
+Step 4: Make sure the "Fixed Frame" for rviz is "odom"
+
+To move with keyboard and have a line of where the robot went:
+
+rosrun applications keyboard_teleop_viz.py
+
+To have interative markers
+
+rosrun applications interactive_marker_demo.py
+
+*  Both files can be run at the same time
+
+Files to modify:
+
+Driver.py  (handles the rotation and movement)
+
+interactive_marker_demo.py (handles the 3 interactive markers)
+
+Currently: The markers work, but robot rotation does not work properly.
+           Also, the is no code to handle overshooting the target

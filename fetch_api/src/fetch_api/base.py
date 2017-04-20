@@ -2,7 +2,11 @@
 
 from geometry_msgs.msg import Twist
 import rospy
-from nav_msgs.msg import Odometry
+import nav_msgs.msg
+import math
+import tf.transformations as tft
+import numpy as np
+import copy
 
 
 class Base(object):
@@ -17,7 +21,7 @@ class Base(object):
 
     def __init__(self):
         self.pub = rospy.Publisher('cmd_vel', Twist, queue_size=10)
-        self.currentOdom = None
+        self.currentOdom = nav_msgs.msg.Odometry()
         self._odom_sub = rospy.Subscriber('odom', nav_msgs.msg.Odometry, callback=self._odom_callback)
 
     def _odom_callback(self, msg):
@@ -38,20 +42,20 @@ class Base(object):
                 value means the robot should rotate clockwise.
         """
         twistMsg = None
-	    twistMsg = Twist()
+        twistMsg = Twist()
         twistMsg.linear.x = linear_speed
         twistMsg.linear.y = linear_speed
         twistMsg.linear.z = linear_speed
         twistMsg.angular.x = angular_speed
         twistMsg.angular.y = angular_speed
         twistMsg.angular.z = angular_speed
-	    self.pub.publish(twistMsg)
+        self.pub.publish(twistMsg)
 
     def stop(self):
         """Stops the mobile base from moving.
         """
         twistMsg = Twist()
-	    self.pub.publish(twistMsg)
+        self.pub.publish(twistMsg)
 
 
     def go_forward(self, distance, speed=0.1):
@@ -74,20 +78,64 @@ class Base(object):
 
         # TODO: record start position, use Python's copy.deepcopy
         start = copy.deepcopy(self.currentOdom)
+        startPoint = start.pose.pose.position
         rate = rospy.Rate(10)
 
         position = self.currentOdom.pose.pose.position
 
         # TODO: CONDITION should check if the robot has traveled the desired distance
         # TODO: Be sure to handle the case where the distance is negative!
-        while (distanceBetweenPoints(position, start) < distance):
+        while distanceBetweenPoints(position, startPoint) < abs(distance):
             # TODO: you will probably need to do some math in this loop to check the CONDITION
             direction = -1 if distance < 0 else 1
             self.move(direction * speed, 0)
+            position = self.currentOdom.pose.pose.position
+            rate.sleep()
+
+
+    def turn(self, angular_distance, speed=0.5):
+        """Rotates the robot a certain angle.
+
+        Args:
+            angular_distance: The angle, in radians, to rotate. A positive
+                value rotates counter-clockwise.
+            speed: The angular speed to rotate, in radians/second.
+        """
+        while (self.currentOdom == None):
+            rospy.sleep(rospy.Duration.from_sec(0.005))
+        start = copy.deepcopy(self.currentOdom)
+        startOrient = start.pose.pose.orientation
+        startAngle = quaternion_to_yaw(startOrient)
+        # TODO: What will you do if angular_distance is greater than 2*pi or less than -2*pi?
+        while angular_distance > 2 * math.pi:
+            angular_distance -= 2 * math.pi
+        while angular_distance < -2 * math.pi:
+            angular_distance += 2 * math.pi
+
+        rate = rospy.Rate(10)
+        # TODO: CONDITION should check if the robot has rotated the desired amount
+        orientation = self.currentOdom.pose.pose.orientation
+        angle = quaternion_to_yaw(orientation)
+
+        travelDistance = abs(startAngle - angle)
+        # TODO: Be sure to handle the case where the desired amount is negative!
+        while travelDistance < abs(angular_distance):
+            # TODO: you will probably need to do some math in this loop to check the CONDITION
+            direction = -1 if angular_distance < 0 else 1
+            self.move(0, direction * speed)
+            orientation = self.currentOdom.pose.pose.orientation
+            angle = quaternion_to_yaw(orientation)
+            travelDistance = abs(startAngle - angle)
             rate.sleep()
 
 
 
 def distanceBetweenPoints(point1, point2):
     distance = (point1.x - point2.x)**2 + (point1.y - point2.y)**2
-    return sqrt(distance)
+    return math.sqrt(distance)
+
+def quaternion_to_yaw(q):
+    m = tft.quaternion_matrix([q.x, q.y, q.z, q.w])
+    x = m[0, 0]
+    y = m[1, 0]
+    return math.atan2(y, x)

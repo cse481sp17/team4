@@ -17,6 +17,9 @@ import tf.transformations as tft
 import numpy as np
 import math
 
+# Imports for lab 13-15
+from Driver import Driver
+
 import sys, select, termios, tty
 
 msg = """
@@ -51,7 +54,6 @@ def getKey():
         key = sys.stdin.read(1)
     else:
         key = ''
-
     termios.tcsetattr(sys.stdin, termios.TCSADRAIN, settings)
     return key
 
@@ -84,7 +86,8 @@ def show_text_in_rviz(text):
     marker_publisher.publish(marker)
     
     
-def show_path_in_rviz(data):
+def show_path_in_rviz(data, args):
+    marker_publisher = args
 	# Get the last point and the new point
     last_point = all_points[len(all_points) - 1]
     next_point = data.pose.pose.position
@@ -95,14 +98,14 @@ def show_path_in_rviz(data):
     default_pose = Pose()
     # create and publish the marker
     marker = Marker(
-	type=Marker.LINE_STRIP,
-	id=1,
-	lifetime=rospy.Duration(0),
-	pose=default_pose,
-	scale=Vector3(0.3, 0.3, 0.3),
-	header=Header(frame_id=data.header.frame_id),
-	color=ColorRGBA(0.0, 1.0, 0.0, 0.8),
-	points=all_points)
+        type=Marker.LINE_STRIP,
+        id=1,
+        lifetime=rospy.Duration(0),
+        pose=default_pose,
+        scale=Vector3(0.3, 0.3, 0.3),
+        header=Header(frame_id=data.header.frame_id),
+        color=ColorRGBA(0.0, 1.0, 0.0, 0.8),
+        points=all_points)
     marker_publisher.publish(marker)
 
 
@@ -118,13 +121,6 @@ def handle_move(input):
     else:
         rospy.loginfo('Cannot handle this InteractiveMarker event')
 
-def quaternion_to_yaw(q):
-    m = tft.quaternion_matrix([q.x, q.y, q.z, q.w])
-    x = m[0, 0]
-    y = m[1, 0]
-    theta_rads = math.atan2(y, x)
-    theta_degs = theta_rads * 180 / math.pi
-    return theta_degs
 
 
 if __name__ == "__main__":
@@ -132,38 +128,12 @@ if __name__ == "__main__":
 
     rospy.init_node('fetch_teleop_key')
     base = fetch_api.Base()
+
+    marker_publisher = rospy.Publisher('visualization_marker', Marker, queue_size=10)
     
     # Subscriber for path recording and marking
-    rospy.Subscriber('/odom', Odometry, show_path_in_rviz)
+    rospy.Subscriber('/odom', Odometry, show_path_in_rviz, marker_publisher)
     
-    # Interactive Marker test Code
-    server = InteractiveMarkerServer("simple_marker")
-    int_marker = InteractiveMarker()
-    int_marker.header.frame_id = "base_link"
-    int_marker.name = "my_marker"
-    int_marker.description = "Simple Click Control"
-    int_marker.pose.position.x = 1
-    int_marker.pose.orientation.w = 1
-	
-    box_marker = Marker()
-    box_marker.type = Marker.CUBE
-    box_marker.pose.orientation.w = 1
-    box_marker.scale.x = 0.45
-    box_marker.scale.y = 0.45
-    box_marker.scale.z = 0.45
-    box_marker.color.r = 0.0
-    box_marker.color.g = 0.5
-    box_marker.color.b = 0.5
-    box_marker.color.a = 1.0
-	
-    button_control = InteractiveMarkerControl()
-    button_control.interaction_mode = InteractiveMarkerControl.BUTTON
-    button_control.always_visible = True
-    button_control.markers.append(box_marker)
-    int_marker.controls.append( button_control )
-	
-    server.insert(int_marker, handle_viz_input)
-    server.applyChanges()
 
     # teleop code
     x = 0
@@ -177,7 +147,7 @@ if __name__ == "__main__":
     try:
         print msg
         print vels(speed, turn)
-        marker_publisher = rospy.Publisher('visualization_marker', Marker, queue_size=10)
+        #marker_publisher = rospy.Publisher('visualization_marker', Marker, queue_size=10)
         while (1):
             show_text_in_rviz("test")
         	# print "enter msg for rviz text"
