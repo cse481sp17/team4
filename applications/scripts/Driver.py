@@ -5,6 +5,9 @@ import tf.transformations as tft
 import numpy as np
 
 class Driver(object):
+    ANGULAR_SPEED = 0.5
+    SPEED = 0.1
+
     def __init__(self, base):
          self.goal = None
          self._base = base
@@ -20,32 +23,54 @@ class Driver(object):
                 startPos = copy.deepcopy(self._base.currentOdom.pose.pose)
                 desired_distance = distanceBetweenPoints(goal, self._base.currentOdom.pose.pose.position) # Set this to how far the robot should move once pointed in the right direction
                 state = 'turn'
+            
+            # current position and angle
+            currentPoint = self._base.currentOdom.pose.pose.position
+            currentAngle = quaternion_to_yaw(self._base.currentOdom.pose.pose.orientation)
 
             if state == 'turn' and goal != None:
-                # TODO: Fix Rotation. May need to work on threshold
-                currentPoint = self._base.currentOdom.pose.pose.position
+                # desired angle
                 offsetX = goal.x - currentPoint.x 
                 offsetY = goal.y - currentPoint.y
                 targetAngle = math.atan2(offsetY, offsetX)
-                currentAngle = quaternion_to_yaw(self._base.currentOdom.pose.pose.orientation)
-                angularDistance = currentAngle - targetAngle
-                travelDistance = quaternion_to_yaw(startPos.orientation) - currentAngle
-                STILL_NEED_TO_TURN = travelDistance < abs(angularDistance)
-                #TODO: Handle Overshooting
-                if STILL_NEED_TO_TURN:
-                    direction = -1 if angularDistance < 0 else 1                    
-                    self._base.move(0, direction * 0.5)
+
+                # angle to turn
+                angularDistance = targetAngle - currentAngle
+
+                if angularDistance > math.pi:
+                    angularDistance = angularDistance - 2 * math.pi
+
+                # if the angle to turn is greater than 5 degrees (threshold), 
+                if abs(angularDistance) > 5 * math.pi/180:
+                    direction = -1 if angularDistance < 0 else 1
+                    angularSpeed = max(0.25, min(1, abs(angularDistance)))                  
+                    self._base.move(0, direction * angularSpeed)
                 else:
                     state = 'move'
 
             if state == 'move':
-                position = self._base.currentOdom.pose.pose.position
-                STILL_NEED_TO_MOVE = (distanceBetweenPoints(position, startPos.position) < abs(desired_distance))
-                #TODO: Handle overshooting
-                if STILL_NEED_TO_MOVE:
-                    # TODO: possibly adjust speed to slow down when close to the goal
-                    direction = -1 if desired_distance < 0 else 1
-                    self._base.move(direction * 0.1, 0)
+                # calculate current position and distance left to go
+                forwardDistance = distanceBetweenPoints(currentPoint, goal)
+
+                # calculate whether direction is forwards or backwards
+                offsetX = goal.x - currentPoint.x 
+                offsetY = goal.y - currentPoint.y
+                targetAngle = math.atan2(offsetY, offsetX)
+
+                # check for overshoot
+                direction = 1
+                if abs(targetAngle - math.pi) < 5 * math.pi/180:
+                    direction = -1
+
+                # if the distance left to move is greater than 0.01, keep moving
+                if (forwardDistance > 0.1):
+                    linearSpeed = max(0.05, min(0.5, forwardDistance))
+                    #direction = -1 if desired_distance < 0 else 1
+                    self._base.move(direction * linearSpeed, 0)
+
+                # check again to see if angle needs to be corrected
+                if abs(targetAngle - currentAngle) > 5 * math.pi/180:
+                    state = 'turn'
 
             rospy.sleep(0.1)
 
