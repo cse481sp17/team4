@@ -1,0 +1,19 @@
+Start roscore
+
+run gazebo simulation
+
+Run:
+roslaunch applications nav_rviz.launch
+
+If need to reset global location (red arrows):
+rosservice call global_localization
+
+To move robot around use keyboard_teleop
+
+Then proceed happily!
+
+To run the map annotator in rviz:
+
+cd catkin_ws/src/cse481c/map_annotator/src 
+
+python command_line_frontend.py

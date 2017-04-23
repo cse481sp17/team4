@@ -1,0 +1,13 @@
+Start roscore
+
+run gazebo simulation
+
+Run:
+roslaunch applications nav_rviz.launch
+
+If need to reset global location (red arrows):
+rosservice call global_localization
+
+To move robot around use keyboard_teleop
+
+Then proceed happily!
