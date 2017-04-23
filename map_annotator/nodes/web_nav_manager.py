@@ -31,6 +31,10 @@ class WebNavigationManager(object):
     def goto(self, poseName):
         destination = move_base_msgs.msg.MoveBaseActionGoal()
         destination.goal.target_pose.pose = self.poses[poseName]
+
+        # modify pose so z is zero when interpreting movement
+        destination.goal.target_pose.pose.position.z = 0.0
+
         destination.goal.target_pose.header.frame_id = "map"
         #return destination
         self.goalPublisher.publish(destination)

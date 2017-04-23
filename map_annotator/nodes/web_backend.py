@@ -11,6 +11,7 @@ from visualization_msgs.msg import *
 
 import move_base_msgs.msg
 
+# Globals
 nav_manager = None
 server = None
 nav_manager_pub = None
@@ -28,6 +29,8 @@ class PoseMarker:
         self.pose = pose
         if pose == None:
             self.pose = Pose()
+
+        self.pose.position.z = 0.5
         
         self._server = server
         self._name = name
@@ -37,6 +40,7 @@ class PoseMarker:
         int_marker.header.frame_id = "map"
         int_marker.pose = self.pose
 
+        # Arrow marker
         box_marker = Marker()
         box_marker.type = Marker.ARROW
         box_marker.pose.orientation.w = 1
@@ -48,6 +52,7 @@ class PoseMarker:
         box_marker.color.b = 0.5
         box_marker.color.a = 1.0
 
+        # Text label
         name_marker = Marker()
         name_marker.type = Marker.TEXT_VIEW_FACING
         name_marker.scale.x = 0.2
@@ -59,6 +64,7 @@ class PoseMarker:
         name_marker.color.a = 0.8
         name_marker.text = self._name
 
+        # Arrow is movable
         move_control = InteractiveMarkerControl()
 
         move_control.orientation.w = 1
@@ -74,6 +80,7 @@ class PoseMarker:
 
         int_marker.controls.append( move_control )
 
+        # Arrow is rotatable
         rotation_control = InteractiveMarkerControl()
         rotation_control.interaction_mode = InteractiveMarkerControl.MOVE_ROTATE
         move_control.always_visible = True
@@ -82,8 +89,6 @@ class PoseMarker:
         rotation_control.orientation.x = 0
         rotation_control.orientation.y = 1
         rotation_control.orientation.z = 0
-
-
 
         int_marker.controls.append( rotation_control )
 
@@ -102,30 +107,29 @@ class PoseMarker:
         if feedback_msg.event_type == InteractiveMarkerFeedback.POSE_UPDATE:
             rospy.loginfo('User clicked {}, new pose x/y/z: {}, {}, {}'.format(feedback_msg.marker_name, position.position.x, position.position.y, position.position.z))
             self.pose = position # Updates the pose to the new position
+
+            self.pose.position.z = 0.5 # Set to 0.5 for visual niceness, but interpret as 0 for movement, handled later
+
             nav_manager.savePose(feedback_msg.marker_name, position)
             self._server.applyChanges() # update list of posenames
 
 
 def process_command(data):
+    # We update names whenever the command changes them
     if data.command == data.CREATE:
-        # create nav marker, callback for 
-        print "Create called"
         marker = PoseMarker(server, data.name)
         nav_manager.savePose(data.name, marker.pose)
-        # Update list of pose names here cuz hard
         msg = PoseNames()
         msg.names = nav_manager.listPoses()
         nav_manager_pub.publish(msg)
     elif data.command == data.DELETE:
-        # delete marker
         server.erase(data.name)
         nav_manager.deletePose(data.name)
         msg = PoseNames()
         msg.names = nav_manager.listPoses()
         nav_manager_pub.publish(msg)
-        server.applyChanges() # update list of posenames
+        server.applyChanges() # rviz reflects changes, applyChanges() called in create calls
     elif data.command == data.GOTO:
-        # goto marker
         nav_manager.goto(data.name)
     else:
         print "nothing done, command: ", data.command
@@ -137,13 +141,14 @@ def main():
     wait_for_time()
     global nav_manager
     global nav_manager_pub
+    global server
+
     nav_manager = WebNavigationManager()
     nav_manager.loadPoses()
 
     # Sleeping so publisher has time to get started
     rospy.sleep(rospy.Duration.from_sec(2))
 
-    global server
     server = InteractiveMarkerServer("simple_marker")
 
     for poseName in nav_manager.poses:
@@ -156,14 +161,6 @@ def main():
     msg = PoseNames()
     msg.names = nav_manager.listPoses()
     nav_manager_pub.publish(msg)
-
-    # Publish markers as they're updated
-    # while not rospy.is_shutdown():
-     #   rospy.sleep(.05)
-     #   msg = PoseNames()
-     #   msg.names = nav_manager.listPoses()
-     #   nav_manager_pub.publish(msg)
-
 
     rospy.spin()
 
