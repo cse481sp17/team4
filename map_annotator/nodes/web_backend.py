@@ -41,12 +41,23 @@ class PoseMarker:
         box_marker.type = Marker.ARROW
         box_marker.pose.orientation.w = 1
         box_marker.scale.x = 0.5
-        box_marker.scale.y = 0.23
-        box_marker.scale.z = 0.23
+        box_marker.scale.y = 0.1
+        box_marker.scale.z = 0.1
         box_marker.color.r = 0.0
         box_marker.color.g = 0.5
         box_marker.color.b = 0.5
         box_marker.color.a = 1.0
+
+        name_marker = Marker()
+        name_marker.type = Marker.TEXT_VIEW_FACING
+        name_marker.scale.x = 0.2
+        name_marker.scale.y = 0.2
+        name_marker.scale.z = 0.2
+        name_marker.color.r = 0.0
+        name_marker.color.g = 1.0
+        name_marker.color.b = 0.0
+        name_marker.color.a = 0.8
+        name_marker.text = self._name
 
         move_control = InteractiveMarkerControl()
 
@@ -58,6 +69,9 @@ class PoseMarker:
         move_control.interaction_mode = InteractiveMarkerControl.MOVE_PLANE
         move_control.always_visible = True
         move_control.markers.append(box_marker)
+
+        move_control.markers.append(name_marker)
+
         int_marker.controls.append( move_control )
 
         rotation_control = InteractiveMarkerControl()
@@ -68,6 +82,8 @@ class PoseMarker:
         rotation_control.orientation.x = 0
         rotation_control.orientation.y = 1
         rotation_control.orientation.z = 0
+
+
 
         int_marker.controls.append( rotation_control )
 
@@ -88,16 +104,6 @@ class PoseMarker:
             self.pose = position # Updates the pose to the new position
             nav_manager.savePose(feedback_msg.marker_name, position)
             self._server.applyChanges() # update list of posenames
-
-
-    #def handle_create(self):
-        
-
-    #def handle_delete
-
-    #def handle_update
-
-    #handle_rename
 
 
 def process_command(data):
