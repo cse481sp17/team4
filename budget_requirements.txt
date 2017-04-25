@@ -1,0 +1,18 @@
+objects, components, tools, and materials you would like to purchase or fabricate in order to create the demo scenario for your project
+
+Include a justification of why you need each item, and, if applicable, a link for purchasing (Amazon.com when available)
+
+Floor/Lights/Temp + humidity, map of environment, Power source
+
+
+
+Stuff we need:
+
+Bookshelf
+Books
+Holding container
+Wi-fi or radio receiver for communication
+Barcode scanner/QR scanner
+Barcodes/QRs
+Hook or grabbing implements (makerspace?)
+2nd camera for arm POV?
