@@ -4,7 +4,7 @@ import fetch_api
 import rospy
 import copy
 from fetch_api import *
-from visualization_msgs.msg import InteractiveMarker, Marker, InteractiveMarkerControl, InteractiveMarkerFeedback
+from visualization_msgs.msg import InteractiveMarker, Marker, InteractiveMarkerControl, InteractiveMarkerFeedback, MenuEntry
 from interactive_markers.interactive_marker_server import InteractiveMarkerServer
 from geometry_msgs.msg import PoseStamped
 
@@ -30,6 +30,7 @@ class GripperTeleop(object):
         for marker in markers:
             marker_control.markers.append(marker)
         marker_control.always_visible = True
+        marker_control.interaction_mode = InteractiveMarkerControl.MENU
         
         gripper_im.controls.append(marker_control)
 
@@ -39,8 +40,21 @@ class GripperTeleop(object):
         # Add the menu commands
         entry1 = MenuEntry()
         entry1.id = 1
-        entry1.title = 'gripper'
+        entry1.title = 'open'
+        entry1.command_type = entry1.FEEDBACK
         gripper_im.menu_entries.append(entry1)
+
+        entry2 = MenuEntry()
+        entry2.id = 2
+        entry2.title = 'close'
+        entry2.command_type = entry2.FEEDBACK
+        gripper_im.menu_entries.append(entry2)
+
+        entry3 = MenuEntry()
+        entry3.id = 3
+        entry3.title = 'move_gripper'
+        entry3.command_type = entry3.FEEDBACK
+        gripper_im.menu_entries.append(entry3)
 
         self._im_server.insert(gripper_im, feedback_cb = self.handle_feedback)
         self._im_server.applyChanges()
@@ -68,7 +82,10 @@ class GripperTeleop(object):
             self._im_server.applyChanges()
         # If the feedback is a menu select, do the coresponding action
         elif feedback.event_type == InteractiveMarkerFeedback.MENU_SELECT:
-            pass
+            if feedback.menu_entry_id == 1:
+                self.gripper.open()
+            elif feedback.menu_entry_id == 2:
+                self.gripper.close()
 
 
 class AutoPickTeleop(object):
