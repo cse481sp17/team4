@@ -1,0 +1,230 @@
+header: 
+  seq: 0
+  stamp: 
+    secs: 0
+    nsecs:         0
+  frame_id: wrist_roll_link
+pose: 
+  position: 
+    x: 0.0
+    y: 0.0
+    z: 0.0
+  orientation: 
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+name: da grip
+description: ''
+scale: 0.5
+menu_entries: []
+controls: 
+  - 
+    name: ''
+    orientation: 
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 0.0
+    orientation_mode: 0
+    interaction_mode: 0
+    always_visible: True
+    markers: 
+      - 
+        header: 
+          seq: 0
+          stamp: 
+            secs: 0
+            nsecs:         0
+          frame_id: ''
+        ns: ''
+        id: 0
+        type: 10
+        action: 0
+        pose: 
+          position: 
+            x: 0.166
+            y: 0.0
+            z: 0.0
+          orientation: 
+            x: 0.0
+            y: 0.0
+            z: 0.0
+            w: 0.0
+        scale: 
+          x: 0.0
+          y: 0.0
+          z: 0.0
+        color: 
+          r: 0.0
+          g: 1.0
+          b: 0.0
+          a: 1.0
+        lifetime: 
+          secs: 0
+          nsecs:         0
+        frame_locked: False
+        points: []
+        colors: []
+        text: ''
+        mesh_resource: package://fetch_description/meshes/gripper_link.dae
+        mesh_use_embedded_materials: False
+      - 
+        header: 
+          seq: 0
+          stamp: 
+            secs: 0
+            nsecs:         0
+          frame_id: ''
+        ns: ''
+        id: 0
+        type: 10
+        action: 0
+        pose: 
+          position: 
+            x: 0.166
+            y: -0.05
+            z: 0.0
+          orientation: 
+            x: 0.0
+            y: 0.0
+            z: 0.0
+            w: 0.0
+        scale: 
+          x: 0.0
+          y: 0.0
+          z: 0.0
+        color: 
+          r: 0.0
+          g: 1.0
+          b: 0.0
+          a: 1.0
+        lifetime: 
+          secs: 0
+          nsecs:         0
+        frame_locked: False
+        points: []
+        colors: []
+        text: ''
+        mesh_resource: package://fetch_description/meshes/l_gripper_finger_link.STL
+        mesh_use_embedded_materials: False
+      - 
+        header: 
+          seq: 0
+          stamp: 
+            secs: 0
+            nsecs:         0
+          frame_id: ''
+        ns: ''
+        id: 0
+        type: 10
+        action: 0
+        pose: 
+          position: 
+            x: 0.166
+            y: 0.05
+            z: 0.0
+          orientation: 
+            x: 0.0
+            y: 0.0
+            z: 0.0
+            w: 0.0
+        scale: 
+          x: 0.0
+          y: 0.0
+          z: 0.0
+        color: 
+          r: 0.0
+          g: 1.0
+          b: 0.0
+          a: 1.0
+        lifetime: 
+          secs: 0
+          nsecs:         0
+        frame_locked: False
+        points: []
+        colors: []
+        text: ''
+        mesh_resource: package://fetch_description/meshes/r_gripper_finger_link.STL
+        mesh_use_embedded_materials: False
+    independent_marker_orientation: False
+    description: ''
+  - 
+    name: rotate_x
+    orientation: 
+      x: 1
+      y: 0
+      z: 0
+      w: 1
+    orientation_mode: 0
+    interaction_mode: 5
+    always_visible: False
+    markers: []
+    independent_marker_orientation: False
+    description: ''
+  - 
+    name: move_x
+    orientation: 
+      x: 1
+      y: 0
+      z: 0
+      w: 1
+    orientation_mode: 0
+    interaction_mode: 3
+    always_visible: False
+    markers: []
+    independent_marker_orientation: False
+    description: ''
+  - 
+    name: rotate_z
+    orientation: 
+      x: 0
+      y: 1
+      z: 0
+      w: 1
+    orientation_mode: 0
+    interaction_mode: 5
+    always_visible: False
+    markers: []
+    independent_marker_orientation: False
+    description: ''
+  - 
+    name: move_z
+    orientation: 
+      x: 0
+      y: 1
+      z: 0
+      w: 1
+    orientation_mode: 0
+    interaction_mode: 3
+    always_visible: False
+    markers: []
+    independent_marker_orientation: False
+    description: ''
+  - 
+    name: rotate_y
+    orientation: 
+      x: 0
+      y: 0
+      z: 1
+      w: 1
+    orientation_mode: 0
+    interaction_mode: 5
+    always_visible: False
+    markers: []
+    independent_marker_orientation: False
+    description: ''
+  - 
+    name: move_y
+    orientation: 
+      x: 0
+      y: 0
+      z: 1
+      w: 1
+    orientation_mode: 0
+    interaction_mode: 3
+    always_visible: False
+    markers: []
+    independent_marker_orientation: False
+    description: ''
+
