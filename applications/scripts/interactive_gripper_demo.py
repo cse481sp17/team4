@@ -65,21 +65,24 @@ class GripperTeleop(object):
 
     def handle_feedback(self, feedback):
         gripper_im = copy.deepcopy(self._im_server.get('da grip'))
+
         # If the feedback is a pose update, calculate the IK and update colors accordingly
         if feedback.event_type == InteractiveMarkerFeedback.POSE_UPDATE:
+            # prepare pose and compute ik
             poseStamped = PoseStamped()
             poseStamped.pose = feedback.pose
             poseStamped.header = feedback.header
             success = self.arm.compute_ik(poseStamped)
-            if success:
-                gripper_markers = gripper_im.controls[0].markers
-                change_marker_colors(gripper_markers, True)
-            else:
-                gripper_markers = gripper_im.controls[0].markers
-                change_marker_colors(gripper_markers, False)
-            # Here is where the issue is happening, with the marker disappearing
+            
+            # change marker color
+            gripper_markers = gripper_im.controls[0].markers
+            change_marker_colors(gripper_markers, success)
+            print success
+
+            # Here is where the issue was happening, with the marker disappearing
             self._im_server.insert(gripper_im)
             self._im_server.applyChanges()
+        
         # If the feedback is a menu select, do the coresponding action
         elif feedback.event_type == InteractiveMarkerFeedback.MENU_SELECT:
             if feedback.menu_entry_id == 1:
@@ -213,9 +216,9 @@ def main():
     arm = fetch_api.Arm()
     gripper = fetch_api.Gripper()
     teleop = GripperTeleop(arm, gripper, im_server)
-    auto_pick = AutoPickTeleop(arm, gripper, im_server)
-    teleop.start()
-    auto_pick.start()
+    #auto_pick = AutoPickTeleop(arm, gripper, im_server)
+    #teleop.start()
+    #auto_pick.start()
     rospy.spin()
 
 if __name__ == "__main__":
