@@ -1,0 +1,33 @@
+Instructions for running the interactive gripper demo (both moving the individual gripper, and creating a three-step automatic picking procedure
+
+[Terminal 1]
+roscore
+
+[Terminal 2]
+roslaunch fetch_gazebo playground.launch 
+
+[Terminal 3]
+rosrun rviz rviz
+
+[Terminal 4]
+roslaunch fetch_api move_group.launch
+
+[Terminal 5]
+cd ~/catkin_ws/src/cse481c/applications/scripts
+python interactive_gripper_demo.py
+
+----
+
+At this point, the markers should be visible and movable in Rviz. There should be updates in the last terminal everytime they are moved or rotated.
+
+Note that we are managing the switch between the single-gripper mode and the picking-procedure mode by commenting out either "teleop = GripperTeleop(arm, gripper, im_server)" or "auto_pick = AutoPickTeleop(arm, gripper, im_server)" in the "main" method in python interactive_gripper_demo.py.
+
+To actually position the robot near the table to pick up the object, run "rosrun applications keyboard_teleop.py" and drive around in another terminal.
+
+Also, it might be helpful to list up the torso:
+rosrun applications torso_demo.py 0.3
+
+Or move the head up and down:
+rosrun applications head_demo.py pan_tilt 0 0.5
+
+----
