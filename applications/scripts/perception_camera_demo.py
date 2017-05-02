@@ -24,6 +24,12 @@ def main():
     camera = perception.MockCamera()
     cloud = camera.read_cloud(path)
 
+    # if is_sim:
+    #     cloud = camera.read_cloud('kitchen.bag')
+    # else:
+    #     # Think this is reading from actual robot, not our bag files
+    #     cloud = rospy.wait_for_message('head_camera/depth_registered/points', PointCloud2)
+
     if cloud is None:
         rospy.logerr('Could not load point cloud from {}'.format(path))
         return
