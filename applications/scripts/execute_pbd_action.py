@@ -89,7 +89,9 @@ def main():
 
                     move_pose.pose = target_pose
 
-        arm.move_to_pose(move_pose)
+        err = arm.move_to_pose(move_pose) # TODO: maybe not fail? or just use better sequences of poses less likely to fail
+        if err is not None:
+            print "Error in move to pose: ", err
         # Check the gripper to open/close
         if pbd_pose.gripper_open != gripper_open:
             if gripper_open == True:

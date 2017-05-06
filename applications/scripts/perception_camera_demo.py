@@ -12,7 +12,8 @@ def wait_for_time():
         pass
 
     
-def main():                                                                             
+def main():
+    is_sim = False  # if reading from robot set to False                                                                           
     rospy.init_node('publish_saved_cloud')
     wait_for_time()                                                                     
     argv = rospy.myargv()
@@ -22,13 +23,14 @@ def main():
         return
     path = argv[1]
     camera = perception.MockCamera()
-    cloud = camera.read_cloud(path)
+    # cloud = camera.read_cloud(path)
 
-    # if is_sim:
-    #     cloud = camera.read_cloud('kitchen.bag')
-    # else:
-    #     # Think this is reading from actual robot, not our bag files
-    #     cloud = rospy.wait_for_message('head_camera/depth_registered/points', PointCloud2)
+    if is_sim:
+        cloud = camera.read_cloud(path)
+        # cloud = camera.read_cloud('kitchen.bag')
+    else:
+        # Think this is reading from actual robot, not our bag files
+        cloud = rospy.wait_for_message('head_camera/depth_registered/points', PointCloud2)
 
     if cloud is None:
         rospy.logerr('Could not load point cloud from {}'.format(path))
