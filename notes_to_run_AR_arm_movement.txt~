@@ -1,0 +1,36 @@
+[Terminal 1]
+roscore
+
+[Terminal 2]
+roslaunch fetch_gazebo playground.launch 
+
+[Terminal 3]
+rosrun rviz rviz
+
+[Terminal 4]
+roslaunch fetch_api move_group.launch
+
+[Terminal 5] (If we need to hallucinate a scene in the simulation)
+rosrun applications perception_camera_demo.py /home/team4/catkin_ws/src/perception/src/box_on_table.bag
+
+NOTE: You can replace that last part "box_on_table.bag" with other saved pointClouds
+
+[Terminal 6] (To make the AR markers actually appear)
+roslaunch fetch_api ar_desktop.launch cam_image_topic:=mock_point_cloud
+
+[Terminal 7] (This is where the real meat of the program is)
+
+NOTE: Each of these files takes a few seconds to start up, because there are sleep statements
+
+To save a new set of poses:
+rosrun applications create_pbd_action.py FILENAME.p
+
+To execute a set of poses:
+rosrun applications execute_pbd_action.py FILENAME.p
+
+The 3 files to look at if you want to see the code are:
+create_pbd_action.py
+execute_pbd_action.py
+pbd_pose.py
+
+

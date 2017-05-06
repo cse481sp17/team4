@@ -1,25 +1,17 @@
 #! /usr/bin/env python
 
 import rospy
-# For the poses
-from geometry_msgs.msg import PoseStamped
-# For calculating the transforms
-from tf_util import *
-# For saving the actions
 import pickle
-# For storing the poses
-from pbd_pose import *
-# For relaxing the arm
-from robot_controllers_msgs.msg import QueryControllerStatesGoal, QueryControllerStatesAction, ControllerState
-# for the action server
 import actionlib
-# For the arm and gripper
 import fetch_api
-# For the AR markers
-from ar_track_alvar_msgs.msg import AlvarMarkers
-# For the maths
 import numpy as np
+import tf
 
+from geometry_msgs.msg import PoseStamped, Pose
+from tf_util import *
+from pbd_pose import *
+from robot_controllers_msgs.msg import QueryControllerStatesGoal, QueryControllerStatesAction, ControllerState
+from ar_track_alvar_msgs.msg import AlvarMarkers
 
 # Variable for if we are running this in simulation. In the simulation, we do not need
 # to relax the arm
@@ -31,7 +23,6 @@ class ArTagReader(object):
 
     def callback(self, msg):
         self.markers = msg.markers
-
 
 def print_usage():
     print 'Allows the user to move the arm and save a series of poses. The poses are saved to the given file'
@@ -54,6 +45,20 @@ def print_user_options():
     print "     quit : Exits the program. Does not save automatically"
     print "     help : Prints this list of commands"
 
+# Gets the current pose of the gripper based on the base_link
+def get_current_gripper_pose(listener):
+    (trans, rot) = listener.lookupTransform('/base_link', '/wrist_roll_link', rospy.Time(0))
+    gr_pose = Pose()
+    gr_pose.position.x = trans[0]
+    gr_pose.position.y = trans[1]
+    gr_pose.position.z = trans[2]
+    gr_pose.orientation.x = rot[0]
+    gr_pose.orientation.y = rot[1]
+    gr_pose.orientation.z = rot[2]
+    gr_pose.orientation.w = rot[3]
+    return gr_pose
+
+
 def main():
     rospy.init_node('create_pbd_action')
     wait_for_time()
@@ -72,6 +77,8 @@ def main():
     gripper = fetch_api.Gripper()
     arm = fetch_api.Arm()
 
+    gripper_open = True
+
     # Init a a tfListener for reading the gripper pose
     listener = tf.TransformListener()
     rospy.sleep(rospy.Duration.from_sec(1))
@@ -82,11 +89,9 @@ def main():
 
     # Step 1: Relax the arm
     if not IN_SIM:
-        # TODO: Get this to work. Right now, it doesn't seem to be receiving result.
-        # Maybe double check that the right topic is being published to?
-
-        # Make an Action Client
-        controller_client = actionlib.SimpleActionClient('/query_controller_states/cancel', QueryControllerStatesAction)
+        controller_client = actionlib.SimpleActionClient('/query_controller_states', QueryControllerStatesAction)
+        # Sleep for a second to make sure the client starts up
+        rospy.sleep(1.0)
         # The rest of this code is given in the lab
         goal = QueryControllerStatesGoal()
         state = ControllerState()
@@ -94,21 +99,17 @@ def main():
         state.state = ControllerState.STOPPED
         goal.updates.append(state)
         controller_client.send_goal(goal)
-        controller_client.wait_for_result(rospy.Duration.from_sec(5.0))
+        controller_client.wait_for_result()
 
-    # Step 2, Get the user interface going
+    # Get the user interface going
     print_user_options()
     running = True
     while running:
         user_input = raw_input("")
         if user_input == "save_pose":
-            pass
-            # TODO: All the steps for save_pose
-
-            # First: Get the current pose with respect to the base_link
-            current_gripper_pose = listener.lookupTransform('/base_link', '/wrist_roll_link', rospy.Time(0))
-
-            # Second: As the user which frame they would like to save the pose to
+            # Get the current pose with respect to the base_link
+            current_gripper_pose = get_current_gripper_pose(listener)
+            # Ask the user which frame they would like to save the pose to
             # Eg: base_link, tag 1, tag 2
             print "Please input the frame you would like to save the pose in. The options are:"
             print "     base_link"
@@ -116,41 +117,36 @@ def main():
                 print "     %s" % marker.id
 
             frame = raw_input("")
-            # Not doing any checks to see if it is an actual fram, we just need to be careful
 
-
-            # Third: If necessary, do the transform to get the pose in the proper frame
-            pose = PoseStamped()
+            # Check the frame the pose should be saved in
+            pose = Pose()
+            frame_id = frame
             if frame == "base_link":
-                pose.pose = current_gripper_pose
-                pose.header.frame_id = 'base_link'
+                pose = current_gripper_pose
+                frame_id = 'base_link'
             else:
                 for marker in reader.markers:
-                    if frame == marker.id:
-                        # Now we do the transform math
-
-                        # We want the Pose in the Tag frame. We have Tag in Base frame, and Pose in Base frame
-                        # so we need to do the inverse of the Tag in Base frame
-
-                        # First, we need to turn them into transform matrixes. Thankfully we have a method
-                        pose_in_base_matrix = tf_util.pose_to_transform(current_gripper_pose)
-                        tag_in_base_matrix = tf_util.pose_to_transform(marker.pose.pose)
-
-                        inv_matrix = np.inv(tag_in_base_matrix)
-
+                    if frame == str(marker.id):
+                        # First, we need to turn the poses into transform matrixes
+                        pose_in_base_matrix = pose_to_transform(current_gripper_pose)
+                        tag_in_base_matrix = pose_to_transform(marker.pose.pose)
+                        # Then take the inverse of the tag in the base fram
+                        inv_matrix = np.linalg.inv(tag_in_base_matrix)
+                        # Then take the dot product
                         pose_to_save = np.dot( inv_matrix, pose_in_base_matrix )
-
-                        pose.pose = pose_to_save
-                        pose.header.frame_id = marker.id
-            pbd_pose = PBD_Pose(pose, True)
-
+                        # The target pose is then transformed back into a pose object
+                        pose = transform_to_pose(pose_to_save)
+                        frame_id = str(marker.id)
+            # Create and append the PBD_Pose
+            pbd_pose = PBD_Pose(pose, gripper_open, frame)
             sequence.append(pbd_pose)
-            # Fourth: Create a PBD_Pose and append it to the list "sequence"
 
         if user_input == "open_gripper":
             gripper.open()
+            gripper_open = True
         if user_input == "close_gripper":
             gripper.close()
+            gripper_open = False
         if user_input == "save_program":
             pickle.dump( sequence, open(save_file_name, "wb") )
         if user_input == "help":
@@ -159,13 +155,5 @@ def main():
             running = False
 
 
-
-
 if __name__ == '__main__':
     main()
-
-# NOTE: After a little chat with Justin it seems there many be another (possibly better)
-# way to store the poses. My idea was to store each pose, transformed with respect to its frame.
-# His idea seems to be (and this may need double checking) store all the poses in the base_link frame,
-# and then store the locations of the tags. Then, we calculate the poses on the fly when we need them in other
-# frames. 

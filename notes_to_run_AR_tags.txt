@@ -1,0 +1,21 @@
+[Terminal 1]
+roscore
+
+[Terminal 2]
+roslaunch fetch_gazebo playground.launch 
+
+[Terminal 3]
+rosrun rviz rviz
+
+[Terminal 4] (If we are going to run code to moce the arm)
+roslaunch fetch_api move_group.launch
+
+[Terminal 5] (If we need to hallucinate a scene in the simulation)
+rosrun applications perception_camera_demo.py /home/team4/catkin_ws/src/perception/src/tags.bag
+
+(Or use box_on_table.bag)
+
+[Terminal 6] (To make the AR markers actually appear)
+roslaunch fetch_api ar_desktop.launch cam_image_topic:=mock_point_cloud
+
+

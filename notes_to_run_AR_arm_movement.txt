@@ -1,0 +1,43 @@
+[Terminal 1]
+roscore
+
+[Terminal 2]
+roslaunch fetch_gazebo playground.launch 
+
+[Terminal 3]
+rosrun rviz rviz
+
+[Terminal 4]
+roslaunch fetch_api move_group.launch
+
+[Terminal 5] (If we need to hallucinate a scene in the simulation)
+rosrun applications perception_camera_demo.py /home/team4/catkin_ws/src/perception/src/box_on_table.bag
+
+NOTE: You can replace that last part "box_on_table.bag" with other saved pointClouds
+
+[Terminal 6] (To make the AR markers actually appear)
+roslaunch fetch_api ar_desktop.launch cam_image_topic:=mock_point_cloud
+
+[Terminal 7] (This is where the real meat of the program is)
+
+To save a new set of poses:
+rosrun applications create_pbd_action.py FILENAME.p
+
+To execute a set of poses:
+rosrun applications execute_pbd_action.py FILENAME.p
+
+NOTE: Each of these files takes a few seconds to start up, because there are sleep statements
+
+NOTE: The create file gives instructions on how to work with it. If you want to move the arm in the simulation, use: (Make sure to open and close the gripper with the command line interface, not the
+interactive marker)
+rosrun applications interactive_gripper_demo.py
+
+NOTE: If you want to run the create on the real robot, set the IN_SIM global variable in the file
+to False
+
+The 3 files to look at if you want to see the code are:
+create_pbd_action.py
+execute_pbd_action.py
+pbd_pose.py
+
+
