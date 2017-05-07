@@ -24,7 +24,7 @@ class ArTagReader(object):
 
 def main():
     rospy.init_node('hallucinogen')
-    # wait_for_time()
+    wait_for_time()
 
     start = PoseStamped()
     start.header.frame_id = 'base_link'
