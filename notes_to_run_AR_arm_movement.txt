@@ -41,3 +41,20 @@ execute_pbd_action.py
 pbd_pose.py
 
 
+
+
+[Running the blog6 vids]
+- to save robot's pt. cloud
+- saves "tags.bag" in local path
+[Term 1]
+setrobot astro
+rosrun rviz rviz
+
+[Term 2]
+setrobot astro
+rosrun perception save_cloud tags
+
+- do prior instructions to load AR markers from real robot's saved point cloud
+- save poses relative to those tags
+- sync the sequence of poses from FILENAME.p to real robot, and execute
+
