@@ -44,17 +44,16 @@ pbd_pose.py
 
 
 [Running the blog6 vids]
-- to save robot's pt. cloud
-- saves "tags.bag" in local path
+
 [Term 1]
-setrobot astro
-rosrun rviz rviz
+ssh team4@astro
+roslaunch fetch_api ar_desktop.launch
 
 [Term 2]
-setrobot astro
-rosrun perception save_cloud tags
+ssh team4@astro
+roslaunch fetch_api move_group.launch
 
-- do prior instructions to load AR markers from real robot's saved point cloud
-- save poses relative to those tags
-- sync the sequence of poses from FILENAME.p to real robot, and execute
-
+[Term 3]
+rosrun applications create_pbd_action.py FILENAME.p
+[Do your poses and stuff, save, and quit]
+rosrun applications execute_pbd_action.py FILENAME.p
