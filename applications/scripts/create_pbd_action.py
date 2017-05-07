@@ -61,7 +61,7 @@ def get_current_gripper_pose(listener):
 
 def main():
     rospy.init_node('create_pbd_action')
-    wait_for_time()
+    # wait_for_time()
 
     # Check to see the proper args were given
     argv = rospy.myargv()
