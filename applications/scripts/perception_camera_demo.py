@@ -13,7 +13,7 @@ def wait_for_time():
 
     
 def main():
-    is_sim = False  # if reading from robot set to False                                                                           
+    is_sim = True  # if reading from robot set to False                                                                           
     rospy.init_node('publish_saved_cloud')
     wait_for_time()                                                                     
     argv = rospy.myargv()
