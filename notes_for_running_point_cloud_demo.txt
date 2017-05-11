@@ -1,0 +1,18 @@
+[Terminal 1]
+roscore
+
+[Terminal 2]
+roslaunch fetch_gazebo playground.launch 
+
+[Terminal 3]
+rosrun rviz rviz
+
+[Terminal 4]
+cd catkin_ws/src/perception/src
+rosrun applications perception_camera_demo.py tags.bag
+
+[Terminal 5]
+cd catkin_ws/src/perception/src
+rosrun perception point_cloud_demo cloud_in:=mock_point_cloud
+
+Look at RVIZ
