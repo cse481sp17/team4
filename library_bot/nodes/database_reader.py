@@ -1,7 +1,9 @@
+#! /usr/bin/env python
+
 # Read in database info to a data struct, book identifier -> (fiducial, detailed info, ...) ?
 
 # TODO: fill out
-def class DatabaseReader(object):
+class DatabaseReader(object):
     
     def __init__(self):
         # Store le db info m8

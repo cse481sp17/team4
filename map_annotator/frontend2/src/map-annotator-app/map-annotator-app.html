@@ -1,0 +1,68 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/ros-websocket/ros-websocket.html">
+<link rel="import" href="../../bower_components/ros-topic/ros-topic.html">
+
+<dom-module id="map-annotator-app">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
+	<ros-websocket auto
+  		ros="{{ros}}"
+  		on-connection="handleConnection"
+  		on-close="handleClose"
+  		on-error="handleError">
+	</ros-websocket>
+<ros-topic
+  auto
+  last-message="{{poseList}}"
+  on-message="handlePoseList"
+  topic="/pose_names"
+  ros="{{ros}}"
+  msg-type="map_annotator/PoseNames"
+></ros-topic>
+    <h2>Hello [[prop1]] (change this to a title of your choosing)</h2>
+<div>
+  Websocket status: {{status}}
+</div>
+  </template>
+
+  <script>
+    Polymer({
+
+      is: 'map-annotator-app',
+
+      properties: {
+        prop1: {
+          type: String,
+          value: 'map-annotator-app',
+        },
+      },
+	properties: {
+  status: {
+    type: String,
+    value: 'Unknown',
+  },
+},
+
+handleConnection: function() {
+  this.status = 'Connected to the websocket server.';
+},
+
+handleClose: function() {
+  this.status = 'Closed connection to websocket server.';
+},
+
+handleError: function() {
+  this.status = 'Error connecting to websocket server.';
+},
+
+handlePoseList: function(evt) {
+  var msg = evt.detail;
+  console.log(msg);
+}
+    });
+  </script>
+</dom-module>

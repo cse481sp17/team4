@@ -7,14 +7,14 @@ import move_base_msgs.msg
 from geometry_msgs.msg import Pose
 
 
-def class LocationDriver(object):
+class LocationDriver(object):
 
     def __init__(self):
         self.poses = dict()
         self.currentPose = None
         self.currentPoseSubscriber = rospy.Subscriber("/amcl_pose", geometry_msgs.msg.PoseWithCovarianceStamped, callback=self.updateCurrentPose)
         self.goalPublisher = rospy.Publisher("/move_base/goal", move_base_msgs.msg.MoveBaseActionGoal, queue_size=10)
-        rospy.init_node('locDriver', anonymous=True)
+        # rospy.init_node('locDriver', anonymous=True)
 
         # create bookshelf pose
         bookshelfPose = Pose()
@@ -38,7 +38,7 @@ def class LocationDriver(object):
         returnPose.orientation.y = 0.0
         returnPose.orientation.z = 0.14559
         returnPose.orientation.w = .989
-        self.poses["return"] = None
+        self.poses["return"] = returnPose
 
     def updateCurrentPose(self, data):
         self.currentPose = data.pose.pose
@@ -65,9 +65,11 @@ def class LocationDriver(object):
         destination.goal.target_pose.pose = self.poses[location]
         destination.goal.target_pose.header.frame_id = "map"
         self.goalPublisher.publish(destination)
+        print "here1"
 
     def return_to_goal(self, goal):
         destination = move_base_msgs.msg.MoveBaseActionGoal()
         destination.goal.target_pose.pose = self.poses[goal]
         destination.goal.target_pose.header.frame_id = "map"
         self.goalPublisher.publish(destination)
+        print "here2"
