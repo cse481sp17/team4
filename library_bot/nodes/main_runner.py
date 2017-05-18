@@ -7,6 +7,7 @@ from location_driver import NavigationManager
 from perception_interpreter import PerceptionInterpreter
 from arm_controller import ArmController
 import rospy
+import util
 # from library_bot import Thing.srv # make this work
 
 # TODO: fill out
@@ -16,16 +17,20 @@ def main():
     # TODO: make sure front end is launched
     request = None
     # TODO: read in data from database, request->book location/fiducial info
-    # db = DatabaseReader()
-    # book_info = db.request_book(request)
+    # Assume database stores poses directly.
+    db = DatabaseReader()
+    # TODO: request = ??
+    book_info = db.request_book(1) # 1 == the bookshelf book
+    poseKey = book_info[util.POSE_INDEX]
     # TODO: Check that we have a schematic of env, if not, build it before running this
+    
 
     # For now, these poses are saved manually, thru cmd_line_navigation.py + keyboard_teleop
     # TODO: might need to add to our launch folder: "roslaunch applications nav_rviz.launch"
     location_driver = NavigationManager()
     location_driver.loadPoses()
     rospy.sleep(2)
-    location_driver.goto("bookshelf")
+    location_driver.goto(poseKey)
     
     # Subscribe to move_base/status and wait until status switches from "goal accepted" to "goal reached" before continuing actions
     
@@ -44,7 +49,9 @@ def main():
     # TODO: Send mission status to Backend->Frontend
     # publish finished message
     # msg = Thing
-    location_driver.goto("return")
+
+    # rospy.sleep(2)
+    # location_driver.goto("return")
 
 if __name__ == '__main__':
     main()

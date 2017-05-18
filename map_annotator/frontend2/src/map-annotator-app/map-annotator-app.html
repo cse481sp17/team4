@@ -30,6 +30,13 @@
   		ros="{{ros}}"
   		msg-type="map_annotator/PoseNames"
 	></ros-topic>
+	<ros-topic
+	  auto
+	  id="userActions"
+	  topic="/user_actions"
+	  ros="{{ros}}"
+	  msg-type="map_annotator/UserAction"
+	></ros-topic>
     	<h2>Hello [[prop1]] , Changed this</h2>
 	<div>
   		Websocket status: {{status}}
@@ -75,8 +82,13 @@
 	},
 
 	handleAdd: function() {
-  		var name = alert('Enter a name:');
- 		 console.log(name);
+	  var name = prompt('Enter a name:');
+	  var msg = {
+	    command: 'create',
+	    name: name,
+	    updated_name: ''
+	  };     
+	  this.$.userActions.publish(msg);
 	},
     });
   </script>
