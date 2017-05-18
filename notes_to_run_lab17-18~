@@ -1,0 +1,39 @@
+Start roscore
+
+run gazebo simulation
+
+Run:
+roslaunch applications nav_rviz.launch
+
+If need to reset global location (red arrows):
+rosservice call global_localization
+
+To move robot around use keyboard_teleop
+
+Then proceed happily!
+
+To run the map annotator in rviz:
+
+cd catkin_ws/src/cse481c/map_annotator/src 
+
+python command_line_frontend.py
+
+
+New instructions for lab18:
+
+[Terminal 1]
+roscore
+[Terminal 2]
+roslaunch fetch_gazebo playground.launch 
+[Terminal 3]
+roslaunch applications nav_rviz.launch
+[Terminal 4]
+roslaunch rosbridge_server rosbridge_websocket.launch
+[Terminal 5]
+cd ~/catkin_ws/src/cse481c/map_annotator/nodes
+python web_backend.py
+[Terminal 6]
+python -m SimpleHTTPServer 8080 .
+[Debugging: Terminal 7]
+rostopic echo move_base/goal
+

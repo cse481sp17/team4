@@ -1,13 +1,20 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 <link rel="import" href="../../bower_components/ros-websocket/ros-websocket.html">
 <link rel="import" href="../../bower_components/ros-topic/ros-topic.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
 
 <dom-module id="map-annotator-app">
   <template>
     <style>
       :host {
         display: block;
+	font-family: Sans-serif
       }
+	paper-button {
+    	background-color: #ccc;
+    	margin-bottom: 10px;
+    	text-transform: none;
+  	}
     </style>
 	<ros-websocket auto
   		ros="{{ros}}"
@@ -15,18 +22,23 @@
   		on-close="handleClose"
   		on-error="handleError">
 	</ros-websocket>
-<ros-topic
-  auto
-  last-message="{{poseList}}"
-  on-message="handlePoseList"
-  topic="/pose_names"
-  ros="{{ros}}"
-  msg-type="map_annotator/PoseNames"
-></ros-topic>
-    <h2>Hello [[prop1]] (change this to a title of your choosing)</h2>
-<div>
-  Websocket status: {{status}}
-</div>
+	<ros-topic
+  		auto
+  		last-message="{{poseList}}"
+  		on-message="handlePoseList"
+  		topic="/pose_names"
+  		ros="{{ros}}"
+  		msg-type="map_annotator/PoseNames"
+	></ros-topic>
+    	<h2>Hello [[prop1]] , Changed this</h2>
+	<div>
+  		Websocket status: {{status}}
+	</div>
+	<h3>Poses</h2>
+	<paper-button on-tap="handleAdd">Add pose</paper-button>
+	<template is="dom-repeat" items="{{poseList.names}}">
+  		<div>{{item}}</div>
+	</template>
   </template>
 
   <script>
@@ -39,30 +51,33 @@
           type: String,
           value: 'map-annotator-app',
         },
-      },
-	properties: {
-  status: {
-    type: String,
-    value: 'Unknown',
-  },
-},
+  		status: {
+   		 type: String,
+    		value: 'Unknown',
+  		},
+	},
 
-handleConnection: function() {
-  this.status = 'Connected to the websocket server.';
-},
+	handleConnection: function() {
+	 this.status = 'Connected to the websocket server.';
+	},
 
-handleClose: function() {
-  this.status = 'Closed connection to websocket server.';
-},
+	handleClose: function() {
+	  this.status = 'Closed connection to websocket server.';
+	},
 
-handleError: function() {
-  this.status = 'Error connecting to websocket server.';
-},
+	handleError: function() {
+	  this.status = 'Error connecting to websocket server.';
+	},
 
-handlePoseList: function(evt) {
-  var msg = evt.detail;
-  console.log(msg);
-}
+	handlePoseList: function(evt) {
+	  var msg = evt.detail;
+	  console.log(msg);
+	},
+
+	handleAdd: function() {
+  		var name = alert('Enter a name:');
+ 		 console.log(name);
+	},
     });
   </script>
 </dom-module>

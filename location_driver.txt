@@ -1,0 +1,29 @@
+Lab 17-18ish
+
+map_annotator's
+
+web_backend.py
+web_nav_manager.py
+command_line_frontend.py
+
+
+To run our stuff
+
+[Terminal 1]
+roscore
+
+[Terminal 2]
+roslaunch fetch_gazebo playground.launch
+
+[Terminal 3]
+roslaunch applications nav_rviz.launch
+
+If need to reset global location (red arrows):
+rosservice call global_localization
+
+
+[Terminal 4] to run pose annotator
+python cmd_line_navigation.py
+
+[Terminal 5] to run keyboard teleop
+rosrun applications keyboard_teleop.py
