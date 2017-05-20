@@ -82,9 +82,11 @@
 				// var userIn = prompt('Enter a name:');
 				var e = document.getElementById("dropdown");
 				var strUser = e.options[e.selectedIndex].value;
+				var index = e.selectedIndex;
 				var msg = {
 					command: 'create',
-					name: strUser
+					name: strUser,
+					id: index
 				};
 				console.log(msg);
 				this.$.userActions.publish(msg);
