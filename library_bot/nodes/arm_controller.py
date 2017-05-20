@@ -1,6 +1,6 @@
 # Calls arm to pull out target tray and take book
 
-def class ArmController(object):
+class ArmController(object):
 
     def __init__(self):
         pass
@@ -12,6 +12,9 @@ def class ArmController(object):
         pass
         
     def grab_book(self, book):
+        pass
+
+    def release_book(self):
         pass
 
     def pull_out_book(self):
