@@ -13,8 +13,10 @@ from perception.srv import *
 
 import math
 
+from moveit_python import PlanningSceneInterface
+
 TARGET_ID = 13
-INSERT_GRASP_POSES = "testBookInsertPull2.p"
+INSERT_GRASP_POSES = "/home/team4/catkin_ws/src/perception/testBookInsertPull2.p"
 
 class ArTagReader(object):
     def __init__(self):
@@ -50,6 +52,18 @@ def main():
     reader = ArTagReader()
     sub = rospy.Subscriber('/ar_pose_marker', AlvarMarkers, reader.callback)
     rospy.sleep(0.5)
+
+    # Init the planning scene for collisions
+    planning_scene = PlanningSceneInterface('base_link')
+
+    print "waiting for service...."
+    rospy.wait_for_service('get_spines')
+    print "found service!"
+
+    get_spine_poses = rospy.ServiceProxy('get_spines', GetSpineLocations)
+    response = get_spine_poses()
+    #planning_scene.addBox('surface', response.surface_x_size, response.surface_y_size, response.surface_z_size,
+    #    response.surface_pose.position.x, response.surface_pose.position.y, response.surface_pose.position.z)
 
     # This is the same as the pbd action stuff, not making any changes at the moment
     for pbd_pose in sequence:
@@ -96,6 +110,11 @@ def main():
         get_spine_poses = rospy.ServiceProxy('get_spines', GetSpineLocations)
         response = get_spine_poses()
         spine_poses = response.spine_poses
+
+        # add the surface for collisons
+      #  planning_scene.addBox('surface', response.surface_x_size, response.surface_y_size, response.surface_z_size,
+      #   response.surface_pose.position.x, response.surface_pose.position.y, response.surface_pose.position.z)
+
         # debugging line
         for pose in spine_poses:
             print pose
@@ -132,7 +151,8 @@ def main():
     print "Error in move to pose: ", err
 
 
-
+    # At the end remove collision objects
+    planning_scene.removeCollisionObject('surface')
 
 
 

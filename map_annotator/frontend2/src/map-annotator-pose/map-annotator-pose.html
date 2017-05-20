@@ -1,0 +1,32 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../bower_components/ros-topic/ros-topic.html">
+  
+<dom-module id="map-annotator-pose">
+  <template>
+    <style>
+      :host {
+        display: block;
+      } 
+      paper-button {
+        background-color: #ccc;
+        margin-bottom: 10px;
+        text-transform: none;
+      }
+    </style>
+    {{name}}
+  </template>
+
+  <script>
+    Polymer({
+      is: 'map-annotator-pose',
+
+      properties: {
+          name: {
+            type: String,
+            value: ''
+        },
+      },
+    });
+  </script>
+</dom-module>

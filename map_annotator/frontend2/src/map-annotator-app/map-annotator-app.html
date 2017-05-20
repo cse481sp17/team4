@@ -1,7 +1,8 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 <link rel="import" href="../../bower_components/ros-websocket/ros-websocket.html">
 <link rel="import" href="../../bower_components/ros-topic/ros-topic.html">
-<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">\
+<link rel="import" href="../map-annotator-pose/map-annotator-pose.html">
 
 <dom-module id="map-annotator-app">
   <template>
@@ -37,14 +38,19 @@
 	  ros="{{ros}}"
 	  msg-type="map_annotator/UserAction"
 	></ros-topic>
-    	<h2>Hello [[prop1]] , Changed this</h2>
+    	<h2>Hello Valued User , Select a book</h2>
 	<div>
   		Websocket status: {{status}}
 	</div>
-	<h3>Poses</h2>
-	<paper-button on-tap="handleAdd">Add pose</paper-button>
+	<select id="dropdown">
+  	<option value="book1">Book1</option>
+  	<option value="book2">Book2</option>
+  	<option value="book3">Book3</option>
+  	<option value="book4">Book4</option>
+	</select> 
+	<paper-button on-tap="handleAdd">Get Book</paper-button>
 	<template is="dom-repeat" items="{{poseList.names}}">
-  		<div>{{item}}</div>
+  		<map-annotator-pose name="{{item}}"></map-annotator-pose>
 	</template>
   </template>
 
@@ -82,12 +88,14 @@
 	},
 
 	handleAdd: function() {
-	  var name = prompt('Enter a name:');
+	  // var userIn = prompt('Enter a name:');
+		var e = document.getElementById("dropdown");
+		var strUser = e.options[e.selectedIndex].value;
 	  var msg = {
 	    command: 'create',
-	    name: name,
-	    updated_name: ''
-	  };     
+	    name: strUser
+	  };
+		console.log(msg);
 	  this.$.userActions.publish(msg);
 	},
     });
