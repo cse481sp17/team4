@@ -27,11 +27,11 @@
 			Websocket status: {{status}}
 		</div>
 		<select id="dropdown">
-  	<option value="book1">Book1</option>
-  	<option value="book2">Book2</option>
-  	<option value="book3">Book3</option>
-  	<option value="book4">Book4</option>
-	</select>
+			<!--<option value="book1">Book1</option>
+			<option value="book2">Book2</option>
+			<option value="book3">Book3</option>
+			<option value="book4">Book4</option>-->
+		</select>
 		<paper-button on-tap="handleAdd">Get Book</paper-button>
 		<template is="dom-repeat" items="{{poseList.names}}">
 			<map-annotator-pose name="{{item}}"></map-annotator-pose>
@@ -104,6 +104,12 @@
 
 		function loadJSON(responseText) {
 			var actual_JSON = JSON.parse(responseText);
+			for (var i = 0; i < actual_JSON.books.length; i++) {
+				var drop = document.getElementById("dropdown");
+				var option = document.createElement("option");
+				option.text = actual_JSON.books[i].title;
+				drop.add(option);
+			}
 			console.log(actual_JSON.books[0]);
 		}
 	</script>
