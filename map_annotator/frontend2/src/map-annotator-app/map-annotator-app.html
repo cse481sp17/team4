@@ -65,7 +65,6 @@
           type: String,
           value: 'map-annotator-app',
         },
-<<<<<<< HEAD
       },
       properties: {
         status: {
@@ -74,27 +73,10 @@
         },
       },
 
-      handleConnection: function () {
-        this.status = 'Connected to the websocket server.';
-      },
-
-      handleClose: function () {
-        this.status = 'Closed connection to websocket server.';
-      },
-
-      handleError: function () {
-        this.status = 'Error connecting to websocket server.';
-      },
-
-    });
-  </script>
-</dom-module>
-=======
   		status: {
    		 type: String,
     		value: 'Unknown',
   		},
-	},
 
 	handleConnection: function() {
 	 this.status = 'Connected to the websocket server.';
@@ -125,6 +107,21 @@
 	  this.$.userActions.publish(msg);
 	},
     });
+
+	var xobj = new XMLHttpRequest();
+  xobj.overrideMimeType("application/json");
+  xobj.open('GET', '../../books.json', true); // Replace 'my_data' with the path to your file
+  xobj.onreadystatechange = function () {
+          if (xobj.readyState == 4 && xobj.status == "200") {
+            // Required use of an anonymous callback as .open will NOT return a value but simply returns undefined in asynchronous mode
+            loadJSON(xobj.responseText);
+          }
+  };
+  xobj.send(null); 
+
+	function loadJSON(responseText) {
+		var actual_JSON = JSON.parse(response);
+		console.log(actual_JSON.books[0]);
+	}
   </script>
 </dom-module>
->>>>>>> 2190ec2556f60d0cf6d6909f32d290d9e8962188

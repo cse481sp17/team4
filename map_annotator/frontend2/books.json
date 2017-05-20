@@ -1,0 +1,19 @@
+{
+  "books" : [
+    {
+      "title" : "The Cat in the Hat",
+      "author" : "Dr. Seuss",
+      "fiducial" : 1
+    },
+    {
+      "title" : "Ender's Game",
+      "author" : "Orson Scott Card",
+      "fiducial" : 2
+    },
+    {
+      "title" : "Prey",
+      "author" : "Michael Crichton",
+      "fiducial" : 3
+    }
+  ]
+}
