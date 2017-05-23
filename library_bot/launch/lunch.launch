@@ -1,0 +1,17 @@
+<launch>
+  <node pkg="applications" type="perception_camera_demo.py" name="publish_saved_cloud" args="$(find perception)/twoBooksOffset.bag"/>
+
+  <arg name="map_file" default="/home/team4/maps/playground.yaml"/>
+  <include file="$(find fetch_navigation)/launch/fetch_nav.launch">
+      <arg name="map_file" value="$(arg map_file)"/>
+  </include>
+
+  <arg name="cam_image_topic" default="mock_point_cloud"/>
+  <include file="$(find fetch_api)/launch/move_group.launch"/>
+  
+  <include file="$(find fetch_api)/launch/ar_desktop.launch">
+    <arg name="cam_image_topic" value="$(arg cam_image_topic)"/>
+  </include>
+
+  <node pkg="perception" type="book_pose_finder" name="book_pose_finder" args="cloud_in:=mock_point_cloud"/>
+</launch>

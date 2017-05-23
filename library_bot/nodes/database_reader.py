@@ -1,37 +1,28 @@
 #! /usr/bin/env python
 
 # Read in database info to a data struct, 
-# book identifier -> (fiducial, book info maybe not needed, poseName) ?
+# book identifier -> (BookInfo)
 
 import util
+import pickle
 
-# TODO: fill out
+
 class DatabaseReader(object):
-    
     def __init__(self):
-        # Store le db info m8
-        self.stuff = dict()
-        self.load_database(None)
-        self.save_database(None)
-        self.test_book_init()
-        pass
+        # load book data
+        self.library = pickle.load( open("bookData.p", "rb") )
 
-    # stuff
-    def load_database(self, file):
-        pass
+    def request_book(self, bookID):
+        return self.library[bookID]
 
-    # probs not needed
-    def save_database(self, target):
-        pass
 
-    def request_book(self, book):
-        return self.stuff[book]
+class BookInfo(object):
+    def __init__(self):
+        self.pose = None
+        self.torso = None
+        self.head_pan = None
+        self.head_tilt = None
+        self.fiducial_number = None
+        self.book_name = None
 
-    def test_book_init(self):
-        book1 = (1, None, "bookshelf")
-        book2 = (2, None, "return")
-        if not self.stuff.__contains__(1):
-            self.stuff[1] = book1
-        if not self.stuff.__contains__(2):
-            self.stuff[2] = book2
         
