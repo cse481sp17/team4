@@ -19,7 +19,7 @@ class DatabaseReader(object):
 class BookInfo(object):
     def __init__(self):
         self.pose = None
-        self.torso = None
+        self.torso_height = None
         self.head_pan = None
         self.head_tilt = None
         self.fiducial_number = None

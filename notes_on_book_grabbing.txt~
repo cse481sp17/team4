@@ -1,0 +1,38 @@
+[Terminal 1]
+roscore
+
+[Terminal 2]
+roslaunch fetch_gazebo playground.launch
+
+[Terminal 3]
+rosrun rviz rviz
+
+[Terminal 4]
+rosrun applications perception_camera_demo.py /home/team4/catkin_ws/src/perception/twoBooksOffset.bag
+(can also use other point cloud like: twoBooksOnePulled.bag)
+
+[Terminal 5]
+roslaunch fetch_api move_group.launch
+
+[Terminal 6]
+roslaunch fetch_api ar_desktop.launch cam_image_topic:=mock_point_cloud
+
+[Terminal 7] (Set the torso to be higher)
+rosrun applications torso_demo.py
+
+[Terminal 8] (This is the service code that will return the poses of book spines)
+rosrun perception book_pose_finder cloud_in:=mock_point_cloud
+
+[Terminal 9] (This is the file to execute for the arm movement)
+rosrun applications book_grasp_procedure.py
+
+* Notes: To choose a differnt book and insert to grab, change the TARGET_ID variable in book_grasp_procedure.py
+* Notes: To change the series of poses for grabbing the insert, change INSERT_GRASP_POSES to another
+pickle file created by create_pbd_action.py
+* Notes: To create a new series of poses for the insert grabbing (The current one sometimes has trouble moving to the poses) use: 
+python create_pbd_action.py FILENAME.p
+
+* Notes: You can change the point cloud after the insert poses are executed (Use the Terminal 4 command with a differnt file) to simulate the cloud after the insert has been pulled out
+
+
+

@@ -1,0 +1,8 @@
+---
+geometry_msgs/Pose[] spine_poses
+
+geometry_msgs/Pose surface_pose
+
+float64 surface_x_size
+float64 surface_y_size
+float64 surface_z_size

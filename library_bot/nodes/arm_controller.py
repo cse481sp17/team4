@@ -16,6 +16,10 @@ class ArmController(object):
         self.reader = ArTagReader()
         self.sub = rospy.Subscriber('/ar_pose_marker', AlvarMarkers, reader.callback)
 
+    def open_gripper(self):
+        self.gripper.open()
+        self.gripper_open = True
+
     def add_bounding_box(self):
         # Init the planning scene for collisions
         planning_scene = PlanningSceneInterface('base_link')
