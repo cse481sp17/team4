@@ -70,6 +70,12 @@ def main():
     gripper.open()
     gripper_open = True
 
+    target_marker_pose = None
+    for marker in reader.markers:
+        if TARGET_ID == marker.id:
+            target_marker_pose = marker.pose.pose
+
+
     # This is the same as the pbd action stuff, not making any changes at the moment
     for pbd_pose in sequence:
         move_pose = PoseStamped()
@@ -77,19 +83,20 @@ def main():
         if pbd_pose.frame == 'base_link':
             move_pose.pose = pbd_pose.pose
         else:
-            for marker in reader.markers:
-                if TARGET_ID == marker.id:
-                    print "Calculating pose relative to marker...."
+            # for marker in reader.markers:
+            #     if TARGET_ID == marker.id:
+            print "Calculating pose relative to marker...."
 
-                    # Transform the pose to be in the base_link frame
-                    pose_in_tag_frame = pose_to_transform(pbd_pose.pose)
-                    tag_in_base_frame = pose_to_transform(marker.pose.pose)
+            # Transform the pose to be in the base_link frame
+            pose_in_tag_frame = pose_to_transform(pbd_pose.pose)
+            #tag_in_base_frame = pose_to_transform(marker.pose.pose)
+            tag_in_base_frame = pose_to_transform(target_marker_pose)
 
-                    target_matrix = np.dot(tag_in_base_frame, pose_in_tag_frame)
+            target_matrix = np.dot(tag_in_base_frame, pose_in_tag_frame)
 
-                    target_pose = transform_to_pose(target_matrix)
+            target_pose = transform_to_pose(target_matrix)
 
-                    move_pose.pose = target_pose
+            move_pose.pose = target_pose
 
         rospy.sleep(1)
         err = arm.move_to_pose(move_pose)
