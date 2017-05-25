@@ -1,3 +1,6 @@
+import fetch_api
+import pickle
+
 # Calls arm to pull out target tray and take book
 
 class ArmController(object):
@@ -6,7 +9,8 @@ class ArmController(object):
         # set arm and gripper, and fiducial id
         self.arm = fetch_api.Arm()
         self.gripper = fetch_api.Gripper()
-        self.target_id = target_id
+        # Will need to change this to something real at some point
+        self.target_id = None# target_id
 
         # First, load the poses for the fiducial insert movement
         self.sequence = pickle.load( open(INSERT_GRASP_POSES, "rb") )

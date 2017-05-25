@@ -6,11 +6,10 @@
 import util
 import pickle
 
-
 class DatabaseReader(object):
     def __init__(self):
         # load book data
-        self.library = pickle.load( open("bookData.p", "rb") )
+        self.library = pickle.load( open("/home/team4/catkin_ws/src/cse481c/library_bot/nodes/book_database.p", "rb") )
 
     def request_book(self, bookID):
         return self.library[bookID]

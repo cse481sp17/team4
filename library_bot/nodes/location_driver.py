@@ -50,7 +50,7 @@ from geometry_msgs.msg import Pose
 class NavigationManager(object):
 
     def __init__(self):
-        self.currentPoseSubscriber = rospy.Subscriber("/amcl_pose", geometry_msgs.msg.PoseWithCovarianceStamped, callback=self.updateCurrentPose)
+        self.currentPoseSubscriber = rospy.Subscriber("/amcl_pose", geometry_msgs.msg.PoseWithCovarianceStamped, callback=self.goto)# self.updateCurrentPose)
         self.goalPublisher = rospy.Publisher("/move_base/goal", move_base_msgs.msg.MoveBaseActionGoal, queue_size=10)
 
     def goto(self, goal_pose):

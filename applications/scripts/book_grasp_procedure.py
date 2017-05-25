@@ -16,7 +16,7 @@ import math
 from moveit_python import PlanningSceneInterface
 
 TARGET_ID = 13
-INSERT_GRASP_POSES = "/home/team4/catkin_ws/src/perception/testBookInsertPull2.p"
+INSERT_GRASP_POSES = "/home/team4/catkin_ws/src/cse481c/applications/scripts/testBookInsertPull2.p"
 
 class ArTagReader(object):
     def __init__(self):
@@ -146,10 +146,24 @@ def main():
     grasp_pose.pose.position.x -= 0.166
     grasp_pose.pose.orientation.w = 1
 
-    # Note: This is only the position of the spine, not any sort of pre or post grasp
-    err = arm.move_to_pose(grasp_pose)
-    print "Error in move to pose: ", err
+    pre_grasp = PoseStamped()
+    pre_grasp.header.frame_id = 'base_link'
+    pre_grasp.pose = closest_pose
+    pre_grasp.pose.position.x -= (0.166 + 0.05)
+    pre_grasp.pose.orientation.w = 1
 
+    # Note: This is only the position of the spine, not any sort of pre or post grasp
+    err = arm.move_to_pose(pre_grasp)
+    print "Error in move to pregrasp pose: ", err
+
+    err = arm.move_to_pose(grasp_pose)
+    print "Error in move to grasp pose: ", err
+
+    gripper.close()
+    gripper_open = False
+
+    err = arm.move_to_pose(pre_grasp)
+    print "Error in move to postgrasp pose: ", err
 
     # At the end remove collision objects
     planning_scene.removeCollisionObject('surface')

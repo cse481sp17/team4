@@ -28,7 +28,7 @@
 			on-response="handleResponse"
 			name="/library_bot/book_execute"
 			ros="{{ros}}"
-			service-type="library_bot_msgs/srv/RequestBook"
+			service-type="library_bot_msgs/RequestBook"
 		></ros-service>
 		<ros-topic auto last-message="{{poseList}}" on-message="handlePoseList" topic="/pose_names" ros="{{ros}}" msg-type="map_annotator/PoseNames"></ros-topic>
 		<ros-topic auto id="userActions" topic="/user_actions" ros="{{ros}}" msg-type="map_annotator/UserAction"></ros-topic>
