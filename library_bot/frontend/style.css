@@ -1,0 +1,51 @@
+:host {
+	display: block;
+	font-family: Sans-serif
+}
+
+h1 {
+	text-align: center;
+	-webkit-text-fill-color: white;
+	padding-top: 80px;
+}
+
+.select-style {
+	border: 1px solid #ccc;
+	width: 150px;
+	border-radius: 3px;
+	overflow: hidden;
+	background: #fafafa url("img/icon-select.png") no-repeat 90% 50%;
+	margin: 0 auto;
+	margin-bottom: 20px;
+}
+
+.select-style select {
+	padding: 5px 8px;
+	width: 130%;
+	border: none;
+	box-shadow: none;
+	background: transparent;
+	background-image: none;
+	-webkit-appearance: none;
+	text-align: center;
+}
+
+.select-style select:focus {
+	outline: none;
+}
+
+#header-background {
+	background-image: url("http://ethosworld.com/library/library6.jpg");
+	height: 200px;
+	margin-bottom: 20px;
+}
+
+.over {
+	position:absolute;
+	left:10px;
+	top:20px;
+}
+
+body {
+	background-image: url("http://graphicdesignjunction.com/wp-content/uploads/2012/10/background+pattern+design+33.jpg");
+}

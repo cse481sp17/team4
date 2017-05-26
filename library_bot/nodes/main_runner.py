@@ -50,16 +50,17 @@ class BookServer(object):
         # get book information
         bookID = data.book_id
         book_info = self.book_data.library[bookID]
+        print book_info.pose
         target_id = book_info.fiducial_number
 
         # navigate to book
         self.location_driver.goto(book_info.pose)
 
         # move torso
-        self.torso.setHeight(book_info.torso_height)
+        #self.torso.setHeight(book_info.torso_height)
 
         # move head (pan and tilt)
-        self.head.setPanTilt(book_info.head_pan, book_info.head_tilt)
+        #self.head.setPanTilt(book_info.head_pan, book_info.head_tilt)
 
         # # execute grasping procedure
         # self.arm_controller.add_bounding_box()
