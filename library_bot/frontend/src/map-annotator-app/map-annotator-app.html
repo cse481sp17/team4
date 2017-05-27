@@ -1,0 +1,164 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/ros-websocket/ros-websocket.html">
+<link rel="import" href="../../bower_components/ros-topic/ros-topic.html">
+<link rel="import" href="../../bower_components/ros-service/ros-service.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">\
+<link rel="import" href="../map-annotator-pose/map-annotator-pose.html">
+<script src="roslib.js"></script>
+
+<body>
+	<dom-module id="map-annotator-app">
+		<template>
+			<style>
+				:host {
+					display: block;
+					font-family: Sans-serif
+				}
+
+				paper-button {
+					background-color: #ccc;
+					margin-bottom: 10px;
+					text-transform: none;			
+					--paper-button: {
+						@apply(--layout-vertical);
+						@apply(--layout-center-center);
+					};
+				}
+			</style>
+			<ros-websocket auto ros="{{ros}}" on-connection="handleConnection" on-close="handleClose" on-error="handleError">
+			</ros-websocket>
+			<ros-service
+				id="service"
+				on-fail="handleError2"
+				on-response="handleResponse"
+				name="/library_bot/book_execute"
+				ros="{{ros}}"
+				service-type="library_bot_msgs/RequestBook"
+			></ros-service>
+			<ros-topic auto last-message="{{poseList}}" on-message="handlePoseList" topic="/pose_names" ros="{{ros}}" msg-type="map_annotator/PoseNames"></ros-topic>
+			
+			<ros-topic auto id="userActions" topic="/user_actions" ros="{{ros}}" msg-type="map_annotator/UserAction"></ros-topic>
+			<div id="header-background" class="under">
+				<h1>Automated Alexandria</h1>
+			</div>
+			
+			<img src="https://s-media-cache-ak0.pinimg.com/236x/dc/a9/82/dca9820fcc613896ad1f4db7a71cdfea.jpg" width="100" height="84" class="over" />
+			<!--<div>
+				Websocket status: {{status}}
+			</div>-->
+			<div class="select-style">
+				<select id="dropdown">
+					<!--<option value="book1">Book1</option>
+					<option value="book2">Book2</option>
+					<option value="book3">Book3</option>
+					<option value="book4">Book4</option>-->
+				</select>
+			</div>
+			<paper-button on-tap="handleAdd">Get Book</paper-button>
+			<template is="dom-repeat" items="{{poseList.names}}">
+				<map-annotator-pose name="{{item}}"></map-annotator-pose>
+			</template>
+			<!--<div class="select-style">
+				<select>
+					<option value="volvo">Volvo</option>
+					<option value="saab">Saab</option>
+					<option value="mercedes">Mercedes</option>
+					<option value="audi">Audi</option>
+				</select>
+			</div>-->
+		</template>
+
+		<script>
+			// var getBookClient = new ROSLIB.Service({
+			// 	ros: ros,
+			// 	name: '/library_bot/book_execute',
+			// 	serviceType: 'library_bot/RequestBook'
+			// });
+			Polymer({
+
+				is: 'map-annotator-app',
+
+				properties: {
+					prop1: {
+						type: String,
+						value: 'map-annotator-app',
+					},
+				},
+				properties: {
+					status: {
+						type: String,
+						value: 'Unknown',
+					},
+				},
+
+				status: {
+					type: String,
+					value: 'Unknown',
+				},
+
+				handleConnection: function () {
+					this.status = 'Connected to the websocket server.';
+				},
+
+				handleClose: function () {
+					this.status = 'Closed connection to websocket server.';
+				},
+
+				handleError: function () {
+					this.status = 'Error connecting to websocket server.';
+				},
+
+				handlePoseList: function (evt) {
+					var msg = evt.detail;
+					console.log(msg);
+				},
+
+				handleAdd: function () {
+					// var userIn = prompt('Enter a name:');
+					var e = document.getElementById("dropdown");
+					var strUser = e.options[e.selectedIndex].value;
+					var index = e.selectedIndex;
+					var request = {
+						book_id: index
+					};
+					console.log(this);
+					this.$.service.call(request);
+				},
+
+				handleResponse: function(evt) {
+					console.log(evt.detail.sum);
+				},
+
+				handleError2: function(evt) {
+					console.log("Error:" + evt.detail);
+				}
+			});
+
+			var xobj = new XMLHttpRequest();
+			xobj.overrideMimeType("application/json");
+			xobj.open('GET', '../../books.json', true); // Replace 'my_data' with the path to your file
+			xobj.onreadystatechange = function () {
+				if (xobj.readyState == 4 && xobj.status == "200") {
+					// Required use of an anonymous callback as .open will NOT return a value but simply returns undefined in asynchronous mode
+					loadJSON(xobj.responseText);
+				}
+			};
+			xobj.send(null);
+
+			function loadJSON(responseText) {
+				var actual_JSON = JSON.parse(responseText);
+				var drop = document.getElementById("dropdown");
+				var firstOption = document.createElement("option");
+				firstOption.text = "--Select Book--";
+				drop.add(firstOption);
+				for (var i = 0; i < actual_JSON.books.length; i++) {
+					//var drop = document.getElementById("dropdown");
+					var option = document.createElement("option");
+					option.text = actual_JSON.books[i].title;
+					drop.add(option);
+				}
+				console.log(actual_JSON.books[0]);
+			}
+		</script>
+	</dom-module>
+</body>

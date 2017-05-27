@@ -88,6 +88,7 @@ def main():
 
             # Transform the pose to be in the base_link frame
             pose_in_tag_frame = pose_to_transform(pbd_pose.pose)
+            #tag_in_base_frame = pose_to_transform(marker.pose.pose)
             tag_in_base_frame = pose_to_transform(target_marker_pose)
 
             target_matrix = np.dot(tag_in_base_frame, pose_in_tag_frame)
@@ -171,6 +172,13 @@ def main():
     post_grasp.pose.position.y = closest_pose.position.y
     post_grasp.pose.position.z = closest_pose.position.z + 0.05
 
+    post_grasp2 = PoseStamped()
+    post_grasp2.header.frame_id = 'base_link'
+    post_grasp2.pose = copy.deepcopy(closest_pose)
+    post_grasp2.pose.position.x = closest_pose.position.x - (0.166 + 0.13)
+    post_grasp2.pose.position.y = closest_pose.position.y
+    post_grasp2.pose.position.z = closest_pose.position.z + 0.05
+
     # pre_grasp.pose.position.x -= (0.166 + 0.05)
     # pre_grasp.pose.orientation.w = 1
 
@@ -186,6 +194,9 @@ def main():
 
     err = arm.move_to_pose(post_grasp)
     print "Error in move to postgrasp pose: ", err
+
+    err = arm.move_to_pose(post_grasp2)
+    print "Error in move to postgrasp2 pose: ", err
 
 
     # At the end remove collision objects
