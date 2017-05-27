@@ -1,5 +1,5 @@
 <launch>
-  <node pkg="applications" type="perception_camera_demo.py" name="publish_saved_cloud" args="$(find perception)/twoBooksOffset.bag"/>
+  <node pkg="applications" type="perception_camera_demo.py" name="publish_saved_cloud" args="$(find perception_new)/shelfBookPulled2.bag"/>
 
   <arg name="map_file" default="/home/team4/maps/playground.yaml"/>
   <include file="$(find fetch_navigation)/launch/fetch_nav.launch">
