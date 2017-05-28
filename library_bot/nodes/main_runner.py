@@ -7,7 +7,7 @@ from location_driver import NavigationManager
 from perception_interpreter import PerceptionInterpreter
 from arm_controller import ArmController
 from database_reader import DatabaseReader, BookInfo
-from library_bot_msgs.srv import RequestBook
+from library_bot_msgs.srv import RequestBook, RequestBookResponse
 import rospy
 import util
 import fetch_api
@@ -63,7 +63,7 @@ class BookServer(object):
         # move head (pan and tilt)
         self.head.pan_tilt(book_info.head_pan, book_info.head_tilt)
 
-        # # execute grasping procedure
+        # execute grasping procedure
         self.arm_controller.add_bounding_box()
         # t/f if grab tray
         grab_tray_success = self.arm_controller.grab_tray(target_id)
@@ -72,23 +72,23 @@ class BookServer(object):
         grab_book_success = self.arm_controller.grab_book(closest_pose)
         self.arm_controller.remove_bounding_box()
 
-        # # move head (pan and tilt)
+        # move head (pan and tilt)
         self.head.pan_tilt(0.0, 0.0)
 
-        # # move torso
+        # move torso
         self.torso.set_height(0.0)
         
-        # # navigate back home
+        # navigate back home
         self.location_driver.goto(self.home_pose)
 
-        # # drop book somewhere
+        # drop book somewhere
         self.arm_controller.open_gripper()
 
         # TODO: set response?
 
-        success_msg = RequestBook()
+        success_msg = RequestBookResponse()
         success_msg.book_id_response = data.book_id
-        success_msg.success = int(grab_book_success and grab_tray_success)
+        success_msg.success = int(True)# int(grab_book_success and grab_tray_success)
 
         return success_msg
 

@@ -1,2 +1,4 @@
 int64 book_id
 ---
+int64 book_id_response
+int64 success
