@@ -17,7 +17,7 @@ import copy
 
 from moveit_python import PlanningSceneInterface
 
-TARGET_ID = 4
+TARGET_ID = 13
 INSERT_GRASP_POSES = "/home/team4/catkin_ws/src/cse481c/applications/scripts/testBookInsertPull2.p"
 
 class ArTagReader(object):
@@ -161,7 +161,7 @@ def main():
     pre_grasp = PoseStamped()
     pre_grasp.header.frame_id = 'base_link'
     pre_grasp.pose = copy.deepcopy(closest_pose)
-    pre_grasp.pose.position.x = closest_pose.position.x - (0.166 + 0.05)
+    pre_grasp.pose.position.x = closest_pose.position.x - (0.166 + 0.065)
     pre_grasp.pose.position.y = closest_pose.position.y
     pre_grasp.pose.position.z = closest_pose.position.z
 

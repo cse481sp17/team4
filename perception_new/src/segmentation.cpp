@@ -130,7 +130,7 @@ void SegmentSurfaceObjects(pcl::PointCloud<pcl::PointXYZRGB>::Ptr cloud,
 
     double cluster_tolerance;
     int min_cluster_size, max_cluster_size;
-    ros::param::param("ec_cluster_tolerance", cluster_tolerance, 0.01);
+    ros::param::param("ec_cluster_tolerance", cluster_tolerance, 0.005);
     ros::param::param("ec_min_cluster_size", min_cluster_size, 2000);
     ros::param::param("ec_max_cluster_size", max_cluster_size, 13000);
     
