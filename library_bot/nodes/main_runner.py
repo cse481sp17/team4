@@ -20,7 +20,6 @@ def main():
     
     # TODO: Frontend request to retrieve book
     # TODO: make sure front end is launched
-
     server = BookServer()
     book_service = rospy.Service("library_bot/book_execute", RequestBook, server.book_request_callback)
     rospy.spin()
@@ -31,10 +30,12 @@ def main():
 class BookServer(object):
     def __init__(self):
         self.book_data = DatabaseReader()
-        # self.arm_controller = ArmController()
+        self.arm_controller = ArmController()
         self.location_driver = NavigationManager()
         self.torso = fetch_api.Torso()
         self.head = fetch_api.Head()
+        # self.status_pub = rospy.Publisher('library_status', RequestBook, latch=True, queue_size=10)
+
 
         returnPose = Pose()
         returnPose.position.x = 0.3548
@@ -57,32 +58,39 @@ class BookServer(object):
         self.location_driver.goto(book_info.pose)
 
         # move torso
-        #self.torso.setHeight(book_info.torso_height)
+        self.torso.set_height(book_info.torso_height)
 
         # move head (pan and tilt)
-        #self.head.setPanTilt(book_info.head_pan, book_info.head_tilt)
+        self.head.pan_tilt(book_info.head_pan, book_info.head_tilt)
 
         # # execute grasping procedure
-        # self.arm_controller.add_bounding_box()
-        # self.arm_controller.grab_tray(target_id)
-        # closest_pose = self.arm_controller.find_grasp_pose(target_id)
-        # self.arm_controller.grab_book(closest_pose)
-        # self.arm_controller.remove_bounding_box()
+        self.arm_controller.add_bounding_box()
+        # t/f if grab tray
+        grab_tray_success = self.arm_controller.grab_tray(target_id)
+        closest_pose = self.arm_controller.find_grasp_pose(target_id)
+        # t/f if grab book
+        grab_book_success = self.arm_controller.grab_book(closest_pose)
+        self.arm_controller.remove_bounding_box()
 
         # # move head (pan and tilt)
-        # self.head.setPanTilt(0.0, 0.0)
+        self.head.pan_tilt(0.0, 0.0)
 
         # # move torso
-        # self.torso.setHeight(0.0)
+        self.torso.set_height(0.0)
         
         # # navigate back home
-        # self.location_driver.goto(self.home_pose)
+        self.location_driver.goto(self.home_pose)
 
         # # drop book somewhere
-        # self.arm_controller.open_gripper()
+        self.arm_controller.open_gripper()
 
         # TODO: set response?
-        #return BookRequestCallbackResponse()
+
+        success_msg = RequestBook()
+        success_msg.book_id_response = data.book_id
+        success_msg.success = int(grab_book_success and grab_tray_success)
+
+        return success_msg
 
 
 if __name__ == '__main__':

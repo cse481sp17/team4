@@ -1,5 +1,21 @@
+import rospy
 import fetch_api
 import pickle
+
+from pbd_pose import *
+from geometry_msgs.msg import PoseStamped, Pose
+from tf_util import *
+from ar_track_alvar_msgs.msg import AlvarMarkers
+
+from perception_new.srv import *
+
+import math
+
+import copy
+
+from moveit_python import PlanningSceneInterface
+
+INSERT_GRASP_POSES = "/home/team4/catkin_ws/src/cse481c/applications/scripts/testBookInsertPull2.p"
 
 # Calls arm to pull out target tray and take book
 
@@ -10,7 +26,9 @@ class ArmController(object):
         self.arm = fetch_api.Arm()
         self.gripper = fetch_api.Gripper()
         # Will need to change this to something real at some point
-        self.target_id = None# target_id
+        #self.target_id = None# target_id
+
+        self.planning_scene = PlanningSceneInterface('base_link')
 
         # First, load the poses for the fiducial insert movement
         self.sequence = pickle.load( open(INSERT_GRASP_POSES, "rb") )
@@ -18,7 +36,7 @@ class ArmController(object):
 
         # # Init the reader for the tags
         self.reader = ArTagReader()
-        self.sub = rospy.Subscriber('/ar_pose_marker', AlvarMarkers, reader.callback)
+        self.sub = rospy.Subscriber('/ar_pose_marker', AlvarMarkers, self.reader.callback)
 
     def open_gripper(self):
         self.gripper.open()
@@ -26,7 +44,7 @@ class ArmController(object):
 
     def add_bounding_box(self):
         # Init the planning scene for collisions
-        planning_scene = PlanningSceneInterface('base_link')
+        
 
         print "waiting for service...."
         rospy.wait_for_service('get_spines')
@@ -40,28 +58,42 @@ class ArmController(object):
 
     def grab_tray(self, target_id):
         # This is the same as the pbd action stuff, not making any changes at the moment
+        target_marker_pose = None
+        self.gripper.open()
+        self.gripper_open = True
+        for marker in self.reader.markers:
+            if target_id == marker.id:
+                target_marker_pose = marker.pose.pose
+
+        everError = None
+
+        # This is the same as the pbd action stuff, not making any changes at the moment
         for pbd_pose in self.sequence:
             move_pose = PoseStamped()
             move_pose.header.frame_id = 'base_link'
             if pbd_pose.frame == 'base_link':
                 move_pose.pose = pbd_pose.pose
             else:
-                for marker in self.reader.markers:
-                    if target_id == marker.id:
-                        print "Calculating pose relative to marker...."
+                # for marker in reader.markers:
+                #     if target_id == marker.id:
+                print "Calculating pose relative to marker...."
 
-                        # Transform the pose to be in the base_link frame
-                        pose_in_tag_frame = pose_to_transform(pbd_pose.pose)
-                        tag_in_base_frame = pose_to_transform(marker.pose.pose)
+                # Transform the pose to be in the base_link frame
+                pose_in_tag_frame = pose_to_transform(pbd_pose.pose)
+                #tag_in_base_frame = pose_to_transform(marker.pose.pose)
+                tag_in_base_frame = pose_to_transform(target_marker_pose)
 
-                        target_matrix = np.dot(tag_in_base_frame, pose_in_tag_frame)
+                target_matrix = np.dot(tag_in_base_frame, pose_in_tag_frame)
 
-                        target_pose = transform_to_pose(target_matrix)
+                target_pose = transform_to_pose(target_matrix)
 
-                        move_pose.pose = target_pose
+                move_pose.pose = target_pose
 
+            rospy.sleep(1)
             err = self.arm.move_to_pose(move_pose)
             print "Error in move to pose: ", err
+            if err != None:
+                return False
             # Check the gripper to open/close
             if pbd_pose.gripper_open != self.gripper_open:
                 if self.gripper_open == True:
@@ -70,6 +102,7 @@ class ArmController(object):
                 else:
                     self.gripper.open()
                     self.gripper_open = True
+        return True
 
     def find_grasp_pose(self, target_id):
         print "waiting for service...."
@@ -82,13 +115,14 @@ class ArmController(object):
 
             # debugging line
             for pose in spine_poses:
-                print pose
+                #print pose
+                pass
         except rospy.ServiceException, e:
             print "Service call failed: %s" % e
         
         target_fiducial = None
-        for marker in reader.markers:
-            if marker.id == TARGET_ID:
+        for marker in self.reader.markers:
+            if marker.id == target_id:
                 target_fiducial = marker
 
         print target_fiducial.id
@@ -100,25 +134,80 @@ class ArmController(object):
                 min_dist = distance
                 closest_pose = pose
 
-        print "Pose closest to target fiducial"
-        print closest_pose
+        #print "Pose closest to target fiducial"
+        #print closest_pose
         return closest_pose
 
     def grab_book(self, closest_pose):
         grasp_pose = PoseStamped()
         grasp_pose.header.frame_id = 'base_link'
-        grasp_pose.pose = closest_pose
+        grasp_pose.pose = copy.deepcopy(closest_pose)
         # Offset because the arm is moved relative to the wrist roll Joint
-        grasp_pose.pose.position.x -= 0.166
+        grasp_pose.pose.position.x -= (0.166 - 0.02)
         grasp_pose.pose.orientation.w = 1
 
+        pre_grasp = PoseStamped()
+        pre_grasp.header.frame_id = 'base_link'
+        pre_grasp.pose = copy.deepcopy(closest_pose)
+        pre_grasp.pose.position.x = closest_pose.position.x - (0.166 + 0.065)
+        pre_grasp.pose.position.y = closest_pose.position.y
+        pre_grasp.pose.position.z = closest_pose.position.z
+
+        post_grasp = PoseStamped()
+        post_grasp.header.frame_id = 'base_link'
+        post_grasp.pose = copy.deepcopy(closest_pose)
+        post_grasp.pose.position.x = closest_pose.position.x - (0.166 + 0.05)
+        post_grasp.pose.position.y = closest_pose.position.y
+        post_grasp.pose.position.z = closest_pose.position.z + 0.05
+
+        post_grasp2 = PoseStamped()
+        post_grasp2.header.frame_id = 'base_link'
+        post_grasp2.pose = copy.deepcopy(closest_pose)
+        post_grasp2.pose.position.x = closest_pose.position.x - (0.166 + 0.13)
+        post_grasp2.pose.position.y = closest_pose.position.y
+        post_grasp2.pose.position.z = closest_pose.position.z + 0.05
+
+        #position: 
+    #     x: 0.012627533637
+    #     y: -0.540503621101
+    #     z: 0.967533946037
+    # orientation: 
+    #     x: -0.736985862255
+    #     y: 0.0
+    #     z: 0.0
+    #     w: 0.675908148289
+        carry_position = PoseStamped()
+        carry_position.header.frame_id = 'base_link'
+        carry_position.pose.position.x = 0.012627533637
+        carry_position.pose.position.y = -0.540503621101
+        carry_position.pose.position.z = 0.967533946037
+        carry_position.pose.orientation.x = -0.736985862255
+        carry_position.pose.orientation.y = 0.0
+        carry_position.pose.orientation.z = 0.0
+        carry_position.pose.orientation.w = 0.675908148289
+
+        # pre_grasp.pose.position.x -= (0.166 + 0.05)
+        # pre_grasp.pose.orientation.w = 1
+
         # Note: This is only the position of the spine, not any sort of pre or post grasp
-        err = self.arm.move_to_pose(grasp_pose)
-        print "Error in move to pose: ", err
+        grasp_order = ["pre_grasp", "grasp_pose", "post_grasp", "post_grasp2", "carry_position"]
+        grasp_dict = {"pre_grasp": pre_grasp, "grasp_pose": grasp_pose, "post_grasp": post_grasp, "post_grasp2": post_grasp2, "carry_position": carry_position}
+        for poseName in grasp_order:
+            rospy.sleep(.5)
+            print poseName
+            err = self.arm.move_to_pose(grasp_dict[poseName])
+            if poseName == "grasp_pose":
+                self.gripper.close()
+                self.gripper_open = False
+            if err != None:
+                print "Error in move to ", poseName, " pose: ", err
+                return False
+        return True
+        
 
     def remove_bounding_box(self):    
         # At the end remove collision objects
-        planning_scene.removeCollisionObject('surface')
+        self.planning_scene.removeCollisionObject('surface')
         
 
 class ArTagReader(object):

@@ -60,7 +60,8 @@ p24
 F0.4
 sS'fiducial_number'
 p25
-NsbsI2
+I4
+sbsI2
 g1
 (g2
 g3
@@ -79,4 +80,25 @@ g14
 sg24
 F0.4
 sg25
-Nsbs.
+I13
+sbsI3
+g1
+(g2
+g3
+Ntp30
+Rp31
+(dp32
+g7
+S'Praise Justin'
+p33
+sg9
+F0.3
+sg10
+F-0.15
+sg11
+g14
+sg24
+F0.4
+sg25
+I13
+sbs.

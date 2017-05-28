@@ -5,6 +5,7 @@
 import rospy
 import geometry_msgs.msg
 import move_base_msgs.msg
+import actionlib
 
 import pickle
 
@@ -50,13 +51,16 @@ from geometry_msgs.msg import Pose
 class NavigationManager(object):
 
     def __init__(self):
-        self.currentPoseSubscriber = rospy.Subscriber("/amcl_pose", geometry_msgs.msg.PoseWithCovarianceStamped, callback=self.goto)# self.updateCurrentPose)
-        self.goalPublisher = rospy.Publisher("/move_base/goal", move_base_msgs.msg.MoveBaseActionGoal, queue_size=10)
+        # self.currentPoseSubscriber = rospy.Subscriber("/amcl_pose", geometry_msgs.msg.PoseWithCovarianceStamped, callback=self.goto)# self.updateCurrentPose)
+        # self.goalPublisher = rospy.Publisher("/move_base/goal", move_base_msgs.msg.MoveBaseGoal, queue_size=10)
+        self.client = actionlib.SimpleActionClient('/move_base', move_base_msgs.msg.MoveBaseAction)
+        #self.client.wait_for_server()
 
     def goto(self, goal_pose):
-        destination = move_base_msgs.msg.MoveBaseActionGoal()
-        destination.goal.target_pose.pose = goal_pose
-        destination.goal.target_pose.header.frame_id = "map"
-        self.goalPublisher.publish(destination)
+        destination = move_base_msgs.msg.MoveBaseGoal()
+        destination.target_pose.pose = goal_pose
+        destination.target_pose.header.frame_id = "map"
+        self.client.send_goal(destination)
+        self.client.wait_for_result()
         print "goto method ran"
     

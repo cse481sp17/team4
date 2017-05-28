@@ -47,14 +47,14 @@
 				Websocket status: {{status}}
 			</div>-->
 			<div class="select-style">
-				<select id="dropdown">
+				<select id="dropdown" onchange="selectChange">
 					<!--<option value="book1">Book1</option>
 					<option value="book2">Book2</option>
 					<option value="book3">Book3</option>
 					<option value="book4">Book4</option>-->
 				</select>
 			</div>
-			<paper-button on-tap="handleAdd">Get Book</paper-button>
+			<paper-button on-tap="handleAdd" visibility="hidden">Get Book</paper-button>
 			<template is="dom-repeat" items="{{poseList.names}}">
 				<map-annotator-pose name="{{item}}"></map-annotator-pose>
 			</template>
@@ -116,17 +116,21 @@
 				handleAdd: function () {
 					// var userIn = prompt('Enter a name:');
 					var e = document.getElementById("dropdown");
-					var strUser = e.options[e.selectedIndex].value;
-					var index = e.selectedIndex;
-					var request = {
-						book_id: index
-					};
-					console.log(this);
-					this.$.service.call(request);
+					if (e.selectedIndex != 0) {
+						var strUser = e.options[e.selectedIndex].value;
+						var index = e.selectedIndex;
+						var request = {
+							book_id: index
+						};
+						console.log(this);
+						document.querySelector("paper-button").visibility = "hidden";
+						this.$.service.call(request);
+					}
 				},
 
 				handleResponse: function(evt) {
-					console.log(evt.detail.sum);
+					console.log(evt.detail.book_id_response);
+					console.log(evt.detail.success);
 				},
 
 				handleError2: function(evt) {
@@ -144,6 +148,13 @@
 				}
 			};
 			xobj.send(null);
+
+			function selectChange() {
+				var e = document.getElementById("dropdown");
+				if (e.selectedIndex != 0) {
+					document.getElementById("paper-button").visibility = "visible";
+				}
+			}
 
 			function loadJSON(responseText) {
 				var actual_JSON = JSON.parse(responseText);
