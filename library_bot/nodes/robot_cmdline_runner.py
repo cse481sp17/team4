@@ -11,7 +11,6 @@ def main():
             print "type number 1-4"
             inpt = int(raw_input)
             book_id = -inpt
-            
 
         else:
             print "type number 1-4"

@@ -15,7 +15,7 @@ from ar_track_alvar_msgs.msg import AlvarMarkers
 
 # Variable for if we are running this in simulation. In the simulation, we do not need
 # to relax the arm
-IN_SIM = False
+IN_SIM = True
 
 class ArTagReader(object):
     def __init__(self):
