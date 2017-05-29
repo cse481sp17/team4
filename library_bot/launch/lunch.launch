@@ -14,7 +14,7 @@
   </include>
 
   <!--TODO: this probably isn't referencing perception_new' -->
-  <node pkg="perception" type="book_pose_finder" name="book_pose_finder" args="cloud_in:=mock_point_cloud"/>
+  <node pkg="perception_new" type="book_pose_finder" name="book_pose_finder" args="cloud_in:=mock_point_cloud"/>
 
   <include file="$(find rosbridge_server)/launch/rosbridge_websocket.launch" />
   <node pkg="library_bot" type="main_runner.py" name="library_bot_main" />
