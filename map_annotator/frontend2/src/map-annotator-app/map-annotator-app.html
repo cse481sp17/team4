@@ -19,6 +19,10 @@
 				margin-bottom: 10px;
 				text-transform: none;
 			}
+			select {
+				display: block;
+				margin: 0 auto; 
+			}
 		</style>
 		<ros-websocket auto ros="{{ros}}" on-connection="handleConnection" on-close="handleClose" on-error="handleError">
 		</ros-websocket>
