@@ -1,7 +1,7 @@
 #!/usr/bin/env python 
 
 from sensor_msgs.msg import PointCloud2
-import perception
+import perception_new
 import rospy
 
 
@@ -22,7 +22,7 @@ def main():
         print 'Usage: rosrun applications publish_saved_cloud.py ~/cloud.bag'
         return
     path = argv[1]
-    camera = perception.MockCamera()
+    camera = perception_new.MockCamera()
     # cloud = camera.read_cloud(path)
 
     if is_sim:

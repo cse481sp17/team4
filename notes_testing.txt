@@ -1,0 +1,33 @@
+How to test final system?
+What to report from the test?
+What is reliability?
+
+Test: over # books, max 5
+
+Mostly success of arm
+
+Metrics:
+Report #successes/total tries
+Failure points
+Stability of test:
+- does the robot knock over/bump bookshelves/books/trays? 
+
+Range of difficulties of a test:
+
+Shelf:
+top shelf level with no shelves above it
+middle shelves
+top/bottom (furthest arm reach)
+
+Shelf level configuration:
+Target book on an empty shelf
+Target book on a nonempty shelf
+Target books on an empty shelf
+Target books on a nonempty shelf
+
+Target:
+1 target book
+x target books on one shelf level
+x target books on y shelf levels
+
+

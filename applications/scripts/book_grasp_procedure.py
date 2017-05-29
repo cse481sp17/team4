@@ -9,14 +9,16 @@ from geometry_msgs.msg import PoseStamped, Pose
 from tf_util import *
 from ar_track_alvar_msgs.msg import AlvarMarkers
 
-from perception.srv import *
+from perception_new.srv import *
 
 import math
+
+import copy
 
 from moveit_python import PlanningSceneInterface
 
 TARGET_ID = 13
-INSERT_GRASP_POSES = "/home/team4/catkin_ws/src/perception/testBookInsertPull2.p"
+INSERT_GRASP_POSES = "/home/team4/catkin_ws/src/cse481c/applications/scripts/testBookInsertPull2.p"
 
 class ArTagReader(object):
     def __init__(self):
@@ -62,8 +64,16 @@ def main():
 
     get_spine_poses = rospy.ServiceProxy('get_spines', GetSpineLocations)
     response = get_spine_poses()
-    #planning_scene.addBox('surface', response.surface_x_size, response.surface_y_size, response.surface_z_size,
-    #    response.surface_pose.position.x, response.surface_pose.position.y, response.surface_pose.position.z)
+    planning_scene.addBox('surface', (response.surface_x_size - 0.17), (response.surface_y_size), response.surface_z_size,
+       response.surface_pose.position.x, response.surface_pose.position.y, response.surface_pose.position.z)
+
+    gripper.open()
+    gripper_open = True
+
+    target_marker_pose = None
+    for marker in reader.markers:
+        if TARGET_ID == marker.id:
+            target_marker_pose = marker.pose.pose
 
     # This is the same as the pbd action stuff, not making any changes at the moment
     for pbd_pose in sequence:
@@ -72,20 +82,22 @@ def main():
         if pbd_pose.frame == 'base_link':
             move_pose.pose = pbd_pose.pose
         else:
-            for marker in reader.markers:
-                if TARGET_ID == marker.id:
-                    print "Calculating pose relative to marker...."
+            # for marker in reader.markers:
+            #     if TARGET_ID == marker.id:
+            print "Calculating pose relative to marker...."
 
-                    # Transform the pose to be in the base_link frame
-                    pose_in_tag_frame = pose_to_transform(pbd_pose.pose)
-                    tag_in_base_frame = pose_to_transform(marker.pose.pose)
+            # Transform the pose to be in the base_link frame
+            pose_in_tag_frame = pose_to_transform(pbd_pose.pose)
+            #tag_in_base_frame = pose_to_transform(marker.pose.pose)
+            tag_in_base_frame = pose_to_transform(target_marker_pose)
 
-                    target_matrix = np.dot(tag_in_base_frame, pose_in_tag_frame)
+            target_matrix = np.dot(tag_in_base_frame, pose_in_tag_frame)
 
-                    target_pose = transform_to_pose(target_matrix)
+            target_pose = transform_to_pose(target_matrix)
 
-                    move_pose.pose = target_pose
+            move_pose.pose = target_pose
 
+        rospy.sleep(1)
         err = arm.move_to_pose(move_pose)
         print "Error in move to pose: ", err
         # Check the gripper to open/close
@@ -141,14 +153,50 @@ def main():
 
     grasp_pose = PoseStamped()
     grasp_pose.header.frame_id = 'base_link'
-    grasp_pose.pose = closest_pose
+    grasp_pose.pose = copy.deepcopy(closest_pose)
     # Offset because the arm is moved relative to the wrist roll Joint
-    grasp_pose.pose.position.x -= 0.166
+    grasp_pose.pose.position.x -= (0.166 - 0.02)
     grasp_pose.pose.orientation.w = 1
 
+    pre_grasp = PoseStamped()
+    pre_grasp.header.frame_id = 'base_link'
+    pre_grasp.pose = copy.deepcopy(closest_pose)
+    pre_grasp.pose.position.x = closest_pose.position.x - (0.166 + 0.065)
+    pre_grasp.pose.position.y = closest_pose.position.y
+    pre_grasp.pose.position.z = closest_pose.position.z
+
+    post_grasp = PoseStamped()
+    post_grasp.header.frame_id = 'base_link'
+    post_grasp.pose = copy.deepcopy(closest_pose)
+    post_grasp.pose.position.x = closest_pose.position.x - (0.166 + 0.05)
+    post_grasp.pose.position.y = closest_pose.position.y
+    post_grasp.pose.position.z = closest_pose.position.z + 0.05
+
+    post_grasp2 = PoseStamped()
+    post_grasp2.header.frame_id = 'base_link'
+    post_grasp2.pose = copy.deepcopy(closest_pose)
+    post_grasp2.pose.position.x = closest_pose.position.x - (0.166 + 0.13)
+    post_grasp2.pose.position.y = closest_pose.position.y
+    post_grasp2.pose.position.z = closest_pose.position.z + 0.05
+
+    # pre_grasp.pose.position.x -= (0.166 + 0.05)
+    # pre_grasp.pose.orientation.w = 1
+
     # Note: This is only the position of the spine, not any sort of pre or post grasp
+    err = arm.move_to_pose(pre_grasp)
+    print "Error in move to pregrasp pose: ", err
+
     err = arm.move_to_pose(grasp_pose)
-    print "Error in move to pose: ", err
+    print "Error in move to grasp pose: ", err
+
+    gripper.close()
+    gripper_open = False
+
+    err = arm.move_to_pose(post_grasp)
+    print "Error in move to postgrasp pose: ", err
+
+    err = arm.move_to_pose(post_grasp2)
+    print "Error in move to postgrasp2 pose: ", err
 
 
     # At the end remove collision objects

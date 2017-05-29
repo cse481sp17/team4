@@ -1,8 +1,10 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 <link rel="import" href="../../bower_components/ros-websocket/ros-websocket.html">
 <link rel="import" href="../../bower_components/ros-topic/ros-topic.html">
+<link rel="import" href="../../bower_components/ros-service/ros-service.html">
 <link rel="import" href="../../bower_components/paper-button/paper-button.html">\
 <link rel="import" href="../map-annotator-pose/map-annotator-pose.html">
+<script src="roslib.js"></script>
 
 <dom-module id="map-annotator-app">
 	<template>
@@ -24,6 +26,14 @@
 		</style>
 		<ros-websocket auto ros="{{ros}}" on-connection="handleConnection" on-close="handleClose" on-error="handleError">
 		</ros-websocket>
+		<ros-service
+			id="service"
+			on-fail="handleError2"
+			on-response="handleResponse"
+			name="/library_bot/book_execute"
+			ros="{{ros}}"
+			service-type="library_bot_msgs/RequestBook"
+		></ros-service>
 		<ros-topic auto last-message="{{poseList}}" on-message="handlePoseList" topic="/pose_names" ros="{{ros}}" msg-type="map_annotator/PoseNames"></ros-topic>
 		<ros-topic auto id="userActions" topic="/user_actions" ros="{{ros}}" msg-type="map_annotator/UserAction"></ros-topic>
 		<h2>Hello Valued User , Select a book</h2>
@@ -43,6 +53,11 @@
 	</template>
 
 	<script>
+		// var getBookClient = new ROSLIB.Service({
+		// 	ros: ros,
+		// 	name: '/library_bot/book_execute',
+		// 	serviceType: 'library_bot/RequestBook'
+		// });
 		Polymer({
 
 			is: 'map-annotator-app',
@@ -87,14 +102,20 @@
 				var e = document.getElementById("dropdown");
 				var strUser = e.options[e.selectedIndex].value;
 				var index = e.selectedIndex;
-				var msg = {
-					command: 'create',
-					name: strUser,
-					id: index
+				var request = {
+					book_id: index
 				};
-				console.log(msg);
-				this.$.userActions.publish(msg);
+				console.log(this);
+				this.$.service.call(request);
 			},
+
+			handleResponse: function(evt) {
+				console.log(evt.detail.sum);
+			},
+
+			handleError2: function(evt) {
+				console.log("Error:" + evt.detail);
+			}
 		});
 
 		var xobj = new XMLHttpRequest();
