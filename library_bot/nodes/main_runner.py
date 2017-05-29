@@ -36,7 +36,7 @@ class BookServer(object):
         self.head = fetch_api.Head()
         # self.status_pub = rospy.Publisher('library_status', RequestBook, latch=True, queue_size=10)
 
-
+        # home for sim
         returnPose = Pose()
         returnPose.position.x = 0.3548
         returnPose.position.y = 0.6489
@@ -45,6 +45,9 @@ class BookServer(object):
         returnPose.orientation.y = 0.0
         returnPose.orientation.z = 0.14559
         returnPose.orientation.w = .989
+
+
+        # home for real robot as negative book indices
         self.home_pose = returnPose
 
     def book_request_callback(self, data):

@@ -9,7 +9,10 @@ import pickle
 class DatabaseReader(object):
     def __init__(self):
         # load book data
-        self.library = pickle.load( open("/home/team4/catkin_ws/src/cse481c/library_bot/nodes/book_database.p", "rb") )
+
+        # uncomment htis if want to sim
+        # self.library = pickle.load( open("/home/team4/catkin_ws/src/cse481c/library_bot/nodes/book_database.p", "rb") )
+        self.library = pickle.load( open("/home/team4/catkin_ws/src/cse481c/library_bot/nodes/book_database_real_robot.p", "rb") )
 
     def request_book(self, bookID):
         return self.library[bookID]
