@@ -234,12 +234,6 @@ def main():
     # At the end remove collision objects
     planning_scene.removeCollisionObject('surface')
 
-    #arm.move_to_relaxed_position()
-
-    joints = [1.320041981, 1.57359256789, -0.200327627143, 1.71883243474, -0.00416841187651, 1.38416326889, 0.000508665030575]
-
-    arm.move_to_joints(fetch_api.ArmJoints.from_list(joints))
-
     # err = arm.move_to_pose(curled_pose)
     # print "Error in move to curled_pose pose: ", err
 
