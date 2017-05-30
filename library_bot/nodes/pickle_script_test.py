@@ -1,14 +1,15 @@
 import pickle
 from database_reader import BookInfo
 from geometry_msgs.msg import Pose
+import main_runner
 
-SIM = False
+# SIM = False
 
 #Simulation stuff
 books = None
 bookPath = None
 
-if SIM:
+if main_runner.IN_SIM:
     # At bookshelf
     bookshelfPose = Pose()
     bookshelfPose.position.x = 2.56

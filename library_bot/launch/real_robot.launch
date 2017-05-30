@@ -1,0 +1,18 @@
+<launch>
+  <arg name="map_file" default="/home/team4/catkin_ws/src/cse481c/library_bot/maps/real_robot_take_1.yaml"/>
+  <include file="$(find fetch_navigation)/launch/fetch_nav.launch">
+      <arg name="map_file" value="$(arg map_file)"/>
+  </include>
+
+  <arg name="cam_image_topic" default="head_camera/depth_registered/points"/>
+  <include file="$(find fetch_api)/launch/move_group.launch"/>
+  
+  <include file="$(find fetch_api)/launch/ar_desktop.launch">
+    <arg name="cam_image_topic" value="$(arg cam_image_topic)"/>
+  </include>
+
+  <node pkg="perception_new" type="book_pose_finder" name="book_pose_finder" args="cloud_in:=head_camera/depth_registered/points"/>
+
+  <include file="$(find rosbridge_server)/launch/rosbridge_websocket.launch" />
+  <node pkg="library_bot" type="main_runner.py" name="library_bot_main" />
+</launch>

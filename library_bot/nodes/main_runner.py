@@ -14,6 +14,8 @@ import fetch_api
 from geometry_msgs.msg import Pose
 # from library_bot import Thing.srv # make this work
 
+IN_SIM = True  # fo evythin bby
+
 # TODO: fill out
 def main():
     rospy.init_node("libraryBotRunner", anonymous = True)
@@ -34,9 +36,11 @@ class BookServer(object):
         self.location_driver = NavigationManager()
         self.torso = fetch_api.Torso()
         self.head = fetch_api.Head()
-        # self.status_pub = rospy.Publisher('library_status', RequestBook, latch=True, queue_size=10)
+        self.cmdline = False
+        self.cmdline_grab_tray = False
+        self.cmdline_grab_book = False
 
-        # home for sim
+        # home for sim.  could be refactored better
         returnPose = Pose()
         returnPose.position.x = 0.3548
         returnPose.position.y = 0.6489
@@ -46,13 +50,26 @@ class BookServer(object):
         returnPose.orientation.z = 0.14559
         returnPose.orientation.w = .989
 
-
         # home for real robot as negative book indices
         self.home_pose = returnPose
+   
+    # Call this before doing the callback from cmdline
+    def set_home(self, homeIndx):
+        self.home_pose = self.book_data.library[homeIndx].pose
+
+    # Call this before doing the callback from cmdline
+    def set_bookshelf(self, bookshelfIndx):
+        self.bookshelfIndex = bookshelfIndx
+        self.bookshelf = self.book_data.library[bookshelfIndx].pose
 
     def book_request_callback(self, data):
         # get book information
-        bookID = data.book_id
+        bookID = None
+        if self.cmdline:
+            bookID = self.bookshelfIndex
+        else:
+            bookID = data.book_id
+
         book_info = self.book_data.library[bookID]
         print book_info.pose
         target_id = book_info.fiducial_number
@@ -68,12 +85,19 @@ class BookServer(object):
 
         # execute grasping procedure
         self.arm_controller.add_bounding_box()
+        
         # t/f if grab tray
-        grab_tray_success = self.arm_controller.grab_tray(target_id)
-        closest_pose = self.arm_controller.find_grasp_pose(target_id)
+        grab_tray_success = None
+        closest_pose = None
+        grab_book_success = None
+
+        if not self.cmdline or (self.cmdline and self.cmdline_grab_tray):
+            grab_tray_success = self.arm_controller.grab_tray(target_id)
+            closest_pose = self.arm_controller.find_grasp_pose(target_id)
         # t/f if grab book
-        grab_book_success = self.arm_controller.grab_book(closest_pose)
-        self.arm_controller.remove_bounding_box()
+        if not self.cmdline or (self.cmdline and self.cmdline_grab_book):
+            grab_book_success = self.arm_controller.grab_book(closest_pose)
+            self.arm_controller.remove_bounding_box()
 
         # move head (pan and tilt)
         self.head.pan_tilt(0.0, 0.0)
@@ -89,11 +113,12 @@ class BookServer(object):
 
         # TODO: set response?
 
-        success_msg = RequestBookResponse()
-        success_msg.book_id_response = data.book_id
-        success_msg.success = int(True)# int(grab_book_success and grab_tray_success)
+        if not self.cmdline:
+            success_msg = RequestBookResponse()
+            success_msg.book_id_response = data.book_id
+            success_msg.success = int(True)# int(grab_book_success and grab_tray_success)
 
-        return success_msg
+            return success_msg
 
 
 if __name__ == '__main__':

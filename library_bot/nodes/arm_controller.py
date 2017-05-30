@@ -10,7 +10,6 @@ from ar_track_alvar_msgs.msg import AlvarMarkers
 from perception_new.srv import *
 
 import math
-
 import copy
 
 from moveit_python import PlanningSceneInterface
