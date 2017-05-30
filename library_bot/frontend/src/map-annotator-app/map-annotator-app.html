@@ -51,7 +51,7 @@
 				</select>
 			</div>
 			<div id="buttonHolder" visibility="visible">
-				<paper-button on-tap="handleAdd" visibility="hidden">Get Book</paper-button>
+				<paper-button on-tap="handleAdd" id="button">Get Book</paper-button>
 			</div>
 			<!--<button on-tap="handleAdd" type="button">Click Me!</button>-->
 			<p id="resultMsg"></p>
@@ -110,10 +110,11 @@
 							book_id: index
 						};
 						console.log(this);
-						console.log(document.querySelector("#buttonHolder"));
-						console.log(document.querySelector("#buttonHolder").visibility);
-						document.querySelector("#buttonHolder").visibility = "hidden";
-						console.log(document.querySelector("#buttonHolder").visibility);
+						// console.log(document.querySelector("#buttonHolder"));
+						// console.log(document.querySelector("#buttonHolder").visibility);
+						// document.querySelector("#buttonHolder").visibility = "hidden";
+						// console.log(document.querySelector("#buttonHolder").visibility);
+						this.$.button.disabled = true;
 						this.$.service.call(request);
 					}
 				},
