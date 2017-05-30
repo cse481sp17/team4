@@ -114,6 +114,7 @@
 						// console.log(document.querySelector("#buttonHolder").visibility);
 						// document.querySelector("#buttonHolder").visibility = "hidden";
 						// console.log(document.querySelector("#buttonHolder").visibility);
+						document.querySelector("#resultMsg").innerHTML = "";
 						this.$.button.disabled = true;
 						this.$.service.call(request);
 					}
@@ -125,13 +126,14 @@
 					if (evt.detail.success === 1) {
 						document.querySelector("#resultMsg").innerHTML = "Your book is ready for pickup";
 					} else {
-						document.querySelector("#resultMsg").innerHTML = "Something went wrong";
+						document.querySelector("#resultMsg").innerHTML = "Something went with your order wrong";
 					}
-					document.querySelector("#buttonHolder").visibility = "visible";
+					this.$.button.disabled = false;
 				},
 
 				handleError2: function (evt) {
-					document.querySelector("#resultMsg").innerHTML = "Something went wrong";
+					document.querySelector("#resultMsg").innerHTML = "Something went wrong with your order";
+					this.$.button.disabled = false;
 					console.log("Error:" + evt.detail);
 				}
 			});
