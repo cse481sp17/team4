@@ -14,6 +14,11 @@
       "title" : "Prey",
       "author" : "Michael Crichton",
       "fiducial" : 3
+    },
+    {
+      "title" : "Robotics",
+      "author" : "Something",
+      "fiducial" : 4
     }
   ]
 }

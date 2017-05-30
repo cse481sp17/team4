@@ -18,31 +18,27 @@
 				paper-button {
 					background-color: #ccc;
 					margin-bottom: 10px;
-					text-transform: none;			
+					text-transform: none;
 					--paper-button: {
 						@apply(--layout-vertical);
 						@apply(--layout-center-center);
-					};
+					}
+					;
 				}
 			</style>
 			<ros-websocket auto ros="{{ros}}" on-connection="handleConnection" on-close="handleClose" on-error="handleError">
 			</ros-websocket>
-			<ros-service
-				id="service"
-				on-fail="handleError2"
-				on-response="handleResponse"
-				name="/library_bot/book_execute"
-				ros="{{ros}}"
-				service-type="library_bot_msgs/RequestBook"
-			></ros-service>
+			<ros-service id="service" on-fail="handleError2" on-response="handleResponse" name="/library_bot/book_execute" ros="{{ros}}"
+			    service-type="library_bot_msgs/RequestBook"></ros-service>
 			<ros-topic auto last-message="{{poseList}}" on-message="handlePoseList" topic="/pose_names" ros="{{ros}}" msg-type="map_annotator/PoseNames"></ros-topic>
-			
+
 			<ros-topic auto id="userActions" topic="/user_actions" ros="{{ros}}" msg-type="map_annotator/UserAction"></ros-topic>
 			<div id="header-background" class="under">
 				<h1>Automated Alexandria</h1>
 			</div>
-			
-			<img src="https://s-media-cache-ak0.pinimg.com/236x/dc/a9/82/dca9820fcc613896ad1f4db7a71cdfea.jpg" width="100" height="84" class="over" />
+
+			<img src="https://s-media-cache-ak0.pinimg.com/236x/dc/a9/82/dca9820fcc613896ad1f4db7a71cdfea.jpg" width="100" height="84"
+			    class="over" />
 			<!--<div>
 				Websocket status: {{status}}
 			</div>-->
@@ -54,18 +50,14 @@
 					<option value="book4">Book4</option>-->
 				</select>
 			</div>
-			<paper-button on-tap="handleAdd" visibility="hidden">Get Book</paper-button>
+			<div id="buttonHolder">
+				<paper-button on-tap="handleAdd" visibility="hidden">Get Book</paper-button>
+			</div>
+			<!--<button on-tap="handleAdd" type="button">Click Me!</button>-->
+			<p id="resultMsg"></p>
 			<template is="dom-repeat" items="{{poseList.names}}">
 				<map-annotator-pose name="{{item}}"></map-annotator-pose>
 			</template>
-			<!--<div class="select-style">
-				<select>
-					<option value="volvo">Volvo</option>
-					<option value="saab">Saab</option>
-					<option value="mercedes">Mercedes</option>
-					<option value="audi">Audi</option>
-				</select>
-			</div>-->
 		</template>
 
 		<script>
@@ -123,17 +115,23 @@
 							book_id: index
 						};
 						console.log(this);
-						document.querySelector("paper-button").visibility = "hidden";
+						document.querySelector("#buttonHolder").visibility = "hidden";
 						this.$.service.call(request);
 					}
 				},
 
-				handleResponse: function(evt) {
+				handleResponse: function (evt) {
 					console.log(evt.detail.book_id_response);
 					console.log(evt.detail.success);
+					if (evt.detail.success === 1) {
+						document.querySelector("#resultMsg").innerHTML = "Your book is ready for pickup";
+					} else {
+						document.querySelector("#resultMsg").innerHTML = "Something went wrong";
+					}
+					document.querySelector("#buttonHolder").visibility = "visible";
 				},
 
-				handleError2: function(evt) {
+				handleError2: function (evt) {
 					console.log("Error:" + evt.detail);
 				}
 			});
