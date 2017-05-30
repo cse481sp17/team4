@@ -111,7 +111,9 @@
 						};
 						console.log(this);
 						console.log(document.querySelector("#buttonHolder"));
+						console.log(document.querySelector("#buttonHolder").visibility);
 						document.querySelector("#buttonHolder").visibility = "hidden";
+						console.log(document.querySelector("#buttonHolder").visibility);
 						this.$.service.call(request);
 					}
 				},
