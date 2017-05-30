@@ -1,0 +1,40 @@
+Temp info for poses stuff
+
+curled pose
+Pose: header: 
+  seq: 1798
+  stamp: 
+    secs: 1754
+    nsecs: 739000000
+  frame_id: base_link
+pose: 
+  position: 
+    x: 0.0120114460588
+    y: 0.169908821583
+    z: 0.5732229352
+  orientation: 
+    x: -0.484937250614
+    y: -0.513127207756
+    z: -0.468707561493
+    w: 0.53089505434
+
+
+Book_drop_pose
+
+Pose: header: 
+  seq: 2166
+  stamp: 
+    secs: 1848
+    nsecs: 329000000
+  frame_id: base_link
+pose: 
+  position: 
+    x: 0.494402498007
+    y: 0.125714763999
+    z: 0.663536846638
+  orientation: 
+    x: -0.999855518341
+    y: 0.000162673357408
+    z: 0.0169933252037
+    w: -0.000329103932017
+

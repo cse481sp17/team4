@@ -17,9 +17,9 @@ import copy
 
 from moveit_python import PlanningSceneInterface
 
-TARGET_ID = 13
+TARGET_ID = 4
 #INSERT_GRASP_POSES = "/home/team4/catkin_ws/src/cse481c/applications/scripts/testBookInsertPull2.p"
-INSERT_GRASP_POSES = "/home/team4/catkin_ws/src/cse481c/library_bot/nodes/real_robot_holder_grab2.p"
+INSERT_GRASP_POSES = "/home/team4/catkin_ws/src/cse481c/library_bot/nodes/real_robot_holder_grab3.p"
 
 class ArTagReader(object):
     def __init__(self):
@@ -75,6 +75,11 @@ def main():
     for marker in reader.markers:
         if TARGET_ID == marker.id:
             target_marker_pose = marker.pose.pose
+
+    print "Surface position z"
+    print response.surface_pose.position.z
+    print "target marker position z"
+    print target_marker_pose.position.z
 
     # This is the same as the pbd action stuff, not making any changes at the moment
     for pbd_pose in sequence:
@@ -156,7 +161,7 @@ def main():
     grasp_pose.header.frame_id = 'base_link'
     grasp_pose.pose = copy.deepcopy(closest_pose)
     # Offset because the arm is moved relative to the wrist roll Joint
-    grasp_pose.pose.position.x -= (0.166 - 0.02)
+    grasp_pose.pose.position.x -= (0.166 - 0.03)
     grasp_pose.pose.orientation.w = 1
 
     pre_grasp = PoseStamped()
@@ -180,6 +185,28 @@ def main():
     post_grasp2.pose.position.y = closest_pose.position.y
     post_grasp2.pose.position.z = closest_pose.position.z + 0.05
 
+    carry_position = PoseStamped()
+    carry_position.header.frame_id = 'base_link'
+    carry_position.pose.position.x = 0.012627533637
+    carry_position.pose.position.y = -0.540503621101
+    carry_position.pose.position.z = 0.967533946037
+    carry_position.pose.orientation.x = -0.736985862255
+    carry_position.pose.orientation.y = 0.0
+    carry_position.pose.orientation.z = 0.0
+    carry_position.pose.orientation.w = 0.675908148289
+
+    # Oookay, If I want this position I need joint state reader
+
+    curled_pose = PoseStamped()
+    curled_pose.header.frame_id = 'base_link'
+    curled_pose.pose.position.x = 0.0120114460588
+    curled_pose.pose.position.y = 0.169908821583
+    curled_pose.pose.position.z = 0.5732229352
+    curled_pose.pose.orientation.x = -0.484937250614
+    curled_pose.pose.orientation.y = -0.513127207756
+    curled_pose.pose.orientation.z = -0.468707561493
+    curled_pose.pose.orientation.w = 0.53089505434
+
     # pre_grasp.pose.position.x -= (0.166 + 0.05)
     # pre_grasp.pose.orientation.w = 1
 
@@ -199,9 +226,21 @@ def main():
     err = arm.move_to_pose(post_grasp2)
     print "Error in move to postgrasp2 pose: ", err
 
+    err = arm.move_to_pose(carry_position)
+    print "Error in move to carry_position pose: ", err
+
 
     # At the end remove collision objects
     planning_scene.removeCollisionObject('surface')
+
+    #arm.move_to_relaxed_position()
+
+    # joints = [1.320041981, 1.57359256789, -0.200327627143, 1.71883243474, -0.00416841187651, 1.38416326889, 0.000508665030575]
+
+    # arm.move_to_joints(fetch_api.ArmJoints.from_list(list))
+
+    # err = arm.move_to_pose(curled_pose)
+    # print "Error in move to curled_pose pose: ", err
 
 
 
