@@ -161,7 +161,7 @@ def main():
     grasp_pose.header.frame_id = 'base_link'
     grasp_pose.pose = copy.deepcopy(closest_pose)
     # Offset because the arm is moved relative to the wrist roll Joint
-    grasp_pose.pose.position.x -= (0.166 - 0.03)
+    grasp_pose.pose.position.x -= (0.166 - 0.04)
     grasp_pose.pose.orientation.w = 1
 
     pre_grasp = PoseStamped()
@@ -174,7 +174,8 @@ def main():
     post_grasp = PoseStamped()
     post_grasp.header.frame_id = 'base_link'
     post_grasp.pose = copy.deepcopy(closest_pose)
-    post_grasp.pose.position.x = closest_pose.position.x - (0.166 + 0.05)
+    #post_grasp.pose.position.x = closest_pose.position.x - (0.166 + 0.05)
+    grasp_pose.pose.position.x -= (0.166 - 0.04)
     post_grasp.pose.position.y = closest_pose.position.y
     post_grasp.pose.position.z = closest_pose.position.z + 0.05
 
@@ -235,9 +236,9 @@ def main():
 
     #arm.move_to_relaxed_position()
 
-    # joints = [1.320041981, 1.57359256789, -0.200327627143, 1.71883243474, -0.00416841187651, 1.38416326889, 0.000508665030575]
+    joints = [1.320041981, 1.57359256789, -0.200327627143, 1.71883243474, -0.00416841187651, 1.38416326889, 0.000508665030575]
 
-    # arm.move_to_joints(fetch_api.ArmJoints.from_list(list))
+    arm.move_to_joints(fetch_api.ArmJoints.from_list(list))
 
     # err = arm.move_to_pose(curled_pose)
     # print "Error in move to curled_pose pose: ", err
