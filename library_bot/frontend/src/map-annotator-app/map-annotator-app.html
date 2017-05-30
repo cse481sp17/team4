@@ -61,11 +61,6 @@
 		</template>
 
 		<script>
-			// var getBookClient = new ROSLIB.Service({
-			// 	ros: ros,
-			// 	name: '/library_bot/book_execute',
-			// 	serviceType: 'library_bot/RequestBook'
-			// });
 			Polymer({
 
 				is: 'map-annotator-app',
@@ -115,6 +110,7 @@
 							book_id: index
 						};
 						console.log(this);
+						console.log(document.querySelector("#buttonHolder"));
 						document.querySelector("#buttonHolder").visibility = "hidden";
 						this.$.service.call(request);
 					}
@@ -132,6 +128,7 @@
 				},
 
 				handleError2: function (evt) {
+					document.querySelector("#resultMsg").innerHTML = "Something went wrong";
 					console.log("Error:" + evt.detail);
 				}
 			});
