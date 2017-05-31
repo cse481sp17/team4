@@ -20,6 +20,10 @@
 
 
 <!-- cuz params in crop.cpp not working.  probably being overwriten from old rosparam settings -->
+  <param name="ec_cluster_tolerance" value="0.005" />
+  <param name="ec_min_cluster_size" value="2000" />
+  <param name="ec_max_cluster_size" value="13000" />
+  <param name="distance_above_plane" value="0.005" />
   <param name="crop_min_x" value="0.3" />
   <param name="crop_min_y" value="-0.4" />
   <param name="crop_min_z" value="0.5" />

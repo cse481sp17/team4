@@ -18,8 +18,8 @@ import copy
 from moveit_python import PlanningSceneInterface
 
 TARGET_ID = 4
-#INSERT_GRASP_POSES = "/home/team4/catkin_ws/src/cse481c/applications/scripts/testBookInsertPull2.p"
-INSERT_GRASP_POSES = "/home/team4/catkin_ws/src/cse481c/library_bot/nodes/real_robot_holder_grab3.p"
+INSERT_GRASP_POSES = "/home/team4/catkin_ws/src/cse481c/applications/scripts/testBookInsertPull2.p"
+#INSERT_GRASP_POSES = "/home/team4/catkin_ws/src/cse481c/library_bot/nodes/real_robot_holder_grab3.p"
 
 class ArTagReader(object):
     def __init__(self):
@@ -175,7 +175,7 @@ def main():
     post_grasp.header.frame_id = 'base_link'
     post_grasp.pose = copy.deepcopy(closest_pose)
     #post_grasp.pose.position.x = closest_pose.position.x - (0.166 + 0.05)
-    grasp_pose.pose.position.x -= (0.166 - 0.04)
+    post_grasp.pose.position.x -= (0.166 - 0.04)
     post_grasp.pose.position.y = closest_pose.position.y
     post_grasp.pose.position.z = closest_pose.position.z + 0.05
 
@@ -214,6 +214,8 @@ def main():
     # Note: This is only the position of the spine, not any sort of pre or post grasp
     err = arm.move_to_pose(pre_grasp)
     print "Error in move to pregrasp pose: ", err
+
+    rospy.sleep(1.0)
 
     err = arm.move_to_pose(grasp_pose)
     print "Error in move to grasp pose: ", err
