@@ -182,14 +182,15 @@ def main():
     post_grasp2 = PoseStamped()
     post_grasp2.header.frame_id = 'base_link'
     post_grasp2.pose = copy.deepcopy(closest_pose)
-    post_grasp2.pose.position.x = closest_pose.position.x - (0.166 + 0.13)
+    post_grasp2.pose.position.x = closest_pose.position.x - (0.166 + 0.15)
     post_grasp2.pose.position.y = closest_pose.position.y
     post_grasp2.pose.position.z = closest_pose.position.z + 0.10
 
     carry_position = PoseStamped()
     carry_position.header.frame_id = 'base_link'
     carry_position.pose.position.x = 0.012627533637
-    carry_position.pose.position.y = -0.540503621101
+    #carry_position.pose.position.y = -0.540503621101
+    carry_position.pose.position.y = 0.540503621101
     carry_position.pose.position.z = 0.967533946037
     carry_position.pose.orientation.x = -0.736985862255
     carry_position.pose.orientation.y = 0.0
