@@ -17,7 +17,7 @@ import copy
 
 from moveit_python import PlanningSceneInterface
 
-TARGET_ID = 4
+TARGET_ID = 13
 INSERT_GRASP_POSES = "/home/team4/catkin_ws/src/cse481c/applications/scripts/testBookInsertPull2.p"
 #INSERT_GRASP_POSES = "/home/team4/catkin_ws/src/cse481c/library_bot/nodes/real_robot_holder_grab3.p"
 
@@ -177,14 +177,14 @@ def main():
     #post_grasp.pose.position.x = closest_pose.position.x - (0.166 + 0.05)
     post_grasp.pose.position.x -= (0.166 - 0.04)
     post_grasp.pose.position.y = closest_pose.position.y
-    post_grasp.pose.position.z = closest_pose.position.z + 0.05
+    post_grasp.pose.position.z = closest_pose.position.z + 0.10
 
     post_grasp2 = PoseStamped()
     post_grasp2.header.frame_id = 'base_link'
     post_grasp2.pose = copy.deepcopy(closest_pose)
     post_grasp2.pose.position.x = closest_pose.position.x - (0.166 + 0.13)
     post_grasp2.pose.position.y = closest_pose.position.y
-    post_grasp2.pose.position.z = closest_pose.position.z + 0.05
+    post_grasp2.pose.position.z = closest_pose.position.z + 0.10
 
     carry_position = PoseStamped()
     carry_position.header.frame_id = 'base_link'
