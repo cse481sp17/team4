@@ -18,8 +18,8 @@ import copy
 from moveit_python import PlanningSceneInterface
 
 TARGET_ID = 13
-INSERT_GRASP_POSES = "/home/team4/catkin_ws/src/cse481c/applications/scripts/testBookInsertPull2.p"
-#INSERT_GRASP_POSES = "/home/team4/catkin_ws/src/cse481c/library_bot/nodes/real_robot_holder_grab3.p"
+#INSERT_GRASP_POSES = "/home/team4/catkin_ws/src/cse481c/applications/scripts/testBookInsertPull2.p"
+INSERT_GRASP_POSES = "/home/team4/catkin_ws/src/cse481c/library_bot/nodes/real_robot_holder_grab3.p"
 
 class ArTagReader(object):
     def __init__(self):
