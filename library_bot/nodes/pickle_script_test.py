@@ -153,15 +153,14 @@ else:
 
     # At bookshelf
     bookshelfPose1 = Pose()
-    bookshelfPose1.position.x = -3.56519186617
-    bookshelfPose1.position.y = -14.3602268261
+    bookshelfPose1.position.x = -3.57069354555
+    bookshelfPose1.position.y = -14.3549949522
     bookshelfPose1.position.z = 0.0
     bookshelfPose1.orientation.x = 0.0
     bookshelfPose1.orientation.y = 0.0
-    bookshelfPose1.orientation.z = 0.67690438257
-    bookshelfPose1.orientation.w = 0.736070959118
-
-    # Medium 
+    bookshelfPose1.orientation.z = 0.698556725617
+    bookshelfPose1.orientation.w = 0.715554680716
+ 
     bookshelfPose2 = Pose()
     bookshelfPose2.position.x = -3.56519186617
     bookshelfPose2.position.y = -14.3602268261
@@ -171,7 +170,6 @@ else:
     bookshelfPose2.orientation.z = 0.67690438257
     bookshelfPose2.orientation.w = 0.736070959118
 
-    # Closest
     bookshelfPose3 = Pose()
     bookshelfPose3.position.x = -3.60172798139
     bookshelfPose3.position.y = -14.7564795155
@@ -181,7 +179,6 @@ else:
     bookshelfPose3.orientation.z = 0.69354384818
     bookshelfPose3.orientation.w = 0.720414415911
 
-    # Furthest back
     bookshelfPose4 = Pose()
     bookshelfPose4.position.x = -3.60172798139
     bookshelfPose4.position.y = -14.7564795155

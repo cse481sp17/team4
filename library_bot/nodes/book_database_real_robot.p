@@ -40,8 +40,8 @@ g3
 Ntp17
 Rp18
 (lp19
-F-3.56519186617
-aF-14.3602268261
+F-3.57069354555
+aF-14.3549949522
 aF0.0
 abag1
 (cgeometry_msgs.msg._Quaternion
@@ -53,8 +53,8 @@ Rp22
 (lp23
 F0.0
 aF0.0
-aF0.67690438257
-aF0.736070959118
+aF0.698556725617
+aF0.715554680716
 ababsS'torso_height'
 p24
 F0.25
