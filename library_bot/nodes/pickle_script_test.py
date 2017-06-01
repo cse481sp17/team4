@@ -153,13 +153,13 @@ else:
 
     # At bookshelf
     bookshelfPose1 = Pose()
-    bookshelfPose1.position.x = -3.58069354555
-    bookshelfPose1.position.y = -14.6
+    bookshelfPose1.position.x = -3.59108390925
+    bookshelfPose1.position.y = -14.5822269719
     bookshelfPose1.position.z = 0.0
     bookshelfPose1.orientation.x = 0.0
     bookshelfPose1.orientation.y = 0.0
-    bookshelfPose1.orientation.z = 0.653014437223
-    bookshelfPose1.orientation.w = 0.715554680716
+    bookshelfPose1.orientation.z = 0.762571238503
+    bookshelfPose1.orientation.w = 0.646904248098
  
     bookshelfPose2 = Pose()
     bookshelfPose2.position.x = -3.56519186617
