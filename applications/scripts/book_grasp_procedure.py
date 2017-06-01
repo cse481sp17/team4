@@ -148,7 +148,7 @@ def main():
     # After this we calculate the spine_pose closest to the fiducial. I will test that if I can get the service call working
     target_fiducial = None
     check = 0
-    while target_marker_pose == None and check < 100:
+    while target_fiducial == None and check < 100:
         # If the fiducial was not seen, try again
         rospy.sleep(0.1)
         check += 1
