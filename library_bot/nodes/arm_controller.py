@@ -14,7 +14,7 @@ import copy
 
 from moveit_python import PlanningSceneInterface
 
-INSERT_GRASP_POSES = "/home/team4/catkin_ws/src/cse481c/applications/scripts/testBookInsertPull2.p"
+INSERT_GRASP_POSES = "/home/team4/catkin_ws/src/cse481c/library_bot/nodes/real_robot_holder_grab3.p"
 
 # Calls arm to pull out target tray and take book
 
@@ -51,18 +51,28 @@ class ArmController(object):
 
         get_spine_poses = rospy.ServiceProxy('get_spines', GetSpineLocations)
         response = get_spine_poses()
-        #planning_scene.addBox('surface', response.surface_x_size, response.surface_y_size, response.surface_z_size,
-        #    response.surface_pose.position.x, response.surface_pose.position.y, response.surface_pose.position.z)
+        planning_scene.addBox('surface', (response.surface_x_size - 0.17), response.surface_y_size, response.surface_z_size,
+           response.surface_pose.position.x, response.surface_pose.position.y, response.surface_pose.position.z)
     
 
     def grab_tray(self, target_id):
         # This is the same as the pbd action stuff, not making any changes at the moment
-        target_marker_pose = None
         self.gripper.open()
         self.gripper_open = True
-        for marker in self.reader.markers:
-            if target_id == marker.id:
-                target_marker_pose = marker.pose.pose
+        target_marker_pose = None
+        check = 0
+        print "Searching for fiducial...."
+        while target_marker_pose == None and check < 100:
+            # If the fiducial was not seen, try again
+            rospy.sleep(0.1)
+            check += 1
+            for marker in self.reader.markers:
+                if target_id == marker.id:
+                    target_marker_pose = marker.pose.pose
+
+        if target_marker_pose == None:
+            print "Fiducial not found"
+
 
         everError = None
 
@@ -120,9 +130,14 @@ class ArmController(object):
             print "Service call failed: %s" % e
         
         target_fiducial = None
-        for marker in self.reader.markers:
-            if marker.id == target_id:
-                target_fiducial = marker
+        check = 0
+        while target_fiducial == None and check < 100:
+            # If the fiducial was not seen, try again
+            rospy.sleep(0.1)
+            check += 1
+            for marker in self.reader.markers:
+                if marker.id == target_id:
+                    target_fiducial = marker
 
         print target_fiducial.id
         closest_pose = None
@@ -142,7 +157,7 @@ class ArmController(object):
         grasp_pose.header.frame_id = 'base_link'
         grasp_pose.pose = copy.deepcopy(closest_pose)
         # Offset because the arm is moved relative to the wrist roll Joint
-        grasp_pose.pose.position.x -= (0.166 - 0.02)
+        grasp_pose.pose.position.x -= (0.166 - 0.035)
         grasp_pose.pose.orientation.w = 1
 
         pre_grasp = PoseStamped()
@@ -155,16 +170,16 @@ class ArmController(object):
         post_grasp = PoseStamped()
         post_grasp.header.frame_id = 'base_link'
         post_grasp.pose = copy.deepcopy(closest_pose)
-        post_grasp.pose.position.x = closest_pose.position.x - (0.166 + 0.05)
+        post_grasp.pose.position.x = closest_pose.position.x - (0.166 - 0.04)
         post_grasp.pose.position.y = closest_pose.position.y
-        post_grasp.pose.position.z = closest_pose.position.z + 0.05
+        post_grasp.pose.position.z = closest_pose.position.z + 0.10
 
         post_grasp2 = PoseStamped()
         post_grasp2.header.frame_id = 'base_link'
         post_grasp2.pose = copy.deepcopy(closest_pose)
-        post_grasp2.pose.position.x = closest_pose.position.x - (0.166 + 0.13)
+        post_grasp2.pose.position.x = closest_pose.position.x - (0.166 + 0.185)
         post_grasp2.pose.position.y = closest_pose.position.y
-        post_grasp2.pose.position.z = closest_pose.position.z + 0.05
+        post_grasp2.pose.position.z = closest_pose.position.z + 0.10
 
         #position: 
     #     x: 0.012627533637
@@ -178,7 +193,7 @@ class ArmController(object):
         carry_position = PoseStamped()
         carry_position.header.frame_id = 'base_link'
         carry_position.pose.position.x = 0.012627533637
-        carry_position.pose.position.y = -0.540503621101
+        carry_position.pose.position.y = 0.540503621101 - 0.05
         carry_position.pose.position.z = 0.967533946037
         carry_position.pose.orientation.x = -0.736985862255
         carry_position.pose.orientation.y = 0.0
@@ -194,7 +209,11 @@ class ArmController(object):
         for poseName in grasp_order:
             rospy.sleep(.5)
             print poseName
-            err = self.arm.move_to_pose(grasp_dict[poseName])
+            err = None
+            if poseName == "post_grasp" or poseName == "post_grasp2" or poseName == "carry_position":
+                err = self.arm.move_to_pose(grasp_dict[poseName], num_planning_attempts=3)
+            else:
+                err = self.arm.move_to_pose(grasp_dict[poseName])
             if poseName == "grasp_pose":
                 self.gripper.close()
                 self.gripper_open = False

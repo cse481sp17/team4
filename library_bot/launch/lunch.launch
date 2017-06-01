@@ -1,5 +1,5 @@
 <launch>
-  <node pkg="applications" type="perception_camera_demo.py" name="publish_saved_cloud" args="$(find perception_new)/shelfBookPulled2.bag"/>
+  <node pkg="applications" type="perception_camera_demo.py" name="publish_saved_cloud" args="$(find perception_new)/shelf_620_distance.bag"/>
 
   <arg name="map_file" default="/home/team4/catkin_ws/src/cse481c/library_bot/maps/playground.yaml"/> <!-- real_robot_take_1.yaml"/> -->
   <include file="$(find fetch_navigation)/launch/fetch_nav.launch">
@@ -22,12 +22,12 @@
 <!-- cuz params in crop.cpp not working.  probably being overwriten from old rosparam settings -->
   <param name="ec_cluster_tolerance" value="0.005" />
   <param name="ec_min_cluster_size" value="2000" />
-  <param name="ec_max_cluster_size" value="13000" />
+  <param name="ec_max_cluster_size" value="9000" />
   <param name="distance_above_plane" value="0.005" />
   <param name="crop_min_x" value="0.3" />
   <param name="crop_min_y" value="-0.4" />
   <param name="crop_min_z" value="0.5" />
-  <param name="crop_max_x" value="0.9" />
+  <param name="crop_max_x" value="1.2" />
   <param name="crop_max_y" value="0.4" />
   <param name="crop_max_z" value="1.5" />
 </launch>
