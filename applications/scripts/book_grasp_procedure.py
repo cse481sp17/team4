@@ -235,13 +235,13 @@ def main():
     gripper.close()
     gripper_open = False
 
-    err = arm.move_to_pose(post_grasp)
+    err = arm.move_to_pose(post_grasp, num_planning_attempts=3)
     print "Error in move to postgrasp pose: ", err
 
-    err = arm.move_to_pose(post_grasp2)
+    err = arm.move_to_pose(post_grasp2, num_planning_attempts=3)
     print "Error in move to postgrasp2 pose: ", err
 
-    err = arm.move_to_pose(carry_position)
+    err = arm.move_to_pose(carry_position, num_planning_attempts=3)
     print "Error in move to carry_position pose: ", err
 
 
