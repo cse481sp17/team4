@@ -72,9 +72,15 @@ def main():
     gripper_open = True
 
     target_marker_pose = None
-    for marker in reader.markers:
-        if TARGET_ID == marker.id:
-            target_marker_pose = marker.pose.pose
+    check = 0
+    while target_marker_pose == None and check < 100
+        # If the fiducial was not seen, try again
+        rospy.sleep(0.1)
+        check += 1
+        print "Searching for fiducial...."
+        for marker in reader.markers:
+            if TARGET_ID == marker.id:
+                target_marker_pose = marker.pose.pose
 
     print "Surface position z"
     print response.surface_pose.position.z
@@ -141,9 +147,14 @@ def main():
 
     # After this we calculate the spine_pose closest to the fiducial. I will test that if I can get the service call working
     target_fiducial = None
-    for marker in reader.markers:
-        if marker.id == TARGET_ID:
-            target_fiducial = marker
+    check = 0
+    while target_marker_pose == None and check < 100
+        # If the fiducial was not seen, try again
+        rospy.sleep(0.1)
+        check += 1
+        for marker in reader.markers:
+            if marker.id == TARGET_ID:
+                target_fiducial = marker
 
     print target_fiducial.id
     closest_pose = None
@@ -190,7 +201,7 @@ def main():
     carry_position.header.frame_id = 'base_link'
     carry_position.pose.position.x = 0.012627533637
     #carry_position.pose.position.y = -0.540503621101
-    carry_position.pose.position.y = 0.540503621101
+    carry_position.pose.position.y = 0.540503621101 - 0.05
     carry_position.pose.position.z = 0.967533946037
     carry_position.pose.orientation.x = -0.736985862255
     carry_position.pose.orientation.y = 0.0
