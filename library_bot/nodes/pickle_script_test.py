@@ -158,7 +158,7 @@ else:
     bookshelfPose1.position.z = 0.0
     bookshelfPose1.orientation.x = 0.0
     bookshelfPose1.orientation.y = 0.0
-    bookshelfPose1.orientation.z = 0.698556725617
+    bookshelfPose1.orientation.z = 0.653014437223
     bookshelfPose1.orientation.w = 0.715554680716
  
     bookshelfPose2 = Pose()
