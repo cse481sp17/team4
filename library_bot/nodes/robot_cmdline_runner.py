@@ -7,7 +7,7 @@ import main_runner
 def main():
     rospy.init_node("libraryBotCmdlineRunner", anonymous = True)
     inpt = None
-    bs = BookServer()
+    bs = main_runner.BookServer()
     bs.cmdline = True
     while True:
         if main_runner.IN_SIM:
