@@ -182,7 +182,7 @@ def main():
     post_grasp2 = PoseStamped()
     post_grasp2.header.frame_id = 'base_link'
     post_grasp2.pose = copy.deepcopy(closest_pose)
-    post_grasp2.pose.position.x = closest_pose.position.x - (0.166 + 0.15)
+    post_grasp2.pose.position.x = closest_pose.position.x - (0.166 + 0.17)
     post_grasp2.pose.position.y = closest_pose.position.y
     post_grasp2.pose.position.z = closest_pose.position.z + 0.10
 
