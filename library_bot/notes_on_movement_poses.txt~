@@ -1,0 +1,63 @@
+Arm position for book dropoff
+
+Pose: header: 
+  seq: 134
+  stamp: 
+    secs: 233
+    nsecs: 872000000
+  frame_id: base_link
+pose: 
+  position: 
+    x: 0.666532516479
+    y: 0.0
+    z: 0.707712948322
+  orientation: 
+    x: 0.0
+    y: 0.0
+    z: 0.0
+    w: 1.0
+
+
+Pose the the arm curled position
+
+Pose: header: 
+  seq: 226
+  stamp: 
+    secs: 302
+    nsecs: 772000000
+  frame_id: base_link
+pose: 
+  position: 
+    x: 0.153736814857
+    y: -0.179155305028
+    z: 0.665322303772
+  orientation: 
+    x: -0.506896972656
+    y: -0.487300783396
+    z: -0.51259958744
+    w: 0.492783010006
+
+New shelf pose 1
+
+header: 
+  seq: 139
+  stamp: 
+    secs: 1496290316
+    nsecs: 565241430
+  frame_id: map
+pose: 
+  pose: 
+    position: 
+      x: -3.56519186617
+      y: -14.3602268261
+      z: 0.0
+    orientation: 
+      x: 0.0
+      y: 0.0
+      z: 0.67690438257
+      w: 0.736070959118
+  covariance: [1.9736513288051984, -0.29014196819962024, 0.0, 0.0, 0.0, 0.0, -0.29014196819962024, 0.7041044574978912, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.7371085429122278]
+  
+  
+New shelf pose 2
+

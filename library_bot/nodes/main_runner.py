@@ -14,7 +14,7 @@ import fetch_api
 from geometry_msgs.msg import Pose
 # from library_bot import Thing.srv # make this work
 
-IN_SIM = True  # fo evythin bby
+IN_SIM = False  # fo evythin bby
 
 # TODO: fill out
 def main():

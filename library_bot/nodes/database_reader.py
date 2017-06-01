@@ -5,15 +5,16 @@
 
 import util
 import pickle
-import main_runner
+#import main_runner
 
-# IN_SIM = True
+IN_SIM = False
 
 class DatabaseReader(object):
     def __init__(self):
         # load book data
 
-        if main_runner.IN_SIM:
+        #if main_runner.IN_SIM:
+        if IN_SIM:
             self.library = pickle.load( open("/home/team4/catkin_ws/src/cse481c/library_bot/nodes/book_database_sim.p", "rb") )
         else:
             self.library = pickle.load( open("/home/team4/catkin_ws/src/cse481c/library_bot/nodes/book_database_real_robot.p", "rb") )
