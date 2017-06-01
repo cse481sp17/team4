@@ -74,6 +74,9 @@ class BookServer(object):
         print book_info.pose
         target_id = book_info.fiducial_number
 
+        # Go home before anywhere else
+        self.location_driver.goto(self.home_pose)
+
         # navigate to book
         self.location_driver.goto(book_info.pose)
 
