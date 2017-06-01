@@ -198,7 +198,7 @@ else:
     book1.pose = bookshelfPose1
     book1.torso_height = 0.25
     book1.head_pan = 0.0
-    book1.head_tilt = 0.3
+    book1.head_tilt = 0.6
     book1.book_name = "Theoretical Neuroscience"
     book1.fiducial_number = 13
 
@@ -207,7 +207,7 @@ else:
     book2.pose = bookshelfPose2
     book2.torso_height = 0.25
     book2.head_pan = 0.0
-    book2.head_tilt = 0.3
+    book2.head_tilt = 0.6
     book2.book_name = "Introduction to Robotics"
     book2.fiducial_number = 4
 
@@ -215,7 +215,7 @@ else:
     book3.pose = bookshelfPose3
     book3.torso_height = 0.25
     book3.head_pan = 0.0
-    book3.head_tilt = 0.3
+    book3.head_tilt = 0.6
     book3.book_name = "Praise Justin"
     book3.fiducial_number = 5
 
@@ -223,7 +223,7 @@ else:
     book4.pose = bookshelfPose4
     book4.torso_height = 0.25
     book4.head_pan = 0.0
-    book4.head_tilt = 0.3
+    book4.head_tilt = 0.6
     book4.book_name = "Praise Justin"
     book4.fiducial_number = 3
 

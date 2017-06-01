@@ -18,7 +18,7 @@ S'Theoretical Neuroscience'
 p8
 sS'head_tilt'
 p9
-F0.3
+F0.6
 sS'head_pan'
 p10
 F0.0
@@ -72,7 +72,7 @@ g7
 S'Introduction to Robotics'
 p29
 sg9
-F0.3
+F0.6
 sg10
 F0.0
 sg11
@@ -116,7 +116,7 @@ g7
 S'Praise Justin'
 p42
 sg9
-F0.3
+F0.6
 sg10
 F0.0
 sg11
@@ -159,7 +159,7 @@ Rp53
 g7
 g42
 sg9
-F0.3
+F0.6
 sg10
 F0.0
 sg11
