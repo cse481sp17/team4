@@ -63,7 +63,7 @@ class ArmController(object):
 
         get_spine_poses = rospy.ServiceProxy('get_spines', GetSpineLocations)
         response = get_spine_poses()
-        self.planning_scene.addBox('surface', (response.surface_x_size + 0.03), response.surface_y_size, response.surface_z_size,
+        self.planning_scene.addBox('surface', (response.surface_x_size + 0.01), response.surface_y_size, response.surface_z_size,
            response.surface_pose.position.x, response.surface_pose.position.y, response.surface_pose.position.z)
 
     
