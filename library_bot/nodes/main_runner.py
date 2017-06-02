@@ -132,6 +132,7 @@ class BookServer(object):
         self.head.pan_tilt(0.0, 0.65)
         self.arm_controller.add_delivery_bounding_box()
         self.torso.set_height(0.4)
+        rospy.sleep(3.0)
         self.arm_controller.delivery()
         self.torso.set_height(0.25)
         self.arm_controller.open_gripper()
