@@ -265,15 +265,27 @@ class ArmController(object):
 
     def delivery(self):
 
+        # delivery_pose = PoseStamped()
+        # delivery_pose.header.frame_id = "base_link"
+        # delivery_pose.pose.position.x = 0.641032576561
+        # delivery_pose.pose.position.y = 0.0756497383118
+        # delivery_pose.pose.position.z = 0.36987259984
+        # delivery_pose.pose.orientation.x = -0.689870417118
+        # delivery_pose.pose.orientation.y = 0.135909467936
+        # delivery_pose.pose.orientation.z = 0.137442305684
+        # delivery_pose.pose.orientation.w = 0.697651088238
+
+        # new Delivery pose
+
         delivery_pose = PoseStamped()
         delivery_pose.header.frame_id = "base_link"
-        delivery_pose.pose.position.x = 0.641032576561
-        delivery_pose.pose.position.y = 0.0756497383118
-        delivery_pose.pose.position.z = 0.36987259984
-        delivery_pose.pose.orientation.x = -0.689870417118
-        delivery_pose.pose.orientation.y = 0.135909467936
-        delivery_pose.pose.orientation.z = 0.137442305684
-        delivery_pose.pose.orientation.w = 0.697651088238
+        delivery_pose.pose.position.x = 0.605564773083
+        delivery_pose.pose.position.y = 0.0
+        delivery_pose.pose.position.z = 0.902032971382
+        delivery_pose.pose.orientation.x = -0.708695232868
+        delivery_pose.pose.orientation.y = 0.054994776845
+        delivery_pose.pose.orientation.z = 0.054417796433
+        delivery_pose.pose.orientation.w = 0.70125991106
 
 
         err = self.arm.move_to_pose(delivery_pose, num_planning_attempts=3, replan=True)
@@ -284,15 +296,27 @@ class ArmController(object):
 
     def curl_arm(self):
 
+        # curled_pose = PoseStamped()
+        # curled_pose.header.frame_id = "base_link"
+        # curled_pose.pose.position.x = -0.00938361883163
+        # curled_pose.pose.position.y = 0.38768684864
+        # curled_pose.pose.position.z = 0.742396354675
+        # curled_pose.pose.orientation.x = -0.999579787254
+        # curled_pose.pose.orientation.y = -0.0128491902724
+        # curled_pose.pose.orientation.z = 0.00204527354799
+        # curled_pose.pose.orientation.w = -0.0259021110833
+
+        # New curled pose
+
         curled_pose = PoseStamped()
         curled_pose.header.frame_id = "base_link"
-        curled_pose.pose.position.x = -0.00938361883163
-        curled_pose.pose.position.y = 0.38768684864
-        curled_pose.pose.position.z = 0.742396354675
-        curled_pose.pose.orientation.x = -0.999579787254
-        curled_pose.pose.orientation.y = -0.0128491902724
-        curled_pose.pose.orientation.z = 0.00204527354799
-        curled_pose.pose.orientation.w = -0.0259021110833
+        curled_pose.pose.position.x = -0.10520786792
+        curled_pose.pose.position.y = 0.275289952755
+        curled_pose.pose.position.z = 0.855269372463
+        curled_pose.pose.orientation.x = -0.510465681553
+        curled_pose.pose.orientation.y = -0.489717870951
+        curled_pose.pose.orientation.z = -0.524574935436
+        curled_pose.pose.orientation.w = 0.473732382059
 
         err = self.arm.move_to_pose(curled_pose, num_planning_attempts=3, replan=True)
 

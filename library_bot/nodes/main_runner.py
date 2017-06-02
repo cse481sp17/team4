@@ -129,10 +129,14 @@ class BookServer(object):
         self.torso.set_height(0.0)
 
         self.location_driver.goto(self.delivery_pose)
+        self.torso.set_height(0.2)
         self.arm_controller.delivery()
-        rospy.sleep(1.5)
+        self.torso.set_height(0.05)
         self.arm_controller.open_gripper()
+        self.torso.set_height(0.2)
         self.arm_controller.curl_arm()
+        self.torso.set_height(0.0)
+
         
         # navigate back home
         # self.location_driver.goto(self.home_pose)
