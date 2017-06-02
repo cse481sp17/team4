@@ -18,7 +18,7 @@ S'Theoretical Neuroscience'
 p8
 sS'head_tilt'
 p9
-F0.6
+F0.55
 sS'head_pan'
 p10
 F0.0
@@ -40,8 +40,8 @@ g3
 Ntp17
 Rp18
 (lp19
-F-3.89810466766
-aF-14.6413049698
+F-3.66569411557
+aF-14.5338443433
 aF0.0
 abag1
 (cgeometry_msgs.msg._Quaternion
@@ -53,8 +53,8 @@ Rp22
 (lp23
 F0.0
 aF0.0
-aF0.692950367928
-aF0.721013069153
+aF0.65705315908
+aF0.753844245281
 ababsS'torso_height'
 p24
 F0.25
@@ -72,7 +72,7 @@ g7
 S'Introduction to Robotics'
 p29
 sg9
-F0.6
+F0.55
 sg10
 F0.0
 sg11
@@ -88,8 +88,8 @@ g3
 Ntp33
 Rp34
 (lp35
-F-3.56519186617
-aF-14.3602268261
+F-3.55608035699
+aF-14.5941557214
 aF0.0
 abag1
 (g20
@@ -99,8 +99,8 @@ Rp37
 (lp38
 F0.0
 aF0.0
-aF0.67690438257
-aF0.736070959118
+aF0.611408792497
+aF0.791314911054
 ababsg24
 F0.25
 sg25
@@ -116,7 +116,7 @@ g7
 S'Praise Justin'
 p42
 sg9
-F0.6
+F0.55
 sg10
 F0.0
 sg11
@@ -159,7 +159,7 @@ Rp53
 g7
 g42
 sg9
-F0.6
+F0.55
 sg10
 F0.0
 sg11

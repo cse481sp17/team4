@@ -72,6 +72,8 @@ class ArmController(object):
 
         if target_marker_pose == None:
             print "Fiducial not found"
+        else:
+            print "Fiducial Found :)"
 
 
         everError = None
@@ -99,7 +101,7 @@ class ArmController(object):
                 move_pose.pose = target_pose
 
             rospy.sleep(1)
-            err = self.arm.move_to_pose(move_pose, num_planning_attempts=3)
+            err = self.arm.move_to_pose(move_pose, num_planning_attempts=3, replan=True)
             print "Error in move to pose: ", err
             if err != None:
                 return False
@@ -114,21 +116,6 @@ class ArmController(object):
         return True
 
     def find_grasp_pose(self, target_id):
-        print "waiting for service...."
-        rospy.wait_for_service('get_spines')
-        print "found service!"
-        try:
-            get_spine_poses = rospy.ServiceProxy('get_spines', GetSpineLocations)
-            response = get_spine_poses()
-            spine_poses = response.spine_poses
-
-            # debugging line
-            for pose in spine_poses:
-                #print pose
-                pass
-        except rospy.ServiceException, e:
-            print "Service call failed: %s" % e
-        
         target_fiducial = None
         check = 0
         while target_fiducial == None and check < 100:
@@ -139,14 +126,50 @@ class ArmController(object):
                 if marker.id == target_id:
                     target_fiducial = marker
 
-        print target_fiducial.id
+        if target_fiducial == None:
+            print "Failed to find fiducial :("
+        else:
+            print "Found fidcuail!"
+
+
+        check = 0
+        found_good_pose = False
         closest_pose = None
-        min_dist = float('inf')
-        for pose in spine_poses:
-            distance = calculate_euclidean_distance(pose, target_fiducial.pose.pose)
-            if distance < min_dist:
-                min_dist = distance
-                closest_pose = pose
+        print "waiting for service...."
+        rospy.wait_for_service('get_spines')
+        print "found service!"
+        try:
+            while check < 20 and found_good_pose == False:
+
+                get_spine_poses = rospy.ServiceProxy('get_spines', GetSpineLocations)
+                response = get_spine_poses()
+                spine_poses = response.spine_poses
+
+                min_dist = float('inf')
+                for pose in spine_poses:
+                    distance = calculate_euclidean_distance(pose, target_fiducial.pose.pose)
+                    if distance < min_dist:
+                        min_dist = distance
+                        closest_pose = pose
+                check += 1
+                if closest_pose.position.x > target_fiducial.pose.pose.position.x and closest_pose.position.y < (target_fiducial.pose.pose.position.y + 0.025) and closest_pose.position.y > (target_fiducial.pose.pose.position.y - 0.025):
+                    found_good_pose = True
+        except rospy.ServiceException, e:
+            print "Service call failed: %s" % e
+
+        # print target_fiducial.id
+        # closest_pose = None
+        # min_dist = float('inf')
+        # for pose in spine_poses:
+        #     distance = calculate_euclidean_distance(pose, target_fiducial.pose.pose)
+        #     if distance < min_dist:
+        #         min_dist = distance
+        #         closest_pose = pose
+
+        if found_good_pose == False:
+            print "Failed to find good pose"
+        else:
+            print "Found good pose"
 
         #print "Pose closest to target fiducial"
         #print closest_pose
@@ -211,9 +234,9 @@ class ArmController(object):
             print poseName
             err = None
             if poseName == "post_grasp" or poseName == "post_grasp2" or poseName == "carry_position":
-                err = self.arm.move_to_pose(grasp_dict[poseName], num_planning_attempts=3)
+                err = self.arm.move_to_pose(grasp_dict[poseName], num_planning_attempts=3, replan=True)
             else:
-                err = self.arm.move_to_pose(grasp_dict[poseName], num_planning_attempts=3)
+                err = self.arm.move_to_pose(grasp_dict[poseName], num_planning_attempts=3, replan=True)
             if poseName == "grasp_pose":
                 self.gripper.close()
                 self.gripper_open = False
@@ -241,7 +264,7 @@ class ArmController(object):
         delivery_pose.pose.orientation.w = 0.697651088238
 
 
-        err = self.arm.move_to_pose(delivery_pose, num_planning_attempts=3)
+        err = self.arm.move_to_pose(delivery_pose, num_planning_attempts=3, replan=True)
 
         print "Error in move to  delivery pose: ", err
 
@@ -259,7 +282,7 @@ class ArmController(object):
         curled_pose.pose.orientation.z = 0.00204527354799
         curled_pose.pose.orientation.w = -0.0259021110833
 
-        err = self.arm.move_to_pose(curled_pose, num_planning_attempts=3)
+        err = self.arm.move_to_pose(curled_pose, num_planning_attempts=3, replan=True)
 
         print "Error in move to curled pose: ", err
         

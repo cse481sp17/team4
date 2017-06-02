@@ -55,7 +55,23 @@ if IN_SIM:
     book3.book_name = "Praise Justin"
     book3.fiducial_number = 13
 
-    books = {1: book1, 2: book2, 3: book3}
+    home1 = BookInfo()
+    home1.pose = returnPose
+    home1.torso_height = 0.0
+    home1.head_pan = -0.0
+    home1.head_tilt = 0.0
+    home1.book_name = "Theoretical Neuroscience"
+    home1.fiducial_number = 4
+
+    delivery1 = BookInfo()
+    delivery1.pose = returnPose
+    delivery1.torso_height = 0.0
+    delivery1.head_pan = -0.0
+    delivery1.head_tilt = 0.0
+    delivery1.book_name = "Theoretical Neuroscience"
+    delivery1.fiducial_number = 4
+
+    books = {1: book1, 2: book2, 3: book3, -1: home1, -2: delivery1}
     bookPath = "/home/team4/catkin_ws/src/cse481c/library_bot/nodes/book_database_sim.p"
 else:
     # # Homes
@@ -161,22 +177,22 @@ else:
 
     # At bookshelf
     bookshelfPose1 = Pose()
-    bookshelfPose1.position.x = -3.89810466766
-    bookshelfPose1.position.y = -14.6413049698
+    bookshelfPose1.position.x = -3.66569411557
+    bookshelfPose1.position.y = -14.5338443433
     bookshelfPose1.position.z = 0.0
     bookshelfPose1.orientation.x = 0.0
     bookshelfPose1.orientation.y = 0.0
-    bookshelfPose1.orientation.z = 0.692950367928
-    bookshelfPose1.orientation.w = 0.721013069153
+    bookshelfPose1.orientation.z = 0.65705315908
+    bookshelfPose1.orientation.w = 0.753844245281
  
     bookshelfPose2 = Pose()
-    bookshelfPose2.position.x = -3.56519186617
-    bookshelfPose2.position.y = -14.3602268261
+    bookshelfPose2.position.x = -3.55608035699
+    bookshelfPose2.position.y = -14.5941557214
     bookshelfPose2.position.z = 0.0
     bookshelfPose2.orientation.x = 0.0
     bookshelfPose2.orientation.y = 0.0
-    bookshelfPose2.orientation.z = 0.67690438257
-    bookshelfPose2.orientation.w = 0.736070959118
+    bookshelfPose2.orientation.z = 0.611408792497
+    bookshelfPose2.orientation.w = 0.791314911054
 
     bookshelfPose3 = Pose()
     bookshelfPose3.position.x = -3.60172798139
@@ -203,7 +219,7 @@ else:
     book1.pose = bookshelfPose1
     book1.torso_height = 0.25
     book1.head_pan = 0.0
-    book1.head_tilt = 0.6
+    book1.head_tilt = 0.55
     book1.book_name = "Theoretical Neuroscience"
     book1.fiducial_number = 13
 
@@ -212,7 +228,7 @@ else:
     book2.pose = bookshelfPose2
     book2.torso_height = 0.25
     book2.head_pan = 0.0
-    book2.head_tilt = 0.6
+    book2.head_tilt = 0.55
     book2.book_name = "Introduction to Robotics"
     book2.fiducial_number = 4
 
@@ -220,7 +236,7 @@ else:
     book3.pose = bookshelfPose3
     book3.torso_height = 0.25
     book3.head_pan = 0.0
-    book3.head_tilt = 0.6
+    book3.head_tilt = 0.55
     book3.book_name = "Praise Justin"
     book3.fiducial_number = 5
 
@@ -228,7 +244,7 @@ else:
     book4.pose = bookshelfPose4
     book4.torso_height = 0.25
     book4.head_pan = 0.0
-    book4.head_tilt = 0.6
+    book4.head_tilt = 0.55 
     book4.book_name = "Praise Justin"
     book4.fiducial_number = 3
 

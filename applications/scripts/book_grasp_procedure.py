@@ -73,14 +73,16 @@ def main():
 
     target_marker_pose = None
     check = 0
+    print "Searching for fiducial...."
     while target_marker_pose == None and check < 100:
         # If the fiducial was not seen, try again
         rospy.sleep(0.1)
         check += 1
-        print "Searching for fiducial...."
         for marker in reader.markers:
             if TARGET_ID == marker.id:
                 target_marker_pose = marker.pose.pose
+    if target_marker_pose == None:
+        print "Failed to find fiducial"
 
     print "Surface position z"
     print response.surface_pose.position.z
@@ -110,7 +112,7 @@ def main():
             move_pose.pose = target_pose
 
         rospy.sleep(1)
-        err = arm.move_to_pose(move_pose)
+        err = arm.move_to_pose(move_pose, replan=True)
         print "Error in move to pose: ", err
         # Check the gripper to open/close
         if pbd_pose.gripper_open != gripper_open:
@@ -124,30 +126,10 @@ def main():
     print "Take this opportunity to change to a different mock point cloud, if necessary"
     user_input = raw_input("Press enter to continue")
 
-    # Now, we make a request to the perception side of things
-    spine_poses = []
-
-    print "waiting for service...."
-    rospy.wait_for_service('get_spines')
-    print "found service!"
-    try:
-        get_spine_poses = rospy.ServiceProxy('get_spines', GetSpineLocations)
-        response = get_spine_poses()
-        spine_poses = response.spine_poses
-
-        # add the surface for collisons
-      #  planning_scene.addBox('surface', response.surface_x_size, response.surface_y_size, response.surface_z_size,
-      #   response.surface_pose.position.x, response.surface_pose.position.y, response.surface_pose.position.z)
-
-        # debugging line
-        for pose in spine_poses:
-            print pose
-    except rospy.ServiceException, e:
-        print "Service call failed: %s"%e
-
     # After this we calculate the spine_pose closest to the fiducial. I will test that if I can get the service call working
     target_fiducial = None
     check = 0
+    print "Searching for fiducial"
     while target_fiducial == None and check < 100:
         # If the fiducial was not seen, try again
         rospy.sleep(0.1)
@@ -156,17 +138,62 @@ def main():
             if marker.id == TARGET_ID:
                 target_fiducial = marker
 
+    if target_fiducial == None:
+        print "Failed to find fiducial"
     print target_fiducial.id
+
+    # Now, we make a request to the perception side of things
+    spine_poses = []
+
+    # code for checking
+    check = 0
+    found_good_pose = False
     closest_pose = None
-    min_dist = float('inf')
-    for pose in spine_poses:
-        distance = calculate_euclidean_distance(pose, target_fiducial.pose.pose)
-        if distance < min_dist:
-            min_dist = distance
-            closest_pose = pose
+    print "waiting for service...."
+    rospy.wait_for_service('get_spines')
+    print "found service!"
+
+    print "Searching for a good grasp pose...."
+    try:
+        while check < 20 and found_good_pose == False:
+
+            get_spine_poses = rospy.ServiceProxy('get_spines', GetSpineLocations)
+            response = get_spine_poses()
+            spine_poses = response.spine_poses
+
+            min_dist = float('inf')
+            for pose in spine_poses:
+                distance = calculate_euclidean_distance(pose, target_fiducial.pose.pose)
+                if distance < min_dist:
+                    min_dist = distance
+                    closest_pose = pose
+            check += 1
+            if closest_pose.position.x > target_fiducial.pose.pose.position.x and closest_pose.position.y < (target_fiducial.pose.pose.position.y + 0.025) and closest_pose.position.y > (target_fiducial.pose.pose.position.y - 0.025):
+                found_good_pose = True
+
+        # debugging line
+        # for pose in spine_poses:
+        #     print pose
+    except rospy.ServiceException, e:
+        print "Service call failed: %s"%e
+
+    if found_good_pose == False:
+        print "Failed to find good pose"
+    else:
+        print "Found good pose"
+    # closest_pose = None
+    # min_dist = float('inf')
+    # for pose in spine_poses:
+    #     distance = calculate_euclidean_distance(pose, target_fiducial.pose.pose)
+    #     if distance < min_dist:
+    #         min_dist = distance
+    #         closest_pose = pose
 
     print "Pose closest to target fiducial"
     print closest_pose
+
+    print "pose of the target fiducial"
+    print target_fiducial.pose.pose
 
     grasp_pose = PoseStamped()
     grasp_pose.header.frame_id = 'base_link'
@@ -224,24 +251,24 @@ def main():
     # pre_grasp.pose.orientation.w = 1
 
     # Note: This is only the position of the spine, not any sort of pre or post grasp
-    err = arm.move_to_pose(pre_grasp)
+    err = arm.move_to_pose(pre_grasp, replan=True)
     print "Error in move to pregrasp pose: ", err
 
     rospy.sleep(1.0)
 
-    err = arm.move_to_pose(grasp_pose)
+    err = arm.move_to_pose(grasp_pose, replan=True)
     print "Error in move to grasp pose: ", err
 
     gripper.close()
     gripper_open = False
 
-    err = arm.move_to_pose(post_grasp, num_planning_attempts=3)
+    err = arm.move_to_pose(post_grasp, num_planning_attempts=3, replan=True)
     print "Error in move to postgrasp pose: ", err
 
-    err = arm.move_to_pose(post_grasp2, num_planning_attempts=3)
+    err = arm.move_to_pose(post_grasp2, num_planning_attempts=3, replan=True)
     print "Error in move to postgrasp2 pose: ", err
 
-    err = arm.move_to_pose(carry_position, num_planning_attempts=3)
+    err = arm.move_to_pose(carry_position, num_planning_attempts=3, replan=True)
     print "Error in move to carry_position pose: ", err
 
 

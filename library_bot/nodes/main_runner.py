@@ -43,17 +43,19 @@ class BookServer(object):
         self.cmdline_grab_book = False
 
         # home for sim.  could be refactored better
-        returnPose = Pose()
-        returnPose.position.x = 0.3548
-        returnPose.position.y = 0.6489
-        returnPose.position.z = 0.0
-        returnPose.orientation.x = 0.0
-        returnPose.orientation.y = 0.0
-        returnPose.orientation.z = 0.14559
-        returnPose.orientation.w = .989
+        # returnPose = Pose()
+        # returnPose.position.x = 0.3548
+        # returnPose.position.y = 0.6489
+        # returnPose.position.z = 0.0
+        # returnPose.orientation.x = 0.0
+        # returnPose.orientation.y = 0.0
+        # returnPose.orientation.z = 0.14559
+        # returnPose.orientation.w = .989
 
         # home for real robot as negative book indices
-        self.home_pose = returnPose
+        # self.home_pose = returnPose
+        self.home_pose = self.book_data.library[-1].pose
+        self.delivery_pose = self.book_data.library[-2].pose
    
     # Call this before doing the callback from cmdline
     def set_home(self, homeIndx):
@@ -82,7 +84,6 @@ class BookServer(object):
         # Temp code to publish the shelf location
         marker_pub = rospy.Publisher("visualization_marker", Marker, queue_size=10)
         rospy.sleep(0.5)
-
         box_marker = Marker()
         box_marker.type = Marker.ARROW
         box_marker.header.frame_id = "map"
@@ -94,7 +95,6 @@ class BookServer(object):
         box_marker.color.g = 0.5
         box_marker.color.b = 0.5
         box_marker.color.a = 1.0
-
         marker_pub.publish(box_marker)
 
         # navigate to book
@@ -127,16 +127,14 @@ class BookServer(object):
 
         # move torso
         self.torso.set_height(0.0)
-        
-        # navigate back home
-        self.location_driver.goto(self.home_pose)
 
-        # drop book somewhere
-        #self.arm_controller.open_gripper()
-
+        # self.location_driver.goto(self.delivery_pose)
         # self.arm_controller.delivery()
         # self.arm_controller.open_gripper()
         # self.arm_controller.curl_arm()
+        
+        # navigate back home
+        self.location_driver.goto(self.home_pose)
 
         # TODO: set response?
 
