@@ -36,6 +36,46 @@ pose:
     y: -0.487300783396
     z: -0.51259958744
     w: 0.492783010006
+    
+    
+Drop-off Ground basket
+Pose: header: 
+  seq: 1476
+  stamp: 
+    secs: 9307
+    nsecs: 353000000
+  frame_id: base_link
+pose: 
+  position: 
+    x: 0.641032576561
+    y: 0.0756497383118
+    z: 0.36987259984
+  orientation: 
+    x: -0.689870417118
+    y: 0.135909467936
+    z: 0.137442305684
+    w: 0.697651088238
+
+Carry position
+
+Pose: header: 
+  seq: 1892
+  stamp: 
+    secs: 9382
+    nsecs: 253000000
+  frame_id: base_link
+pose: 
+  position: 
+    x: -0.00938361883163
+    y: 0.38768684864
+    z: 0.742396354675
+  orientation: 
+    x: -0.999579787254
+    y: -0.0128491902724
+    z: 0.00204527354799
+    w: -0.0259021110833
+
+
 
 New shelf pose 1
 

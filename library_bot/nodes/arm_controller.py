@@ -99,7 +99,7 @@ class ArmController(object):
                 move_pose.pose = target_pose
 
             rospy.sleep(1)
-            err = self.arm.move_to_pose(move_pose)
+            err = self.arm.move_to_pose(move_pose, num_planning_attempts=3)
             print "Error in move to pose: ", err
             if err != None:
                 return False
@@ -213,7 +213,7 @@ class ArmController(object):
             if poseName == "post_grasp" or poseName == "post_grasp2" or poseName == "carry_position":
                 err = self.arm.move_to_pose(grasp_dict[poseName], num_planning_attempts=3)
             else:
-                err = self.arm.move_to_pose(grasp_dict[poseName])
+                err = self.arm.move_to_pose(grasp_dict[poseName], num_planning_attempts=3)
             if poseName == "grasp_pose":
                 self.gripper.close()
                 self.gripper_open = False
@@ -226,6 +226,42 @@ class ArmController(object):
     def remove_bounding_box(self):    
         # At the end remove collision objects
         self.planning_scene.removeCollisionObject('surface')
+
+
+    def delivery(self):
+
+        delivery_pose = PoseStamped()
+        delivery_pose.header.frame_id = "base_link"
+        delivery_pose.pose.position.x = 0.641032576561
+        delivery_pose.pose.position.y = 0.0756497383118
+        delivery_pose.pose.position.z = 0.36987259984
+        delivery_pose.pose.orientation.x = -0.689870417118
+        delivery_pose.pose.orientation.y = 0.135909467936
+        delivery_pose.pose.orientation.z = 0.137442305684
+        delivery_pose.pose.orientation.w = 0.697651088238
+
+
+        err = self.arm.move_to_pose(delivery_pose, num_planning_attempts=3)
+
+        print "Error in move to  delivery pose: ", err
+
+
+
+    def curl_arm(self):
+
+        curled_pose = PoseStamped()
+        curled_pose.header.frame_id = "base_link"
+        curled_pose.pose.position.x = -0.00938361883163
+        curled_pose.pose.position.y = 0.38768684864
+        curled_pose.pose.position.z = 0.742396354675
+        curled_pose.pose.orientation.x = -0.999579787254
+        curled_pose.pose.orientation.y = -0.0128491902724
+        curled_pose.pose.orientation.z = 0.00204527354799
+        curled_pose.pose.orientation.w = -0.0259021110833
+
+        err = self.arm.move_to_pose(curled_pose, num_planning_attempts=3)
+
+        print "Error in move to curled pose: ", err
         
 
 class ArTagReader(object):

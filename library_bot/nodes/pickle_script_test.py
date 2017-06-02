@@ -21,6 +21,14 @@ if IN_SIM:
     bookshelfPose.orientation.z = 0.016551
     bookshelfPose.orientation.w = 1.0
 
+    returnPose = Pose()
+    returnPose.position.x = 0.3548
+    returnPose.position.y = 0.6489
+    returnPose.position.z = 0.0
+    returnPose.orientation.x = 0.0
+    returnPose.orientation.y = 0.0
+    returnPose.orientation.z = 0.14559
+    returnPose.orientation.w = .989
 
     book1 = BookInfo()
     book1.pose = bookshelfPose
@@ -153,13 +161,13 @@ else:
 
     # At bookshelf
     bookshelfPose1 = Pose()
-    bookshelfPose1.position.x = -3.59108390925
-    bookshelfPose1.position.y = -14.5822269719
+    bookshelfPose1.position.x = -3.89810466766
+    bookshelfPose1.position.y = -14.6413049698
     bookshelfPose1.position.z = 0.0
     bookshelfPose1.orientation.x = 0.0
     bookshelfPose1.orientation.y = 0.0
-    bookshelfPose1.orientation.z = 0.762571238503
-    bookshelfPose1.orientation.w = 0.646904248098
+    bookshelfPose1.orientation.z = 0.692950367928
+    bookshelfPose1.orientation.w = 0.721013069153
  
     bookshelfPose2 = Pose()
     bookshelfPose2.position.x = -3.56519186617

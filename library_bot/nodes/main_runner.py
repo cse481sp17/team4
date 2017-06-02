@@ -14,7 +14,7 @@ import fetch_api
 from geometry_msgs.msg import Pose
 # from library_bot import Thing.srv # make this work
 
-IN_SIM = False  # fo evythin bby
+IN_SIM = True  # fo evythin bby
 
 # TODO: fill out
 def main():
@@ -112,7 +112,11 @@ class BookServer(object):
         self.location_driver.goto(self.home_pose)
 
         # drop book somewhere
+        #self.arm_controller.open_gripper()
+
+        self.arm_controller.delivery()
         self.arm_controller.open_gripper()
+        self.arm_controller.curl_arm()
 
         # TODO: set response?
 
