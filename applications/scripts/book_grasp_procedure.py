@@ -224,16 +224,28 @@ def main():
     post_grasp2.pose.position.y = closest_pose.position.y
     post_grasp2.pose.position.z = closest_pose.position.z + 0.10
 
+    # carry_position = PoseStamped()
+    # carry_position.header.frame_id = 'base_link'
+    # carry_position.pose.position.x = 0.012627533637
+    # #carry_position.pose.position.y = -0.540503621101
+    # carry_position.pose.position.y = 0.540503621101 - 0.05
+    # carry_position.pose.position.z = 0.967533946037
+    # carry_position.pose.orientation.x = -0.736985862255
+    # carry_position.pose.orientation.y = 0.0
+    # carry_position.pose.orientation.z = 0.0
+    # carry_position.pose.orientation.w = 0.675908148289
+
+
+    # new Carry pose
     carry_position = PoseStamped()
     carry_position.header.frame_id = 'base_link'
-    carry_position.pose.position.x = 0.012627533637
-    #carry_position.pose.position.y = -0.540503621101
-    carry_position.pose.position.y = 0.540503621101 - 0.05
-    carry_position.pose.position.z = 0.967533946037
-    carry_position.pose.orientation.x = -0.736985862255
-    carry_position.pose.orientation.y = 0.0
-    carry_position.pose.orientation.z = 0.0
-    carry_position.pose.orientation.w = 0.675908148289
+    carry_position.pose.position.x = -0.0567592047155
+    carry_position.pose.position.y = 0.356767743826
+    carry_position.pose.position.z = 0.865676641464
+    carry_position.pose.orientation.x = -0.706504225731
+    carry_position.pose.orientation.y = 0.0401065722108
+    carry_position.pose.orientation.z = -0.705501019955
+    carry_position.pose.orientation.w = -0.0388784334064
 
     # Oookay, If I want this position I need joint state reader
 
