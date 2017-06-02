@@ -217,9 +217,9 @@ else:
 
     book1 = BookInfo()
     book1.pose = bookshelfPose1
-    book1.torso_height = 0.25
+    book1.torso_height = 0.30
     book1.head_pan = 0.0
-    book1.head_tilt = 0.55
+    book1.head_tilt = 0.6
     book1.book_name = "Theoretical Neuroscience"
     book1.fiducial_number = 13
 

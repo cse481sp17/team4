@@ -137,7 +137,7 @@ class BookServer(object):
         self.arm_controller.open_gripper()
         self.torso.set_height(0.4)
         self.arm_controller.curl_arm()
-        self.torso.set_height(0.0)
+        self.torso.set_height(0.7) # 0.0 may-or-may-not have accidentily caused the robot to hit it's own killswitch.....
         self.arm_controller.remove_bounding_box()
 
         
