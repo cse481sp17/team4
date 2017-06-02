@@ -128,13 +128,14 @@ class BookServer(object):
         # move torso
         self.torso.set_height(0.0)
 
-        # self.location_driver.goto(self.delivery_pose)
-        # self.arm_controller.delivery()
-        # self.arm_controller.open_gripper()
-        # self.arm_controller.curl_arm()
+        self.location_driver.goto(self.delivery_pose)
+        self.arm_controller.delivery()
+        rospy.sleep(1.5)
+        self.arm_controller.open_gripper()
+        self.arm_controller.curl_arm()
         
         # navigate back home
-        self.location_driver.goto(self.home_pose)
+        # self.location_driver.goto(self.home_pose)
 
         # TODO: set response?
 

@@ -167,13 +167,13 @@ else:
     homePose1.orientation.w = 0.130390027485
 
     deliveryPose1 = Pose()
-    deliveryPose1.position.x = -1.20871210123
-    deliveryPose1.position.y = -15.3899529824
+    deliveryPose1.position.x = -2.71640902391
+    deliveryPose1.position.y = -14.6933606141
     deliveryPose1.position.z = 0.0
     deliveryPose1.orientation.x = 0.0
     deliveryPose1.orientation.y = 0.0
-    deliveryPose1.orientation.z = -0.769828618017
-    deliveryPose1.orientation.w = 0.638250655214
+    deliveryPose1.orientation.z = 0.00472233879895
+    deliveryPose1.orientation.w = 0.999988849696
 
     # At bookshelf
     bookshelfPose1 = Pose()
