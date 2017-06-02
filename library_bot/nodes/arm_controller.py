@@ -50,8 +50,8 @@ class ArmController(object):
         print "found service!"
 
         get_spine_poses = rospy.ServiceProxy('get_spines', GetSpineLocations)
-        response = get_spine_poses()
-        self.planning_scene.addBox('surface', (response.surface_x_size - 0.17), response.surface_y_size, response.surface_z_size,
+        response = get_spine_poses() # 0.17
+        self.planning_scene.addBox('surface', (response.surface_x_size - 0.19), response.surface_y_size, response.surface_z_size,
            response.surface_pose.position.x, response.surface_pose.position.y, response.surface_pose.position.z)
 
 
