@@ -339,6 +339,7 @@ class ArmController(object):
         curled_pose.pose.orientation.y = -0.489717870951
         curled_pose.pose.orientation.z = -0.524574935436
         curled_pose.pose.orientation.w = 0.473732382059
+        
 
         err = self.arm.move_to_pose(curled_pose, num_planning_attempts=3, replan=True)
 
