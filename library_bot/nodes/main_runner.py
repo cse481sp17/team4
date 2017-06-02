@@ -129,13 +129,16 @@ class BookServer(object):
         self.torso.set_height(0.0)
 
         self.location_driver.goto(self.delivery_pose)
-        self.torso.set_height(0.4)
+        self.head.pan_tilt(0.0, 0.65)
+        self.arm_controller.add_delivery_bounding_box()
+        self.torso.set_height(0.2)
         self.arm_controller.delivery()
         self.torso.set_height(0.05)
         self.arm_controller.open_gripper()
-        self.torso.set_height(0.4)
+        self.torso.set_height(0.2)
         self.arm_controller.curl_arm()
         self.torso.set_height(0.0)
+        self.arm_controller.remove_bounding_box()
 
         
         # navigate back home

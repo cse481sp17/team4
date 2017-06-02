@@ -53,6 +53,19 @@ class ArmController(object):
         response = get_spine_poses()
         self.planning_scene.addBox('surface', (response.surface_x_size - 0.17), response.surface_y_size, response.surface_z_size,
            response.surface_pose.position.x, response.surface_pose.position.y, response.surface_pose.position.z)
+
+
+    # Adding a bounding box for the delivery table
+    def add_delivery_bounding_box(self):
+        print "waiting for service...."
+        rospy.wait_for_service('get_spines')
+        print "found service!"
+
+        get_spine_poses = rospy.ServiceProxy('get_spines', GetSpineLocations)
+        response = get_spine_poses()
+        self.planning_scene.addBox('surface', (response.surface_x_size + 0.03), response.surface_y_size, response.surface_z_size,
+           response.surface_pose.position.x, response.surface_pose.position.y, response.surface_pose.position.z)
+
     
 
     def grab_tray(self, target_id):
