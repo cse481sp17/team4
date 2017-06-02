@@ -18,7 +18,7 @@ S'Theoretical Neuroscience'
 p8
 sS'head_tilt'
 p9
-F0.55
+F0.6
 sS'head_pan'
 p10
 F0.0
@@ -57,7 +57,7 @@ aF0.65705315908
 aF0.753844245281
 ababsS'torso_height'
 p24
-F0.25
+F0.3
 sS'fiducial_number'
 p25
 I13
