@@ -101,9 +101,16 @@ class ArmController(object):
                 move_pose.pose = target_pose
 
             rospy.sleep(1)
-            err = self.arm.move_to_pose(move_pose, num_planning_attempts=4)
+            err = self.arm.move_to_pose(move_pose, num_planning_attempts=3)
             print "Error in move to pose: ", err
-            if err != None:
+            temp = 0
+            if err != None and temp < 3:
+                #return False
+                print "Trying This pose again"
+                err = self.arm.move_to_pose(move_pose, num_planning_attempts=3)
+                temp += 1
+            elif err != None and temp >= 3:
+                print "Arm failed to move to pose"
                 return False
             # Check the gripper to open/close
             if pbd_pose.gripper_open != self.gripper_open:
