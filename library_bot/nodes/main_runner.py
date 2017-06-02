@@ -14,6 +14,8 @@ import fetch_api
 from geometry_msgs.msg import Pose
 # from library_bot import Thing.srv # make this work
 
+from visualization_msgs.msg import Marker
+
 IN_SIM = False  # fo evythin bby
 
 # TODO: fill out
@@ -77,6 +79,24 @@ class BookServer(object):
         # Go home before anywhere else
         self.location_driver.goto(self.home_pose)
 
+        # Temp code to publish the shelf location
+        marker_pub = rospy.Publisher("visualization_marker", Marker, queue_size=10)
+        rospy.sleep(0.5)
+
+        box_marker = Marker()
+        box_marker.type = Marker.ARROW
+        box_marker.header.frame_id = "map"
+        box_marker.pose = book_info.pose
+        box_marker.scale.x = 0.5
+        box_marker.scale.y = 0.1
+        box_marker.scale.z = 0.1
+        box_marker.color.r = 0.0
+        box_marker.color.g = 0.5
+        box_marker.color.b = 0.5
+        box_marker.color.a = 1.0
+
+        marker_pub.publish(box_marker)
+
         # navigate to book
         self.location_driver.goto(book_info.pose)
 
@@ -114,9 +134,9 @@ class BookServer(object):
         # drop book somewhere
         #self.arm_controller.open_gripper()
 
-        self.arm_controller.delivery()
-        self.arm_controller.open_gripper()
-        self.arm_controller.curl_arm()
+        # self.arm_controller.delivery()
+        # self.arm_controller.open_gripper()
+        # self.arm_controller.curl_arm()
 
         # TODO: set response?
 
