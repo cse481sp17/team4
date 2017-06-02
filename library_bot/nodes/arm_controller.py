@@ -84,7 +84,7 @@ class ArmController(object):
                     target_marker_pose = marker.pose.pose
 
         if target_marker_pose == None:
-            print "Fiducial not found"
+            print "Fiducial not found :("
         else:
             print "Fiducial Found :)"
 
@@ -117,12 +117,14 @@ class ArmController(object):
             err = self.arm.move_to_pose(move_pose, num_planning_attempts=3)
             print "Error in move to pose: ", err
             temp = 0
-            if err != None and temp < 3:
+            while temp < 3 and err != None:
+                #if err != None:
                 #return False
                 print "Trying This pose again"
                 err = self.arm.move_to_pose(move_pose, num_planning_attempts=3)
+                print "Error in move to pose: ", err
                 temp += 1
-            elif err != None and temp >= 3:
+            if err != None:
                 print "Arm failed to move to pose"
                 return False
             # Check the gripper to open/close

@@ -16,7 +16,7 @@ from geometry_msgs.msg import Pose
 
 from visualization_msgs.msg import Marker
 
-IN_SIM = False  # fo evythin bby
+IN_SIM = True  # fo evythin bby
 
 # TODO: fill out
 def main():
