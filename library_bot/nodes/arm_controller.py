@@ -334,7 +334,7 @@ class ArmController(object):
         curled_pose.header.frame_id = "base_link"
         curled_pose.pose.position.x = -0.10520786792
         curled_pose.pose.position.y = 0.275289952755
-        curled_pose.pose.position.z = 0.855269372463
+        curled_pose.pose.position.z = 0.855269372463 + 0.05
         curled_pose.pose.orientation.x = -0.510465681553
         curled_pose.pose.orientation.y = -0.489717870951
         curled_pose.pose.orientation.z = -0.524574935436

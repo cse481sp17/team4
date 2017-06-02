@@ -134,10 +134,11 @@ class BookServer(object):
         self.torso.set_height(0.4)
         rospy.sleep(3.0)
         self.arm_controller.delivery()
-        self.torso.set_height(0.25)
+        self.torso.set_height(0.27) #0.25
         self.arm_controller.open_gripper()
         self.torso.set_height(0.4)
         self.arm_controller.curl_arm()
+        print "Before height lowering"
         self.torso.set_height(1.0) # 0.0 may-or-may-not have accidentily caused the robot to hit it's own killswitch.....
         self.arm_controller.remove_bounding_box()
 

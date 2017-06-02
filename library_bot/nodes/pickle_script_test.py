@@ -175,6 +175,15 @@ else:
     deliveryPose1.orientation.z = 0.00472233879895
     deliveryPose1.orientation.w = 0.999988849696
 
+    deliveryPose2 = Pose()
+    deliveryPose2.position.x = -4.31286643672
+    deliveryPose2.position.y = -14.6842134712
+    deliveryPose2.position.z = 0.0
+    deliveryPose2.orientation.x = 0.0
+    deliveryPose2.orientation.y = 0.0
+    deliveryPose2.orientation.z = 0.980614521179
+    deliveryPose2.orientation.w = 0.1959468317
+
     # At bookshelf
     bookshelfPose1 = Pose()
     bookshelfPose1.position.x = -3.66569411557
@@ -257,7 +266,7 @@ else:
     home1.fiducial_number = 0
 
     delivery1 = BookInfo()
-    delivery1.pose = deliveryPose1
+    delivery1.pose = deliveryPose2
     delivery1.torso_height = 0.0
     delivery1.head_pan = 0.0
     delivery1.head_tilt = 0.0
