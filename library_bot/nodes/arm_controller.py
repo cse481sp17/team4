@@ -101,7 +101,7 @@ class ArmController(object):
                 move_pose.pose = target_pose
 
             rospy.sleep(1)
-            err = self.arm.move_to_pose(move_pose, num_planning_attempts=3, replan=True)
+            err = self.arm.move_to_pose(move_pose, num_planning_attempts=4)
             print "Error in move to pose: ", err
             if err != None:
                 return False
