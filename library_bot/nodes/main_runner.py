@@ -116,15 +116,6 @@ class BookServer(object):
 
         if not self.cmdline or (self.cmdline and self.cmdline_grab_tray):
             grab_tray_success = self.arm_controller.grab_tray(target_id)
-            if grab_tray_success == False:
-                temp = 0
-                while grab_tray_success == False and temp < 3:
-                    grab_tray_success = self.arm_controller.grab_tray(target_id)
-                    temp += 1
-
-            if grab_tray_success == False:
-                print "Critical Grab tray fail"
-
             closest_pose = self.arm_controller.find_grasp_pose(target_id)
         # t/f if grab book
         if not self.cmdline or (self.cmdline and self.cmdline_grab_book):
