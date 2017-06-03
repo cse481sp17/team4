@@ -159,21 +159,21 @@ class ArmController(object):
                     self.gripper_open = True
         return True
 
-    def find_grasp_pose(self, target_id):
-        target_fiducial = None
-        check = 0
-        while target_fiducial == None and check < 100:
-            # If the fiducial was not seen, try again
-            rospy.sleep(0.1)
-            check += 1
-            for marker in self.reader.markers:
-                if marker.id == target_id:
-                    target_fiducial = marker
+    def find_grasp_pose(self, target_id, target_marker_pose):
+        # target_fiducial = None
+        # check = 0
+        # while target_fiducial == None and check < 100:
+        #     # If the fiducial was not seen, try again
+        #     rospy.sleep(0.1)
+        #     check += 1
+        #     for marker in self.reader.markers:
+        #         if marker.id == target_id:
+        #             target_fiducial = marker
 
-        if target_fiducial == None:
-            print "Failed to find fiducial :("
-        else:
-            print "Found fidcuail!"
+        # if target_fiducial == None:
+        #     print "Failed to find fiducial :("
+        # else:
+        #     print "Found fidcuail!"
 
 
         check = 0
@@ -191,12 +191,14 @@ class ArmController(object):
 
                 min_dist = float('inf')
                 for pose in spine_poses:
-                    distance = calculate_euclidean_distance(pose, target_fiducial.pose.pose)
+                    #distance = calculate_euclidean_distance(pose, target_fiducial.pose.pose)
+                    distance = calculate_euclidean_distance(pose, target_marker_pose)
                     if distance < min_dist:
                         min_dist = distance
                         closest_pose = pose
                 check += 1
-                if closest_pose.position.x > target_fiducial.pose.pose.position.x and closest_pose.position.y < (target_fiducial.pose.pose.position.y + 0.025) and closest_pose.position.y > (target_fiducial.pose.pose.position.y - 0.025):
+                #if closest_pose.position.x > target_fiducial.pose.pose.position.x and closest_pose.position.y < (target_fiducial.pose.pose.position.y + 0.025) and closest_pose.position.y > (target_fiducial.pose.pose.position.y - 0.025):
+                if closest_pose.position.x > target_marker_pose.position.x and closest_pose.position.y < (target_marker_pose.position.y + 0.025) and closest_pose.position.y > (target_marker_pose.position.y - 0.025):
                     found_good_pose = True
         except rospy.ServiceException, e:
             print "Service call failed: %s" % e
@@ -212,6 +214,7 @@ class ArmController(object):
 
         if found_good_pose == False:
             print "Failed to find good pose"
+            return None
         else:
             print "Found good pose"
 

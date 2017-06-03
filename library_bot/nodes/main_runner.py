@@ -141,13 +141,29 @@ class BookServer(object):
             if grab_tray_success is False:
                 print "Grab Tray Critical fail"
 
-            closest_pose = self.arm_controller.find_grasp_pose(target_id)
-        # t/f if grab book
-        if not self.cmdline or (self.cmdline and self.cmdline_grab_book):
             target_marker = self.arm_controller.find_marker(target_id, self.head)
-
             print "Target Marker is..."
             print target_marker
+
+            closest_pose = self.arm_controller.find_grasp_pose(target_id, target_marker)
+            temp = 0
+            while closest_pose == None and temp < 3:
+                print "Failed to find closest pose, trying again....."
+                target_marker = self.arm_controller.find_marker(target_id, self.head)
+                print "Target Marker is..."
+                print target_marker
+
+                closest_pose = self.arm_controller.find_grasp_pose(target_id, target_marker)
+                temp += 1
+            if closest_pose == None:
+                print "Critical Pose-finding failure"
+
+        # t/f if grab book
+        if not self.cmdline or (self.cmdline and self.cmdline_grab_book):
+            # target_marker = self.arm_controller.find_marker(target_id, self.head)
+
+            # print "Target Marker is..."
+            # print target_marker
 
             grab_book_success = self.arm_controller.grab_book(closest_pose)
             temp = 0
@@ -156,10 +172,10 @@ class BookServer(object):
                 self.arm_controller.remove_bounding_box()
                 self.arm_controller.add_bounding_box()
 
-                target_marker = self.arm_controller.find_marker(target_id, self.head)
+                # target_marker = self.arm_controller.find_marker(target_id, self.head)
 
-                print "Target Marker is..."
-                print target_marker
+                # print "Target Marker is..."
+                # print target_marker
 
                 grab_book_success = self.arm_controller.grab_book(closest_pose)
                 temp +=1
