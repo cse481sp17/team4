@@ -127,7 +127,7 @@ class ArmController(object):
                 #if err != None:
                 #return False
                 print "Trying This pose again"
-                err = self.arm.move_to_pose(move_pose, num_planning_attempts=3)
+                err = self.arm.move_to_pose(move_pose, num_planning_attempts=3, tolerance=0.03)
                 print "Error in move to pose: ", err
                 temp += 1
             if err != None:
