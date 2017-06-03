@@ -79,7 +79,7 @@ class BookServer(object):
         target_id = book_info.fiducial_number
 
         # Go home before anywhere else
-        self.location_driver.goto(self.home_pose)
+        #self.location_driver.goto(self.home_pose)
 
         # Temp code to publish the shelf location
         marker_pub = rospy.Publisher("visualization_marker", Marker, queue_size=10)
@@ -98,7 +98,7 @@ class BookServer(object):
         marker_pub.publish(box_marker)
 
         # navigate to book
-        self.location_driver.goto(book_info.pose)
+        #self.location_driver.goto(book_info.pose)
 
         # move torso
         self.torso.set_height(book_info.torso_height)
@@ -116,6 +116,17 @@ class BookServer(object):
 
         if not self.cmdline or (self.cmdline and self.cmdline_grab_tray):
             grab_tray_success = self.arm_controller.grab_tray(target_id)
+            print "Did the grab tray succeed: ", grab_tray_success
+            temp = 0
+            while grab_tray_success is False and temp < 3:
+                print "Grab tray failed. Retrying process......"
+                # Here we can try to move to bookself pose again, or raise the torso if need be
+
+                grab_tray_success = self.arm_controller.grab_tray(target_id)
+                temp += 1
+            if grab_tray_success is False:
+                print "Grab Tray Critical fail"
+
             closest_pose = self.arm_controller.find_grasp_pose(target_id)
         # t/f if grab book
         if not self.cmdline or (self.cmdline and self.cmdline_grab_book):
@@ -139,7 +150,7 @@ class BookServer(object):
         self.torso.set_height(0.4)
         self.arm_controller.curl_arm()
         print "Before height lowering"
-        self.torso.set_height(1.0) # 0.0 may-or-may-not have accidentily caused the robot to hit it's own killswitch.....
+        self.torso.set_height(0.1) # 0.0 may-or-may-not have accidentily caused the robot to hit it's own killswitch.....
         print "after lowering height"
         #self.arm_controller.remove_bounding_box()
 

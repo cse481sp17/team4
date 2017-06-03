@@ -103,6 +103,8 @@ class ArmController(object):
             move_pose.header.frame_id = 'base_link'
             if pbd_pose.frame == 'base_link':
                 move_pose.pose = pbd_pose.pose
+                print "Default pose"
+                print pbd_pose.pose
             else:
                 # for marker in reader.markers:
                 #     if target_id == marker.id:
@@ -132,6 +134,20 @@ class ArmController(object):
                 temp += 1
             if err != None:
                 print "Arm failed to move to pose"
+
+                print "Returning to Default Pose"
+                default_pose = PoseStamped()
+                default_pose.header.frame_id = 'base_link'
+                default_pose.pose.position.x = 0.0
+                default_pose.pose.position.y = 0.467635764991
+                default_pose.pose.position.z = 0.743876436337
+                default_pose.pose.orientation.x = 0.0
+                default_pose.pose.orientation.y = 0.0
+                default_pose.pose.orientation.z = 0.0
+                default_pose.pose.orientation.w = 1.0
+
+                err = self.arm.move_to_pose(default_pose)
+                print "returned to default pose"
                 return False
             # Check the gripper to open/close
             if pbd_pose.gripper_open != self.gripper_open:
