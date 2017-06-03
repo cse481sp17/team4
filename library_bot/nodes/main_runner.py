@@ -118,7 +118,7 @@ class BookServer(object):
             grab_tray_success = self.arm_controller.grab_tray(target_id)
             if grab_tray_success == False:
                 temp = 0
-                while grab_tray_success == False and temp < 3
+                while grab_tray_success == False and temp < 3:
                     grab_tray_success = self.arm_controller.grab_tray(target_id)
                     temp += 1
 
