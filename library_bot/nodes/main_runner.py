@@ -108,6 +108,13 @@ class BookServer(object):
 
         # execute grasping procedure
         self.arm_controller.add_bounding_box()
+
+        # finding marker code
+        target_marker = self.arm_controller.find_marker(target_id, self.head)
+
+        print "Target Marker is..."
+        print target_marker
+
         
         # t/f if grab tray
         grab_tray_success = None

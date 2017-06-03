@@ -312,6 +312,24 @@ class ArmController(object):
                 return False
         return True
         
+    def find_marker(self, target_id, head):
+        head_tilts = [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8]
+        target_fiducial = None
+        for i in range(0, len(head_tilts)):
+            head.pan_tilt(0.0, head_tilts[i])
+            check = 0
+            while target_fiducial == None and check < 50:
+                # If the fiducial was not seen, try again
+                rospy.sleep(0.1)
+                check += 1
+                for marker in self.reader.markers:
+                    if marker.id == target_id:
+                        target_fiducial = marker
+
+                if target_fiducial != None:
+                    return target_fiducial.pose.pose
+        return target_fiducial
+
 
     def remove_bounding_box(self):    
         # At the end remove collision objects
