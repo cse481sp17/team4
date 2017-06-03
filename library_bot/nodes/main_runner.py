@@ -79,7 +79,7 @@ class BookServer(object):
         target_id = book_info.fiducial_number
 
         # Go home before anywhere else
-        #self.location_driver.goto(self.home_pose)
+        self.location_driver.goto(self.home_pose)
 
         # Temp code to publish the shelf location
         marker_pub = rospy.Publisher("visualization_marker", Marker, queue_size=10)
@@ -98,7 +98,7 @@ class BookServer(object):
         marker_pub.publish(box_marker)
 
         # navigate to book
-        #self.location_driver.goto(book_info.pose)
+        self.location_driver.goto(book_info.pose)
 
         # move torso
         self.torso.set_height(book_info.torso_height)
