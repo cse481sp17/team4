@@ -121,6 +121,8 @@ class BookServer(object):
             while grab_tray_success is False and temp < 3:
                 print "Grab tray failed. Retrying process......"
                 # Here we can try to move to bookself pose again, or raise the torso if need be
+                self.arm_controller.remove_bounding_box()
+                self.arm_controller.add_bounding_box()
 
                 grab_tray_success = self.arm_controller.grab_tray(target_id)
                 temp += 1
@@ -131,6 +133,16 @@ class BookServer(object):
         # t/f if grab book
         if not self.cmdline or (self.cmdline and self.cmdline_grab_book):
             grab_book_success = self.arm_controller.grab_book(closest_pose)
+            temp = 0
+            while grab_book_success is False and temp < 3:
+                print "Grab Book Failed. Retrying process..........."
+                self.arm_controller.remove_bounding_box()
+                self.arm_controller.add_bounding_box()
+
+                grab_book_success = self.arm_controller.grab_book(closest_pose)
+                temp +=1
+            if grab_book_success is False:
+                print "Grab Book Critical fail"
             self.arm_controller.remove_bounding_box()
 
         # move head (pan and tilt)

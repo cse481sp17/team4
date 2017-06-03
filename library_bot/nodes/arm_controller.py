@@ -298,6 +298,17 @@ class ArmController(object):
                 self.gripper_open = False
             if err != None:
                 print "Error in move to ", poseName, " pose: ", err
+
+                print "Returning to Default Pose"
+                default_pose = PoseStamped()
+                default_pose.header.frame_id = 'base_link'
+                default_pose.pose.position.x = 0.0
+                default_pose.pose.position.y = 0.467635764991
+                default_pose.pose.position.z = 0.743876436337
+                default_pose.pose.orientation.x = 0.0
+                default_pose.pose.orientation.y = 0.0
+                default_pose.pose.orientation.z = 0.0
+                default_pose.pose.orientation.w = 1.0
                 return False
         return True
         
