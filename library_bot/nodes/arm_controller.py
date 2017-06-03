@@ -313,7 +313,8 @@ class ArmController(object):
         return True
         
     def find_marker(self, target_id, head):
-        head_tilts = [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8]
+        #head_tilts = [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8]
+        head_tilts = [0.8, 0.7. 0.6, 0.5, 0.4, 0.3, 0.2, 0.1, 0.0]
         target_fiducial = None
         for i in range(0, len(head_tilts)):
             head.pan_tilt(0.0, head_tilts[i])
