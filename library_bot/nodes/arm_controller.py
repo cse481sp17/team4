@@ -322,9 +322,15 @@ class ArmController(object):
         delivery_pose.pose.orientation.w = 0.701124310493
 
 
-        err = self.arm.move_to_pose(delivery_pose, num_planning_attempts=3, replan=True)
+        #err = self.arm.move_to_pose(delivery_pose, num_planning_attempts=3, replan=True)
+        err = self.arm.move_to_pose(delivery_pose)
 
         print "Error in move to  delivery pose: ", err
+        check = 0
+        while err != None and check < 3:
+            err = self.arm.move_to_pose(delivery_pose, num_planning_attempts=3, replan=True)
+            print "Error in move to  delivery pose: ", err
+            check += 1
 
 
 
@@ -365,9 +371,16 @@ class ArmController(object):
         curled_pose.pose.orientation.w = 0.507765948772
         
 
-        err = self.arm.move_to_pose(curled_pose, num_planning_attempts=3, replan=True)
+        #err = self.arm.move_to_pose(curled_pose, num_planning_attempts=3, replan=True)
+        err = self.arm.move_to_pose(curled_pose)
 
         print "Error in move to curled pose: ", err
+
+        check = 0
+        while err != None and check < 3:
+            err = self.arm.move_to_pose(curled_pose, num_planning_attempts=3, replan=True)
+            print "Error in move to curled pose: ", err
+            check += 1
         
 
 class ArTagReader(object):
