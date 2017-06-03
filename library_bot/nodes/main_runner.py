@@ -110,10 +110,10 @@ class BookServer(object):
         self.arm_controller.add_bounding_box()
 
         # finding marker code
-        # target_marker = self.arm_controller.find_marker(target_id, self.head)
+        target_marker = self.arm_controller.find_marker(target_id, self.head)
 
-        # print "Target Marker is..."
-        # print target_marker
+        print "Target Marker is..."
+        print target_marker
 
         
         # t/f if grab tray
@@ -139,10 +139,10 @@ class BookServer(object):
             closest_pose = self.arm_controller.find_grasp_pose(target_id)
         # t/f if grab book
         if not self.cmdline or (self.cmdline and self.cmdline_grab_book):
-            # target_marker = self.arm_controller.find_marker(target_id, self.head)
+            target_marker = self.arm_controller.find_marker(target_id, self.head)
 
-            # print "Target Marker is..."
-            # print target_marker
+            print "Target Marker is..."
+            print target_marker
 
             grab_book_success = self.arm_controller.grab_book(closest_pose)
             temp = 0
@@ -163,7 +163,11 @@ class BookServer(object):
         # move torso
         self.torso.set_height(0.0)
 
+        print "Driving to Delivery"
+
         self.location_driver.goto(self.delivery_pose)
+
+        print "Arrived at delivery"
         self.head.pan_tilt(0.0, 0.65)
         self.arm_controller.add_delivery_bounding_box()
         self.torso.set_height(0.4)
