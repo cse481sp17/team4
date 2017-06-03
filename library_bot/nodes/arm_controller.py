@@ -87,6 +87,12 @@ class ArmController(object):
             print "Fiducial not found :("
         else:
             print "Fiducial Found :)"
+            #print target_marker_pose
+
+        target_marker_pose.orientation.x = 0.0
+        target_marker_pose.orientation.y = 0.0
+        target_marker_pose.orientation.z = 0.0
+        target_marker_pose.orientation.w = 1.0
 
 
         everError = None
