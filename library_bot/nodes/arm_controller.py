@@ -68,31 +68,31 @@ class ArmController(object):
 
     
 
-    def grab_tray(self, target_id):
+    def grab_tray(self, target_id, target_marker_pose):
         # This is the same as the pbd action stuff, not making any changes at the moment
         self.gripper.open()
         self.gripper_open = True
-        target_marker_pose = None
-        check = 0
-        print "Searching for fiducial...."
-        while target_marker_pose == None and check < 100:
-            # If the fiducial was not seen, try again
-            rospy.sleep(0.1)
-            check += 1
-            for marker in self.reader.markers:
-                if target_id == marker.id:
-                    target_marker_pose = marker.pose.pose
+        # target_marker_pose = None
+        # check = 0
+        # print "Searching for fiducial...."
+        # while target_marker_pose == None and check < 100:
+        #     # If the fiducial was not seen, try again
+        #     rospy.sleep(0.1)
+        #     check += 1
+        #     for marker in self.reader.markers:
+        #         if target_id == marker.id:
+        #             target_marker_pose = marker.pose.pose
 
-        if target_marker_pose == None:
-            print "Fiducial not found :("
-            return False
-        else:
-            print "Fiducial Found :)"
+        # if target_marker_pose == None:
+        #     print "Fiducial not found :("
+        #     return False
+        # else:
+        #     print "Fiducial Found :)"
 
-        target_marker_pose.orientation.x = 0.0
-        target_marker_pose.orientation.y = 0.0
-        target_marker_pose.orientation.z = 0.0
-        target_marker_pose.orientation.w = 1.0
+        # target_marker_pose.orientation.x = 0.0
+        # target_marker_pose.orientation.y = 0.0
+        # target_marker_pose.orientation.z = 0.0
+        # target_marker_pose.orientation.w = 1.0
 
 
         everError = None

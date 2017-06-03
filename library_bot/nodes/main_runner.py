@@ -122,7 +122,7 @@ class BookServer(object):
         grab_book_success = None
 
         if not self.cmdline or (self.cmdline and self.cmdline_grab_tray):
-            grab_tray_success = self.arm_controller.grab_tray(target_id)
+            grab_tray_success = self.arm_controller.grab_tray(target_id, target_marker)
             print "Did the grab tray succeed: ", grab_tray_success
             temp = 0
             while grab_tray_success is False and temp < 3:
@@ -131,7 +131,12 @@ class BookServer(object):
                 self.arm_controller.remove_bounding_box()
                 self.arm_controller.add_bounding_box()
 
-                grab_tray_success = self.arm_controller.grab_tray(target_id)
+                target_marker = self.arm_controller.find_marker(target_id, self.head)
+
+                print "Target Marker is..."
+                print target_marker
+
+                grab_tray_success = self.arm_controller.grab_tray(target_id, target_marker)
                 temp += 1
             if grab_tray_success is False:
                 print "Grab Tray Critical fail"
