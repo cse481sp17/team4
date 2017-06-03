@@ -202,7 +202,7 @@ class ArmController(object):
         grasp_pose.header.frame_id = 'base_link'
         grasp_pose.pose = copy.deepcopy(closest_pose)
         # Offset because the arm is moved relative to the wrist roll Joint
-        grasp_pose.pose.position.x -= (0.166 - 0.035)
+        grasp_pose.pose.position.x -= (0.166 - 0.04) # 0.035
         grasp_pose.pose.orientation.w = 1
 
         pre_grasp = PoseStamped()
@@ -217,14 +217,14 @@ class ArmController(object):
         post_grasp.pose = copy.deepcopy(closest_pose)
         post_grasp.pose.position.x = closest_pose.position.x - (0.166 - 0.04)
         post_grasp.pose.position.y = closest_pose.position.y
-        post_grasp.pose.position.z = closest_pose.position.z + 0.10
+        post_grasp.pose.position.z = closest_pose.position.z + 0.12 # 0.10
 
         post_grasp2 = PoseStamped()
         post_grasp2.header.frame_id = 'base_link'
         post_grasp2.pose = copy.deepcopy(closest_pose)
         post_grasp2.pose.position.x = closest_pose.position.x - (0.166 + 0.185)
         post_grasp2.pose.position.y = closest_pose.position.y
-        post_grasp2.pose.position.z = closest_pose.position.z + 0.10
+        post_grasp2.pose.position.z = closest_pose.position.z + 0.12 # 0.10
 
         #position: 
     #     x: 0.012627533637
@@ -299,15 +299,27 @@ class ArmController(object):
 
         # new Delivery pose
 
+        # delivery_pose = PoseStamped()
+        # delivery_pose.header.frame_id = "base_link"
+        # delivery_pose.pose.position.x = 0.605564773083
+        # delivery_pose.pose.position.y = 0.0
+        # delivery_pose.pose.position.z = 0.902032971382
+        # delivery_pose.pose.orientation.x = -0.708695232868
+        # delivery_pose.pose.orientation.y = 0.054994776845
+        # delivery_pose.pose.orientation.z = 0.054417796433
+        # delivery_pose.pose.orientation.w = 0.70125991106
+
+        # Once again, new poses (saved with respect to torso 0.4 on the robot)
+
         delivery_pose = PoseStamped()
         delivery_pose.header.frame_id = "base_link"
-        delivery_pose.pose.position.x = 0.605564773083
+        delivery_pose.pose.position.x = 0.67331725359
         delivery_pose.pose.position.y = 0.0
-        delivery_pose.pose.position.z = 0.902032971382
-        delivery_pose.pose.orientation.x = -0.708695232868
-        delivery_pose.pose.orientation.y = 0.054994776845
-        delivery_pose.pose.orientation.z = 0.054417796433
-        delivery_pose.pose.orientation.w = 0.70125991106
+        delivery_pose.pose.position.z = 0.962293148041
+        delivery_pose.pose.orientation.x = 0.686241090298
+        delivery_pose.pose.orientation.y = 0.135450080037
+        delivery_pose.pose.orientation.z = -0.138387724757
+        delivery_pose.pose.orientation.w = 0.701124310493
 
 
         err = self.arm.move_to_pose(delivery_pose, num_planning_attempts=3, replan=True)
@@ -330,15 +342,27 @@ class ArmController(object):
 
         # New curled pose
 
+        # curled_pose = PoseStamped()
+        # curled_pose.header.frame_id = "base_link"
+        # curled_pose.pose.position.x = -0.10520786792
+        # curled_pose.pose.position.y = 0.275289952755
+        # curled_pose.pose.position.z = 0.855269372463 + 0.05
+        # curled_pose.pose.orientation.x = -0.510465681553
+        # curled_pose.pose.orientation.y = -0.489717870951
+        # curled_pose.pose.orientation.z = -0.524574935436
+        # curled_pose.pose.orientation.w = 0.473732382059
+
+        # Once again, new poses (saved with respect to a torso height of 4)
+
         curled_pose = PoseStamped()
         curled_pose.header.frame_id = "base_link"
-        curled_pose.pose.position.x = -0.10520786792
-        curled_pose.pose.position.y = 0.275289952755
-        curled_pose.pose.position.z = 0.855269372463 + 0.05
-        curled_pose.pose.orientation.x = -0.510465681553
-        curled_pose.pose.orientation.y = -0.489717870951
-        curled_pose.pose.orientation.z = -0.524574935436
-        curled_pose.pose.orientation.w = 0.473732382059
+        curled_pose.pose.position.x = 0.0904720053077
+        curled_pose.pose.position.y = 0.146827042103
+        curled_pose.pose.position.z = 0.939861655235
+        curled_pose.pose.orientation.x = 0.49698728323
+        curled_pose.pose.orientation.y = -0.492216616869
+        curled_pose.pose.orientation.z = 0.502891778946
+        curled_pose.pose.orientation.w = 0.507765948772
         
 
         err = self.arm.move_to_pose(curled_pose, num_planning_attempts=3, replan=True)

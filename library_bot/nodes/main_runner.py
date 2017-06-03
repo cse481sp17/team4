@@ -130,7 +130,7 @@ class BookServer(object):
 
         self.location_driver.goto(self.delivery_pose)
         self.head.pan_tilt(0.0, 0.65)
-        #self.arm_controller.add_delivery_bounding_box()
+        self.arm_controller.add_delivery_bounding_box()
         self.torso.set_height(0.4)
         rospy.sleep(3.0)
         self.arm_controller.delivery()
@@ -140,10 +140,11 @@ class BookServer(object):
         self.arm_controller.curl_arm()
         print "Before height lowering"
         self.torso.set_height(1.0) # 0.0 may-or-may-not have accidentily caused the robot to hit it's own killswitch.....
-        #self.arm_controller.remove_bounding_box()
+        print "after lowering height"
+        self.arm_controller.remove_bounding_box()
 
         
-        self.torso.set_height(1.0)
+        #self.torso.set_height(1.0)
 
         # navigate back home
         # self.location_driver.goto(self.home_pose)
