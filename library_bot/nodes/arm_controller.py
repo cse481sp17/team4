@@ -113,8 +113,8 @@ class ArmController(object):
 
                 move_pose.pose = target_pose
 
-            rospy.sleep(1)
-            err = self.arm.move_to_pose(move_pose, num_planning_attempts=3)
+            #rospy.sleep(1)
+            err = self.arm.move_to_pose(move_pose, num_planning_attempts=2) # 3
             print "Error in move to pose: ", err
             temp = 0
             while temp < 3 and err != None:
@@ -264,7 +264,7 @@ class ArmController(object):
         grasp_order = ["pre_grasp", "grasp_pose", "post_grasp", "post_grasp2", "carry_position"]
         grasp_dict = {"pre_grasp": pre_grasp, "grasp_pose": grasp_pose, "post_grasp": post_grasp, "post_grasp2": post_grasp2, "carry_position": carry_position}
         for poseName in grasp_order:
-            rospy.sleep(.5)
+            #rospy.sleep(.5)
             print poseName
             err = None
             if poseName == "post_grasp" or poseName == "post_grasp2" or poseName == "carry_position":
