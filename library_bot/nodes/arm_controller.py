@@ -309,6 +309,9 @@ class ArmController(object):
                 default_pose.pose.orientation.y = 0.0
                 default_pose.pose.orientation.z = 0.0
                 default_pose.pose.orientation.w = 1.0
+
+                err = self.arm.move_to_pose(default_pose)
+                print "returned to default pose"
                 return False
         return True
         
