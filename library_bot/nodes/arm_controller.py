@@ -197,9 +197,10 @@ class ArmController(object):
                         min_dist = distance
                         closest_pose = pose
                 check += 1
-                #if closest_pose.position.x > target_fiducial.pose.pose.position.x and closest_pose.position.y < (target_fiducial.pose.pose.position.y + 0.025) and closest_pose.position.y > (target_fiducial.pose.pose.position.y - 0.025):
-                if closest_pose.position.x > target_marker_pose.position.x and closest_pose.position.y < (target_marker_pose.position.y + 0.025) and closest_pose.position.y > (target_marker_pose.position.y - 0.025):
-                    found_good_pose = True
+                if closest_pose != None:
+                    #if closest_pose.position.x > target_fiducial.pose.pose.position.x and closest_pose.position.y < (target_fiducial.pose.pose.position.y + 0.025) and closest_pose.position.y > (target_fiducial.pose.pose.position.y - 0.025):
+                    if closest_pose.position.x > target_marker_pose.position.x and closest_pose.position.y < (target_marker_pose.position.y + 0.025) and closest_pose.position.y > (target_marker_pose.position.y - 0.025):
+                        found_good_pose = True
         except rospy.ServiceException, e:
             print "Service call failed: %s" % e
 

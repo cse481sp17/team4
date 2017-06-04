@@ -153,6 +153,7 @@ class BookServer(object):
                 print "Target Marker is..."
                 print target_marker
 
+                self.head.pan_tilt(0.0, 0.6)
                 closest_pose = self.arm_controller.find_grasp_pose(target_id, target_marker)
                 temp += 1
             if closest_pose == None:
