@@ -56,3 +56,21 @@ class Gripper(object):
 	self.client.send_goal(goal)
         self.client.wait_for_result(rospy.Duration.from_sec(5.0))
 
+    def half_close(self, max_effort=MAX_EFFORT):
+        # closes the gripper half way
+
+        # unnecessary, but might be helpful
+	if (max_effort > self.MAX_EFFORT):
+		max_effort = self.MAX_EFFORT
+	if (max_effort < self.MIN_EFFORT):
+		max_effort = self.MIN_EFFORT
+	
+	# create goal
+        goal = control_msgs.msg.GripperCommandGoal()
+	goal.command.position = 0.05
+	goal.command.max_effort = max_effort
+	
+	# send goal and wait for result:
+	self.client.send_goal(goal)
+        self.client.wait_for_result(rospy.Duration.from_sec(5.0))
+

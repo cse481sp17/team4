@@ -285,6 +285,8 @@ class ArmController(object):
         # pre_grasp.pose.position.x -= (0.166 + 0.05)
         # pre_grasp.pose.orientation.w = 1
 
+        self.gripper.half_close()
+
         # Note: This is only the position of the spine, not any sort of pre or post grasp
         grasp_order = ["pre_grasp", "grasp_pose", "post_grasp", "post_grasp2", "carry_position"]
         grasp_dict = {"pre_grasp": pre_grasp, "grasp_pose": grasp_pose, "post_grasp": post_grasp, "post_grasp2": post_grasp2, "carry_position": carry_position}
