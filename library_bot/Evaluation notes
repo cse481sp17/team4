@@ -1,0 +1,102 @@
+4 Books, 10 cenimeters apart
+Trial 1:
+	- Completely successful, book was center right on the shelf
+	- Note: It had to redraw the bounding box , the first one was too large. However, it redrew succesfully
+	- Web interface returned message, your book is ready for pickup
+	
+Trial 2:
+	- Completely succesful
+	- Note: Did not have to redraw the bounding box
+	- Note: It went for a different book that the book id. Forgot to refresh frontend
+	
+Trial 3:
+	- Failed on tray Grabbing
+	- Failure do to poorly drawn bounding boxes. The boxes overlapped the inserts, so the robot could not plan movement
+	- The robots angle was off compared to the shelf. Faulty navigation
+	- Robot bumped shelf when going back to default pose
+	
+Trial 4:
+	- Completly successful. Grabbed book from leftmost side of the shelf
+	- The book was a little less than flush against the robot gripper when grabbed, but it was still carried properly
+	
+Trial 5:
+	- Completly successful
+	- Nothing out of the ordinary happened
+	
+Trial 6:
+	- Nearly completly successful
+	- The book was grabbed, from the rightmost side of the shelf
+	- The book was less than flush, so it knocked over the holder as it was pulled out
+	- The robot bumped the book on the delivery table
+	
+Final Count:
+Success: 5
+Failure: 1
+	
+4 Books, 5 centimeters apart
+Trial 7:
+	- Failure.
+	- Went for rightmost book
+	- On tray grabbing, book fell over
+	
+Trial 8:
+	- Failure
+	- Went for rightmost book
+	- On book grabbing, was not flush with the tray, and the book fell out
+	
+Trial 9:
+	- Flawless Success
+	- Went for the middle-right book
+	- Nothing else noteworth happened
+	
+Trial 10:
+	- Partial Success
+	- Went for the middle-left book
+	- Had to redraw the bounding box 3 times
+	- When the insert was pulled out, the book to the left was knocked over
+	- Delivery was successful
+
+Trial 11:
+	- Partical Success
+	- Delivery was successful
+	- Knocked over the book insert as the book was pulled out
+	- Brushed the delivery table as it curled its arm back up
+	
+Trial 12:
+	- Flawless Success
+	
+Final Count:
+Success: 4
+Failure: 2
+	
+4 Books, 0 cm apart
+
+Trial 13:
+	- rightmost book
+	- Flawless Success
+	
+Trial 14:
+	- Failure
+	- Tried to grab the middle right book
+	- Got all the way up to book grasping just fine.
+	- When it grabbed the book, it was not flush and the book fell out of the gripper
+	
+Trial 15:
+	- Middle left book
+	- Flawless success
+	- Had to redrawn the bounding box
+	
+Trial 16:
+	- Flawless Success
+	- Grabbed the middle right book
+	
+Trial 17:
+	- Rightmost book
+	- Near flawless success
+	- Grabbed a paperback book
+	- The broken holder caused the other books to collapse
+	
+Final Count:
+Success: 4
+Failure: 1
+
