@@ -140,6 +140,12 @@ class BookServer(object):
                 temp += 1
             if grab_tray_success is False:
                 print "Grab Tray Critical fail"
+                # If we failed, we want to robot to drive back home
+                self.arm_controller.remove_bounding_box()
+                self.location_driver.goto(self.home_pose)
+                success_msg = RequestBookResponse()
+                success_msg.success = int(False)
+                return success_msg
 
             target_marker = self.arm_controller.find_marker(target_id, self.head)
             print "Target Marker is..."
@@ -159,6 +165,7 @@ class BookServer(object):
             if closest_pose == None:
                 print "Critical Pose-finding failure"
                 # If we failed, we want to robot to drive back home
+                self.arm_controller.remove_bounding_box()
                 self.location_driver.goto(self.home_pose)
                 success_msg = RequestBookResponse()
                 success_msg.success = int(False)
@@ -188,6 +195,7 @@ class BookServer(object):
             if grab_book_success is False:
                 print "Grab Book Critical fail"
                 # If we failed, we want to robot to drive back home
+                self.arm_controller.remove_bounding_box()
                 self.location_driver.goto(self.home_pose)
                 success_msg = RequestBookResponse()
                 success_msg.success = int(False)
