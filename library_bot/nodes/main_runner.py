@@ -158,6 +158,11 @@ class BookServer(object):
                 temp += 1
             if closest_pose == None:
                 print "Critical Pose-finding failure"
+                # If we failed, we want to robot to drive back home
+                self.location_driver.goto(self.home_pose)
+                success_msg = RequestBookResponse()
+                success_msg.success = int(False)
+                return success_msg
 
         # t/f if grab book
         if not self.cmdline or (self.cmdline and self.cmdline_grab_book):
@@ -182,6 +187,11 @@ class BookServer(object):
                 temp +=1
             if grab_book_success is False:
                 print "Grab Book Critical fail"
+                # If we failed, we want to robot to drive back home
+                self.location_driver.goto(self.home_pose)
+                success_msg = RequestBookResponse()
+                success_msg.success = int(False)
+                return success_msg
             self.arm_controller.remove_bounding_box()
 
         # move head (pan and tilt)
@@ -214,7 +224,7 @@ class BookServer(object):
         #self.torso.set_height(1.0)
 
         # navigate back home
-        # self.location_driver.goto(self.home_pose)
+        self.location_driver.goto(self.home_pose)
 
         # TODO: set response?
 
