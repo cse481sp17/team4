@@ -220,7 +220,7 @@ class BookServer(object):
 
         if not self.cmdline:
             success_msg = RequestBookResponse()
-            success_msg.book_id_response = data.book_id
+            # success_msg.book_id_response = bookID
             success_msg.success = int(True)# int(grab_book_success and grab_tray_success)
 
             return success_msg
