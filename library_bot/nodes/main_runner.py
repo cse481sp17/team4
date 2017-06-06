@@ -218,7 +218,7 @@ class BookServer(object):
         self.torso.set_height(0.4)
         #rospy.sleep(3.0)
         self.arm_controller.delivery()
-        self.torso.set_height(0.26) #0.25
+        self.torso.set_height(0.255) #0.25
         self.arm_controller.open_gripper()
         self.torso.set_height(0.4)
         self.arm_controller.curl_arm()
