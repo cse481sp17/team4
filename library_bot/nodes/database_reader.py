@@ -8,7 +8,7 @@ import pickle
 #import main_runner
 
 IN_SIM = False
-IN_DEMO = True
+IN_DEMO = False
 
 class DatabaseReader(object):
     def __init__(self):
