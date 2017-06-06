@@ -228,8 +228,8 @@ class ArmController(object):
         grasp_pose.header.frame_id = 'base_link'
         grasp_pose.pose = copy.deepcopy(closest_pose)
         # Offset because the arm is moved relative to the wrist roll Joint
-        grasp_pose.pose.position.x -= (0.166 - 0.04) # 0.035
-        grasp_pose.pose.orientation.w = 1
+        grasp_pose.pose.position.x -= (0.166 - 0.05) # 0.035
+        grasp_pose.pose.orientation.w = 1 # add one more cenimeter to the grasp pose  form 0.04 to 0.05
 
         pre_grasp = PoseStamped()
         pre_grasp.header.frame_id = 'base_link'
@@ -241,7 +241,7 @@ class ArmController(object):
         post_grasp = PoseStamped()
         post_grasp.header.frame_id = 'base_link'
         post_grasp.pose = copy.deepcopy(closest_pose)
-        post_grasp.pose.position.x = closest_pose.position.x - (0.166 - 0.04)
+        post_grasp.pose.position.x = closest_pose.position.x - (0.166 - 0.05)
         post_grasp.pose.position.y = closest_pose.position.y
         post_grasp.pose.position.z = closest_pose.position.z + 0.12 # 0.10
 
