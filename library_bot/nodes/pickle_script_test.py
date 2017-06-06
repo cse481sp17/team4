@@ -4,7 +4,7 @@ from geometry_msgs.msg import Pose
 #import main_runner
 
 IN_SIM = False
-DEMO_SAVE = False
+DEMO_SAVE = True
 
 #Simulation stuff
 books = None
@@ -80,37 +80,37 @@ elif DEMO_SAVE:
 
     # Home
     homePose = Pose()
-    homePose.position.x = 0.0
-    homePose.position.y = 0.0
+    homePose.position.x = 2.15722826586
+    homePose.position.y = 1.01096643427
     homePose.position.z = 0.0
     homePose.orientation.x = 0.0
     homePose.orientation.y = 0.0
-    homePose.orientation.z = 0.0
-    homePose.orientation.w = 0.0
+    homePose.orientation.z = -0.995399588086
+    homePose.orientation.w = 0.0958105424181
 
     # Delivery
     # From the left front of the table, measure 28.5cm towards the middle.
     # From there, measure from that horizontal distance @ the ground, 
     # 37.5cm from there, perpendicular to the table to the front of the robot chassis
     deliveryPose = Pose()
-    deliveryPose.position.x = 0.0
-    deliveryPose.position.y = 0.0
+    deliveryPose.position.x = 0.771997506875
+    deliveryPose.position.y = -0.613018291959
     deliveryPose.position.z = 0.0
     deliveryPose.orientation.x = 0.0
     deliveryPose.orientation.y = 0.0
-    deliveryPose2orientation.z = 0.0
-    deliveryPose.orientation.w = 0.0
+    deliveryPose.orientation.z = 0.0270260515742
+    deliveryPose.orientation.w = 0.999634729557
 
     # At bookshelf:
     # 63.5cm from the bottom shelf level to the front of the robot chassis
     bookshelfPose = Pose()
-    bookshelfPose.position.x = 0.0
-    bookshelfPose.position.y = 0.0
+    bookshelfPose.position.x = -2.63996843377
+    bookshelfPose.position.y = 0.0833288855778
     bookshelfPose.position.z = 0.0
     bookshelfPose.orientation.x = 0.0
     bookshelfPose.orientation.y = 0.0
-    bookshelfPose.orientation.z = 0.0
-    bookshelfPose.orientation.w = 0.0
+    bookshelfPose.orientation.z = 0.74297776536
+    bookshelfPose.orientation.w = 0.66931609885
 
     book1 = BookInfo()
     book1.pose = bookshelfPose
