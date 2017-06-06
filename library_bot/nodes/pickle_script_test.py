@@ -76,6 +76,9 @@ if IN_SIM:
     bookPath = "/home/team4/catkin_ws/src/cse481c/library_bot/nodes/book_database_sim.p"
 elif DEMO_SAVE:
 
+    #TODO: Fill out for demo
+
+    # Home
     homePose = Pose()
     homePose.position.x = 0.0
     homePose.position.y = 0.0
@@ -85,6 +88,10 @@ elif DEMO_SAVE:
     homePose.orientation.z = 0.0
     homePose.orientation.w = 0.0
 
+    # Delivery
+    # From the left front of the table, measure 28.5cm towards the middle.
+    # From there, measure from that horizontal distance @ the ground, 
+    # 37.5cm from there, perpendicular to the table to the front of the robot chassis
     deliveryPose = Pose()
     deliveryPose.position.x = 0.0
     deliveryPose.position.y = 0.0
@@ -94,7 +101,8 @@ elif DEMO_SAVE:
     deliveryPose2orientation.z = 0.0
     deliveryPose.orientation.w = 0.0
 
-    # At bookshelf
+    # At bookshelf:
+    # 63.5cm from the bottom shelf level to the front of the robot chassis
     bookshelfPose = Pose()
     bookshelfPose.position.x = 0.0
     bookshelfPose.position.y = 0.0
@@ -109,7 +117,7 @@ elif DEMO_SAVE:
     book1.torso_height = 0.30
     book1.head_pan = 0.0
     book1.head_tilt = 0.6
-    book1.book_name = "Theoretical Neuroscience"
+    book1.book_name = "Markov Random Fields"
     book1.fiducial_number = 13
 
     book2 = BookInfo()
@@ -117,15 +125,15 @@ elif DEMO_SAVE:
     book2.torso_height = 0.30
     book2.head_pan = 0.0
     book2.head_tilt = 0.6
-    book2.book_name = "Introduction to Robotics"
+    book2.book_name = "Engineering and Chemical Thermodynamics"
     book2.fiducial_number = 4
 
     book3 = BookInfo()
     book3.pose = bookshelfPose
     book3.torso_height = 0.30
     book3.head_pan = 0.0
-    book3.head_tilt = 0.55
-    book3.book_name = "Praise Justin"
+    book3.head_tilt = 0.6
+    book3.book_name = "Electronic Music"
     book3.fiducial_number = 5
 
     book4 = BookInfo()
@@ -133,7 +141,7 @@ elif DEMO_SAVE:
     book4.torso_height = 0.30
     book4.head_pan = 0.0
     book4.head_tilt = 0.6
-    book4.book_name = "Praise Justin"
+    book4.book_name = "TCP/IP (Yoga)"
     book4.fiducial_number = 3
 
     home1 = BookInfo()

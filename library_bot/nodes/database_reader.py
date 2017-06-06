@@ -8,6 +8,7 @@ import pickle
 #import main_runner
 
 IN_SIM = False
+IN_DEMO = True
 
 class DatabaseReader(object):
     def __init__(self):
@@ -16,6 +17,8 @@ class DatabaseReader(object):
         #if main_runner.IN_SIM:
         if IN_SIM:
             self.library = pickle.load( open("/home/team4/catkin_ws/src/cse481c/library_bot/nodes/book_database_sim.p", "rb") )
+        elif IN_DEMO:
+            self.library = pickle.load( open("/home/team4/catkin_ws/src/cse481c/library_bot/nodes/book_database_DEMO.p", "rb") )
         else:
             self.library = pickle.load( open("/home/team4/catkin_ws/src/cse481c/library_bot/nodes/book_database_real_robot.p", "rb") )
 

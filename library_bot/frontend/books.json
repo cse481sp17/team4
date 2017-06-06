@@ -1,22 +1,22 @@
 {
   "books" : [
     {
-      "title" : "The Cat in the Hat",
+      "title" : "Markov Random Fields",
       "author" : "Dr. Seuss",
       "fiducial" : 1
     },
     {
-      "title" : "Ender's Game",
+      "title" : "Engineering and Chemical Thermodynamics",
       "author" : "Orson Scott Card",
       "fiducial" : 2
     },
     {
-      "title" : "Prey",
+      "title" : "Electronic Music",
       "author" : "Michael Crichton",
       "fiducial" : 3
     },
     {
-      "title" : "Robotics",
+      "title" : "TCP/IP",
       "author" : "Something",
       "fiducial" : 4
     }
